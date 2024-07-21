@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521732835791",
+    "project_id": "mate-ae891",
+    "storage_bucket": "mate-ae891.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521732835791:android:77085ce1c49a08e5962aba",
+        "android_client_info": {
+          "package_name": "com.ksb.mate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsfiDBMHG6lSv4ivXomT-5CycWPMlTI2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
