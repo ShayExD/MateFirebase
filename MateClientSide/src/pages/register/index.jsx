@@ -7,7 +7,8 @@ import { TextInput, Button } from 'react-native-paper';
 import ButtonLower from '../../components/ButtonLower/buttonLower'
 import axios from 'axios';
 import { AuthContext } from '../../../AuthContext'
-
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { app } from '../../../firebase'
 
 export default function Register({navigation}) {
   const [data, setData] = useState([]);
@@ -20,6 +21,23 @@ export default function Register({navigation}) {
 
   const emailRegex = /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
+
+
+  const handleSignUp = () =>{
+    const auth = getAuth(app);
+    createUserWithEmailAndPassword(auth,email,password)
+    .then((userCredential)=>{
+        const user = userCredential.user;
+        console.log("signUp user",user);
+    })
+    .catch((error)=>{
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("ERROR",error)
+    });
+
+    }
+
 
 
   useEffect(() => {
@@ -118,7 +136,7 @@ export default function Register({navigation}) {
         {showError&&passwordError!='' ?  <Text style={{color:'red'}}>{passwordError}</Text> : null}
 
       </View>
-      <ButtonLower textContent={"הירשם"} handlePress={handleRegister}/>
+      <ButtonLower textContent={"הירשם"} handlePress={handleSignUp}/>
       <Text style={Theme.primaryText}> כבר יש לך חשבון? <Text style={Theme.primaryColor} onPress={()=>navigation.navigate('Login')}>כניסה לחשבון</Text></Text>
      
     </View>
