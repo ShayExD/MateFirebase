@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDUPUlYG46Q-GQFO47QpwSB170f0vRtYzQ</string>
+	<string>AIzaSyCz9HZF-4eo8Vn6kMRIjnkZ2NJglEAFbX4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>521732835791</string>
+	<string>473194708391</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ksb.mate</string>
+	<string>mateiosapp</string>
 	<key>PROJECT_ID</key>
-	<string>mate-ae891</string>
+	<string>mateapiconnection</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mate-ae891.appspot.com</string>
+	<string>mateapiconnection.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:521732835791:ios:7964f227e23b4913962aba</string>
+	<string>1:473194708391:ios:cb59ca846d8f85e7a3ca82</string>
 </dict>
 </plist>

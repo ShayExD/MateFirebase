@@ -18,6 +18,7 @@ export default function Register({navigation}) {
   const [passwordError, setPasswordError] = useState('');
   const { loginUser,loggedInUser } = useContext(AuthContext);
   const [showError,setShowError] = useState(false);
+  const [errorFirebase,setErrorFirebase]= useState("");
 
   const emailRegex = /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
@@ -29,10 +30,13 @@ export default function Register({navigation}) {
     .then((userCredential)=>{
         const user = userCredential.user;
         console.log("signUp user",user);
+        setErrorFirebase("");
+
     })
     .catch((error)=>{
         const errorCode = error.code;
         const errorMessage = error.message;
+        setErrorFirebase(errorMessage);
         console.log("ERROR",error)
     });
 
@@ -110,7 +114,8 @@ export default function Register({navigation}) {
       <Text style={[Theme.primaryTitle,styles.title]}>הרשמה</Text>
       <Text  style={[Theme.primaryText,styles.text]}>מלא את השדות הבאים על מנת להירשם</Text>
       <View style={styles.inputsContainer}>
-        {showError&&emailError!='' ?  <Text style={{color:'red'}}>{emailError}</Text> : null}
+
+      {/* {showError&&emailError!='' ?  <Text style={{color:'red'}}>{emailError}</Text> : null} */}
 
       <TextInput
         label= {"אימייל"}
@@ -133,7 +138,9 @@ export default function Register({navigation}) {
         selectionColor='gray'
         textAlign='right'
         />
-        {showError&&passwordError!='' ?  <Text style={{color:'red'}}>{passwordError}</Text> : null}
+        {/* {showError&&passwordError!='' ?  <Text style={{color:'red'}}>{passwordError}</Text> : null} */}
+
+        <Text style={{color:'red'}}>{errorFirebase}</Text>
 
       </View>
       <ButtonLower textContent={"הירשם"} handlePress={handleSignUp}/>

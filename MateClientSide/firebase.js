@@ -3,15 +3,19 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth,initializeAuth,getReactNativePersistence  } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCJDHSB1JrXvJGqYotX2vGKemnyer2CMrM",
-  authDomain: "mate-ae891.firebaseapp.com",
-  databaseURL: "https://mate-ae891-default-rtdb.firebaseio.com",
-  projectId: "mate-ae891",
-  storageBucket: "mate-ae891.appspot.com",
-  messagingSenderId: "521732835791",
-  appId: "1:521732835791:web:00216b6e6cbf095a962aba",
-  measurementId: "G-QSF3HFPX15"
+  apiKey: "AIzaSyBd4fQppD6VQMPGcD1v_9iZd7a0l3IPd_U",
+  authDomain: "mateapiconnection.firebaseapp.com",
+  projectId: "mateapiconnection",
+  storageBucket: "mateapiconnection.appspot.com",
+  messagingSenderId: "473194708391",
+  appId: "1:473194708391:web:ae959a3cfb1c6b25a3ca82",
+  // databaseURL: "https://mate-ae891-default-rtdb.firebaseio.com",
+  //  measurementId: "G-QSF3HFPX15"
+
+
 };
 
 
