@@ -8,23 +8,23 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "type":"module",
+  "type": "module",
   "engines": {
     "node": "18"
   },
   "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^12.1.0",
-    "firebase-functions": "^5.0.0",
     "body-parser": "^1.20.2",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "firebase-admin": "^12.3.0",
+    "firebase-functions": "^5.0.1"
   },
   "devDependencies": {
-    "firebase-functions-test": "^3.1.0", 
     "@babel/node": "^7.24.8",
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/preset-env": "^7.24.8",
-    "@babel/runtime": "^7.24.8"
+    "@babel/runtime": "^7.24.8",
+    "firebase-functions-test": "^3.1.0"
   },
   "private": true
 }

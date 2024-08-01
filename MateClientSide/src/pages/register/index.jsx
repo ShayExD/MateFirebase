@@ -24,23 +24,68 @@ export default function Register({navigation}) {
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
 
 
-  const handleSignUp = () =>{
+  // const handleSignUp = () =>{
+  //   const auth = getAuth(app);
+  //   createUserWithEmailAndPassword(auth,email,password)
+  //   .then((userCredential)=>{
+  //       const user = userCredential.user;
+  //       console.log("signUp user",user);
+  //       setErrorFirebase("");
+
+  //   })
+  //   .catch((error)=>{
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       setErrorFirebase(errorMessage);
+  //       console.log("ERROR",error)
+  //   });
+
+  //   }
+
+  const handleSignUp = () => {
     const auth = getAuth(app);
-    createUserWithEmailAndPassword(auth,email,password)
-    .then((userCredential)=>{
-        const user = userCredential.user;
-        console.log("signUp user",user);
-        setErrorFirebase("");
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log("signUp user", user);
+            setErrorFirebase("");
 
-    })
-    .catch((error)=>{
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setErrorFirebase(errorMessage);
-        console.log("ERROR",error)
-    });
+            // שליחת בקשה לשרת להוספת המשתמש לאוסף המשתמשים ב-Firestore
+            fetch('https://us-central1-mateapiconnection.cloudfunctions.net/mateApi/createUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uid: user.uid, // שליחת ה-UID של המשתמש שנוצר
+                    attributes: {
+                        firstName: "John",
+                        lastName: "Doe"
+                    }
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data); // הודעה במידה והמשתמש נוסף בהצלחה
+            })
+            .catch((error) => {
+                console.error('Error:', error); // טיפול בשגיאות בקריאת ה-API
+            });
 
-    }
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorFirebase(errorMessage); // הצגת הודעת השגיאה אם ההרשמה נכשלה
+            console.log("ERROR", error);
+        });
+}
+
 
 
 
