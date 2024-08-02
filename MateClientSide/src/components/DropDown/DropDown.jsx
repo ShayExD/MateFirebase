@@ -20,7 +20,7 @@ const data = [
   { label: 'Item 8', value: '8' },
 ]
 
-const DropDown = () => {
+const DropDown = ({ header }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 
   const handleDropdownPress = () => {
@@ -30,7 +30,7 @@ const DropDown = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdown} onPress={handleDropdownPress}>
-        <Text style={styles.selectedTextStyle}>יעדים</Text>
+        <Text style={styles.selectedTextStyle}>{header}</Text>
         <FontAwesome
           name={isDropdownVisible ? 'angle-up' : 'angle-down'}
           size={20}
@@ -54,7 +54,7 @@ export default DropDown
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: VerticalScale(5),
+    marginBottom: VerticalScale(10),
     width: '80%',
   },
   dropdown: {
@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     marginTop: 8,
-    maxHeight: 150, // הגדרת גובה מקסימלי לרשימה הנגללת
+    maxHeight: 150, 
+    marginBottom: VerticalScale(20),
   },
   dropdownItem: {
     padding: 10,

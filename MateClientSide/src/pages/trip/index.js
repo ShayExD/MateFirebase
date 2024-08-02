@@ -7,12 +7,11 @@ import {
   windowWidth,
 } from '../../utils'
 import Theme from '../../../assets/styles/theme'
-import ButtonLower from '../../components/ButtonLower/buttonLower'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import DropDown from '../../components/DropDown/DropDown'
-
+import Button from '../../components/Button/Button'
 export default function Trip({ navigation }) {
   return (
     <ScrollView
@@ -71,15 +70,15 @@ export default function Trip({ navigation }) {
             </Text>
           </View>
         </View>
-        <ButtonLower
+        <Button
           textContent={'הצטרף לקבוצה'}
           handlePress={() => {
             navigation.navigate('Login')
           }}
         />
-        <DropDown></DropDown>
-        <DropDown></DropDown>
-        <DropDown></DropDown>
+        <DropDown header={'יעדים'}></DropDown>
+        <DropDown header={'תחומי עניין'}></DropDown>
+        <DropDown header={'מנוהל ע"י'}></DropDown>
       </View>
     </ScrollView>
   )
@@ -88,8 +87,6 @@ export default function Trip({ navigation }) {
 const styles = StyleSheet.create({
   wrap: {
     width: '90%',
-
-    backgroundColor: 'black',
   },
   header: {
     justifyContent: 'space-between',
@@ -136,6 +133,7 @@ const styles = StyleSheet.create({
     textAlign: 'right', // מגדיר את יישור הטקסט
     writingDirection: 'rtl',
     fontSize: Theme.primaryText.fontSize,
+    color: 'gray',
   },
   details: {
     marginTop: VerticalScale(10),

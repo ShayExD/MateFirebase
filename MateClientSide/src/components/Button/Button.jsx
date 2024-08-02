@@ -3,7 +3,7 @@ import { StyleSheet, Pressable, Text, View, Dimensions } from 'react-native'
 import Theme from '../../../assets/styles/theme'
 import { windowHeight, windowWidth } from '../../utils'
 
-const ButtonLower = ({ textContent, handlePress }) => {
+const Button = ({ textContent, handlePress }) => {
   return (
     <View style={styles.containerButtonLower}>
       <Pressable onPress={handlePress} style={styles.Lower}>
@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   containerButtonLower: {
-    width: windowWidth * 0.85,
+    width: windowWidth * 0.90,
     backgroundColor: '#e6824a',
     borderRadius: 10,
-    marginVertical: windowHeight * 0.05,
+    marginVertical: windowHeight * 0.02,
   },
   text: {
     color: 'white',
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ButtonLower
+export default Button
