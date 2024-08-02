@@ -6,8 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Theme from '../../../assets/styles/theme';
 import axios from 'axios';
 import * as Font from 'expo-font';
-
 export default function Splash({navigation}) {
+
+
+
+
+
 
     const [loadFont,setLoadFont]= useState(false)
     const [loadCountries,setLoadCountries]= useState(false)

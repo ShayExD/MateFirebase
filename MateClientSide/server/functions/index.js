@@ -1,9 +1,25 @@
 import * as functions from 'firebase-functions'
 import express from 'express'
 import admin from 'firebase-admin'
+// import { defaultValues } from '../../src/utils';
 
-admin.initializeApp({
-  credential: admin.credential.cert({
+const defaultValues = {
+  uid:0,
+  fullname: '',
+  password: '',
+  introduction: '',
+  gender: ' ', 
+  age: 0,
+  instagram: '',
+  email: '',
+  phoneNumber: '',
+  profileImage: 'https://i.imgur.com/LBIwlSy.png',
+  city: '',
+  travelPlan: [], 
+  tripInterests: [], 
+}
+const serviceAccount =
+{
     type: 'service_account',
     project_id: 'mateapiconnection',
     private_key_id: '964d7765bfa494288531d2b64f6cc132e4f9dfd0',
@@ -18,7 +34,10 @@ admin.initializeApp({
     client_x509_cert_url:
       'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-nudqk%40mateapiconnection.iam.gserviceaccount.com',
     universe_domain: 'googleapis.com',
-  }),
+  };
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://mateserver-61da3-default-rtdb.firebaseio.com',
 })
 
@@ -49,12 +68,56 @@ app.post('/user', (req, res) => {
   res.send('Checssssssk')
 })
 
+app.post('/loginUser', async (req, res) => {
+  const { uid } = req.body; // Extract UID from request body
+
+  if (!uid) {
+    return res.status(400).json({ error: 'error' });
+  }
+
+  try {
+    const userDoc = await db.collection('users').doc(uid).get(); // Access the Firestore 'users' collection and fetch the document with the specified UID
+
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userData = userDoc.data(); // Extract the user data from the document
+
+    return res.status(200).json({ userData }); // Send the user data as a response
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return res.status(500).json({ error: 'Internal server error' }); // Handle and send back internal server error
+  }
+});
+
+
+
 app.post('/createUser', async (req, res) => {
+  const { uid, attributes } = req.body;
+
+  try {
+    // Merge default values with incoming attributes
+    const userData = { ...defaultValues, ...attributes, uid };
+
+    await db.collection('users').doc(uid).set(userData);
+    res.status(200).send({ message: 'Registration Successful\nYou have successfully registered!', userData });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).send({ error: 'Failed to create user' });
+  }
+});
+
+
+
+
+
+app.post('/updateUser', async (req, res) => {
   const { uid, attributes } = req.body
 
   try {
     await db.collection('users').doc(uid).set(attributes)
-    res.status(200).send({ message: 'User created successfully' })
+    res.status(200).send({ message: 'User updated successfully',data: {} })
   } catch (error) {
     console.error('Error creating user:', error)
     res.status(500).send({ error: 'Failed to create user' })
