@@ -10,6 +10,7 @@ import ViewProfile from '../pages/view_profile'
 import Home from '../pages/home'
 import Tabs from './tabs'
 import Trip from '../pages/trip'
+import CreateTrip from '../pages/createTrip'
 const MainNavigation = () => {
   const Stack = createStackNavigator()
 
@@ -18,7 +19,7 @@ const MainNavigation = () => {
       initialRouteName='Loading'
       screenOptions={{ header: () => null, headerShown: false }}
     >
-      <Stack.Screen name='Trip' component={Trip} />
+      <Stack.Screen name='CreateTrip' component={CreateTrip} />
       <Stack.Screen name='Splash' component={Splash} />
       <Stack.Screen name='Intro' component={Intro} />
       <Stack.Screen name='Login' component={Login} />
@@ -26,6 +27,7 @@ const MainNavigation = () => {
       <Stack.Screen name='EditProfile' component={EditProfile} />
       <Stack.Screen name='ViewProfile' component={ViewProfile} />
       <Stack.Screen name='Home' component={Home} />
+      <Stack.Screen name='Trip' component={Trip} />
       <Stack.Screen name='myTabs' component={Tabs} />
 
       {/* <Stack.Screen name="PlanTrip" component={PlanTrip} /> */}

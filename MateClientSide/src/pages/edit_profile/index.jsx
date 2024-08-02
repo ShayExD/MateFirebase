@@ -25,7 +25,7 @@ export default function EditProfile({ navigation }) {
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
     useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  const [isImageUpload, setIsImageUpload ]= useState(false)
+  const [isImageUpload, setIsImageUpload] = useState(false)
   const [profilePicture, setProfilePicture] = useState(
     loggedInUser.profileImage,
   )
@@ -109,8 +109,7 @@ export default function EditProfile({ navigation }) {
           ...prevUser,
           profileImage: uploadedImageURI,
         }))
-        setIsImageUpload(true);
-        
+        setIsImageUpload(true)
       }
     } catch (error) {
       console.error('Upload error:', error)
@@ -207,10 +206,8 @@ export default function EditProfile({ navigation }) {
       console.error('Error updating user:', error)
 
       // Handle the error if needed
-    }
-    finally{
+    } finally {
       setIsLoading(false)
-
     }
   }
 

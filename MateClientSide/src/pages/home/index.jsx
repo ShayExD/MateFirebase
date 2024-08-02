@@ -25,7 +25,8 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 export default function Home({ navigation }) {
-  const { loginUser, loggedInUser, setLoggedInUser,logoutUser } = useContext(AuthContext)
+  const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
+    useContext(AuthContext)
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const userPostsPageSize = 2
@@ -43,22 +44,21 @@ export default function Home({ navigation }) {
     return database.slice(startIndex, endIndex)
   }
 
-  
   function calculateMatchingScore(user1, user2) {
-    let ageScore = 100 - Math.abs(user1.age - user2.age) 
+    let ageScore = 100 - Math.abs(user1.age - user2.age)
     let interestsScore =
       user1.tripInterests.filter((interest) =>
         user2.tripInterests.includes(interest),
-      ).length * 10 
+      ).length * 10
     let travelPlanScore =
       user1.travelPlan.filter((plan) => user2.travelPlan.includes(plan))
-        .length * 10 
+        .length * 10
     return ageScore + interestsScore + travelPlanScore
   }
 
   function getRecommendedUsers(loggedInUser, allUsers) {
     const recommendedUsers = allUsers
-      .filter(user => user.age !== 0) 
+      .filter((user) => user.age !== 0)
       .filter((user) => user.id !== loggedInUser.id)
       .map((user) => {
         const matchingScore = calculateMatchingScore(loggedInUser, user)
@@ -99,7 +99,7 @@ export default function Home({ navigation }) {
       numOfPeople: 48,
     },
   ]
- 
+
   const getAllUser = async () => {
     try {
       const response = await axios.get(
@@ -140,9 +140,12 @@ export default function Home({ navigation }) {
         textStyle={styles.spinnerText}
         overlayColor='rgba(0, 0, 0, 0.6)'
       />
-     
+
       <View style={styles.topBar}>
-        <Header nickName={loggedInUser.fullname} picUri={loggedInUser.profileImage}></Header>
+        <Header
+          nickName={loggedInUser.fullname}
+          picUri={loggedInUser.profileImage}
+        ></Header>
         <Pressable style={styles.icon} onPress={logOut}>
           <AntDesign name='logout' size={30} color='#e6824a' />
           <Text>התנתק</Text>
@@ -181,7 +184,7 @@ export default function Home({ navigation }) {
               }}
               name={item.fullname}
               details={item.introduction}
-              profileImg={{uri:item.profileImage}}
+              profileImg={{ uri: item.profileImage }}
               age={item.age}
               city={item.city}
               ig={item.instagram}
@@ -247,5 +250,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
   },
-  
 })
