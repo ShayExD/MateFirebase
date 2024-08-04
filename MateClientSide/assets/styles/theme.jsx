@@ -29,7 +29,7 @@ const Theme = StyleSheet.create({
     color: '#e6824a',
   },
   screen: {
-    width: '90%',
+    width: '100%',
     height: '100%',
     flex: 1,
   },

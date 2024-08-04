@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { VerticalScale } from '../../utils';
-import Theme from '../../../assets/styles/theme';
-const DatePickerComponent = ({ selectedDate, onDateChange }) => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const today = new Date();
-  const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
+import { VerticalScale } from '../../utils'
+import Theme from '../../../assets/styles/theme'
+const DatePickerComponent = ({ selectedDate, onDateChange, title }) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
+  const today = new Date()
+  const maxDate = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate(),
+  )
   const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
+    setDatePickerVisibility(true)
+  }
 
   const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+    setDatePickerVisibility(false)
+  }
 
   const handleConfirm = (date) => {
-    onDateChange(date);
-    hideDatePicker();
-  };
+    onDateChange(date)
+    hideDatePicker()
+  }
 
   return (
     <View style={styles.container}>
@@ -26,24 +30,24 @@ const DatePickerComponent = ({ selectedDate, onDateChange }) => {
         <Text style={styles.selectedDate}>
           {selectedDate
             ? `בחירת תאריך: ${selectedDate.toLocaleDateString()}`
-            : 'תאריך לידה'}
+            : title}
         </Text>
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode='date'
         maximumDate={maxDate}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     marginBottom: VerticalScale(24),
-    
+    width: '90%',
   },
   touchableArea: {
     padding: 10,
@@ -56,10 +60,10 @@ const styles = StyleSheet.create({
     direction: 'rtl',
   },
   selectedDate: {
-    fontFamily:Theme.primaryText.fontFamily,
+    fontFamily: Theme.primaryText.fontFamily,
     fontSize: 16,
     textAlign: 'right',
   },
-});
+})
 
-export default DatePickerComponent;
+export default DatePickerComponent
