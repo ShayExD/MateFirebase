@@ -13,10 +13,7 @@ const firebaseConfig = {
   appId: "1:473194708391:web:ae959a3cfb1c6b25a3ca82",
   databaseURL: "https://mateapiconnection-default-rtdb.firebaseio.com",
     //  measurementId: "G-QSF3HFPX15"
-
-
 };
-
 
 
 // Initialize Firebase

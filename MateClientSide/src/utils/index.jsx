@@ -89,5 +89,20 @@ const users = [
   },
 ]
 
+const defaultValues = {
+  uid:0,
+  fullname: '',
+  password: '',
+  introduction: '',
+  gender: ' ', 
+  age: 0,
+  instagram: '',
+  email: '',
+  phoneNumber: '',
+  profileImage: 'https://i.imgur.com/LBIwlSy.png',
+  city: '',
+  travelPlan: [], 
+  tripInterests: [], 
+}
 
-export { windowWidth, windowHeight ,HorizontalScale,VerticalScale,interests,SingleCharToString,mapToSingleChar};
+export { windowWidth, windowHeight ,HorizontalScale,VerticalScale,interests,SingleCharToString,mapToSingleChar,defaultValues};
