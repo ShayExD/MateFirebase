@@ -24,9 +24,12 @@ import {
 const UploadImage = ({ setuUploadImage, uploadImage }) => {
   // const { loggedInUser, setLoggedInUser } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-
-  const [avatar, setAvatar] = useState('../../../assets/images/IntroImage.png')
+  const [tripPhoto, setTripPhoto] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
+
+  const [avatar, setAvatar] = useState(
+    tripPhoto !== '' ? tripPhoto : 'https://i.imgur.com/LBIwlSy.png',
+  )
 
   useEffect(() => {
     requestPermissions()
@@ -58,7 +61,7 @@ const UploadImage = ({ setuUploadImage, uploadImage }) => {
       setModalVisible(false)
       setAvatar(result.assets[0].uri)
       uploadImage(result.assets[0].uri)
-      // setProfilePicture(result.assets[0].uri)
+      setuUploadImage(result.assets[0].uri)
       // uploadImage(result.assets[0].uri)
     }
   }
@@ -82,7 +85,8 @@ const UploadImage = ({ setuUploadImage, uploadImage }) => {
       setModalVisible(false)
       setAvatar(result.assets[0].uri)
       uploadImage(result.assets[0].uri)
-      // setProfilePicture(result.assets[0].uri)
+      // console.log('בדיקה', result.assets[0].uri)
+      setuUploadImage(result.assets[0].uri)
       // uploadImage(result.assets[0].uri)
     }
   }
@@ -91,7 +95,7 @@ const UploadImage = ({ setuUploadImage, uploadImage }) => {
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       {avatar && (
         <Image
-          source={{ uri: 'https://i.imgur.com/LBIwlSy.png' }}
+          source={{ uri: avatar }}
           style={{
             width: windowWidth * 0.65,
             height: windowHeight * 0.2,

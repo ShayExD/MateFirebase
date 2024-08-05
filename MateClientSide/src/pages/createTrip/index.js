@@ -9,6 +9,7 @@ import { interests } from '../../utils'
 import UploadImage from '../../components/UploadImage/uploadImage'
 import { AuthContext } from '../../../AuthContext'
 import DropdownComponent from '../../components/DropdownCountryCityComponents/dropdownCountryCityComponents'
+import axios from 'axios'
 
 import { TextInput } from 'react-native-paper'
 import {
@@ -30,7 +31,7 @@ export default function CreateTrip({ navigation }) {
   const [countryData, setCountryData] = useState([])
   const [destination, setDestination] = useState([])
   const [tripPhoto, setTripPhoto] = useState([])
-
+  const [isImageUpload, setIsImageUpload] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,12 +87,14 @@ export default function CreateTrip({ navigation }) {
     }
   }
   const createTrip = async () => {
+    console.log('tripPhoto:', tripPhoto)
     console.log('Trip Name:', tripName)
     console.log('Number of People:', numOfPeople)
     console.log('Start Date:', startDate)
     console.log('End Date:', endDate)
     console.log('Selected Interests:', selectedInterests)
     console.log('destination:', destination)
+
     console.log('הטיול נוצר')
   }
   return (
