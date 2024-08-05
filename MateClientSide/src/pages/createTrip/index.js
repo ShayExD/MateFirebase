@@ -8,6 +8,7 @@ import DateRangePicker from '../../components/DateRangePicker/DateRangePicker'
 import { interests } from '../../utils'
 import UploadImage from '../../components/UploadImage/uploadImage'
 import { AuthContext } from '../../../AuthContext'
+import DropdownComponent from '../../components/DropdownCountryCityComponents/dropdownCountryCityComponents'
 
 import { TextInput } from 'react-native-paper'
 import {
@@ -19,6 +20,8 @@ import {
 import Theme from '../../../assets/styles/theme'
 export default function CreateTrip({ navigation }) {
   const [tripName, setTripName] = useState('')
+  const [aboutTrip, setAboutTrip] = useState('')
+  const [startLocation, setStartLocation] = useState('')
   const [tripImg, setTripImg] = useState('')
   const [numOfPeople, setNumOfPeople] = useState('')
   const [startDate, setStartDate] = useState('')
@@ -27,6 +30,8 @@ export default function CreateTrip({ navigation }) {
   const [countryData, setCountryData] = useState([])
   const [destination, setDestination] = useState([])
   const [tripPhoto, setTripPhoto] = useState([])
+
+
   useEffect(() => {
     const fetchData = async () => {
       const storedCountryData = await AsyncStorage.getItem('countryData')
@@ -38,6 +43,11 @@ export default function CreateTrip({ navigation }) {
     setSelectedInterests(selectedItems)
     // console.log(selectedInterests)
   }
+  const handleStartLocation = (selectedItems) => {
+    setStartLocation(selectedItems)
+    // console.log(destination)
+  }
+
   const handleSelectedDestinations = (selectedItems) => {
     setDestination(selectedItems)
     // console.log(destination)
@@ -89,7 +99,7 @@ export default function CreateTrip({ navigation }) {
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
     >
-      <UploadImage />
+      <UploadImage setuUploadImage={setTripPhoto} uploadImage={uploadImage} />
       {/* <Image
         source={require('../../../assets/images/IntroImage.png')}
         resizeMode='cover'
@@ -103,6 +113,22 @@ export default function CreateTrip({ navigation }) {
         mode='outlined'
         activeOutlineColor='#E6824A'
         selectionColor='gray'
+        maxLength={100} // הגבלת מספר האותיות
+      />
+      <TextInput
+        label={'תאור הטיול'}
+        value={aboutTrip}
+        onChangeText={setAboutTrip}
+        maxLength={200} // הגבלת מספר האותיות
+        style={[
+          styles.input,
+          { textAlign: 'right', height: VerticalScale(100) },
+        ]}
+        mode='outlined'
+        activeOutlineColor='#E6824A'
+        selectionColor='gray'
+        multiline // תכונה זו מאפשרת לטקסט לרדת שורה אוטומטית
+        numberOfLines={4}
       />
       <TextInput
         label='מספר אנשים'
