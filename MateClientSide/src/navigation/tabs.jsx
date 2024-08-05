@@ -15,6 +15,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Theme from '../../assets/styles/theme'
 import ComingSoon from '../pages/comingSoon'
 import MapPage from '../pages/map'
+import CreateTrip from '../pages/createTrip'
 
 
 const Tab = createBottomTabNavigator()
@@ -90,8 +91,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name='בקרוב'
-        component={ComingSoon}
+        name='יצירת טיול'
+        component={CreateTrip}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

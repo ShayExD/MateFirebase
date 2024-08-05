@@ -25,7 +25,7 @@ export default function EditProfile({ navigation }) {
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
     useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  const [isImageUpload, setIsImageUpload] = useState(false)
+  const [isImageUpload, setIsImageUpload ]= useState(false)
   const [profilePicture, setProfilePicture] = useState(
     loggedInUser.profileImage,
   )
@@ -87,7 +87,7 @@ export default function EditProfile({ navigation }) {
       const randomKey = Math.random().toString(36).substring(7)
       formData.append('files', {
         uri,
-        name: `AvatarImage_${loggedInUser.id}_${randomKey}.jpg`,
+        name: `AvatarImage_${loggedInUser.uid}_${randomKey}.jpg`,
         type: 'image/jpeg',
       })
       const response = await axios.post(
@@ -109,17 +109,116 @@ export default function EditProfile({ navigation }) {
           ...prevUser,
           profileImage: uploadedImageURI,
         }))
-        setIsImageUpload(true)
+        setIsImageUpload(true);
+        
       }
     } catch (error) {
       console.error('Upload error:', error)
     } finally {
       // setIsLoading(false)
+      console.log("check")
     }
   }
 
+  // const updateUser = async () => {
+  //   setIsLoading(true)
+  //   // await uploadImage(profilePicture)
+  //   try {
+  //     if (!phoneNumberPattern.test(phoneNumber)) {
+  //       setPhoneNumberError(
+  //         'Invalid phone number format. Please enter 10 digits.',
+  //       )
+  //       return
+  //     } else {
+  //       setPhoneNumberError('')
+  //     }
+  //     // uploadImage(profilePicture)
+  //     const updatedUserData = {
+  //       id: loggedInUser.id,
+  //       fullname: fullName,
+  //       password: loggedInUser.password,
+  //       introduction: description,
+  //       gender: mapToSingleChar(gender),
+  //       age: age,
+  //       instagram: instagram,
+  //       email: loggedInUser.email,
+  //       phoneNumber: phoneNumber,
+  //       profileImage: profilePicture,
+  //       city: city,
+  //       travelPlan: destination,
+  //       tripInterests: selectedInterests,
+  //     }
+
+  //     if (
+  //       fullName == '' ||
+  //       description == '' ||
+  //       gender == ' ' ||
+  //       instagram == '' ||
+  //       phoneNumber == '' ||
+  //       profilePicture == '' ||
+  //       city == '' ||
+  //       destination.length == 0 ||
+  //       selectedInterests.length == 0
+  //       // isImageUpload===false
+  //     ) {
+  //       // Alert user to fill all fields
+  //       Alert.alert(
+  //         'Updated failed',
+  //         'You have to fill all the fields, please update your details!',
+  //         [
+  //           {
+  //             text: 'OK',
+  //           },
+  //         ],
+  //       )
+  //       return
+  //     }
+  //     // await uploadImage(profilePicture)
+
+  //     // console.log(updatedUserData)
+
+  //     const response = await axios({
+  //       method: 'PUT', // or 'PATCH' if the server expects a PATCH request
+  //       url: 'https://proj.ruppin.ac.il/cgroup72/test2/tar1/api/User/UpdateUser',
+  //       data: updatedUserData,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     })
+
+  //     // console.log('User updated successfully:', response.data)
+  //     // You can perform additional actions after successful update, such as updating the loggedInUser state
+  //     if (response.data) {
+  //       loginUser(updatedUserData)
+  //       Alert.alert(
+  //         'Updated Successful',
+  //         'You have successfully updated your details!',
+  //         [
+  //           {
+  //             text: 'OK',
+  //             onPress: () => {
+  //               navigation.navigate('myTabs', { screen: 'Home' })
+  //             },
+  //           },
+  //         ],
+  //       )
+  //     }
+  //     // Example: Update the loggedInUser state with the updated user data
+  //   } catch (error) {
+  //     console.error('Error updating user:', error)
+
+  //     // Handle the error if needed
+  //   }
+  //   finally{
+  //     setIsLoading(false)
+
+  //   }
+  // }
+
+
   const updateUser = async () => {
     setIsLoading(true)
+    console.log("check")
     // await uploadImage(profilePicture)
     try {
       if (!phoneNumberPattern.test(phoneNumber)) {
@@ -132,7 +231,9 @@ export default function EditProfile({ navigation }) {
       }
       // uploadImage(profilePicture)
       const updatedUserData = {
-        id: loggedInUser.id,
+        uid:loggedInUser.uid,
+        
+        attributes:{
         fullname: fullName,
         password: loggedInUser.password,
         introduction: description,
@@ -145,6 +246,8 @@ export default function EditProfile({ navigation }) {
         city: city,
         travelPlan: destination,
         tripInterests: selectedInterests,
+        }
+        
       }
 
       if (
@@ -173,11 +276,11 @@ export default function EditProfile({ navigation }) {
       }
       // await uploadImage(profilePicture)
 
-      // console.log(updatedUserData)
+      console.log(updatedUserData)
 
       const response = await axios({
-        method: 'PUT', // or 'PATCH' if the server expects a PATCH request
-        url: 'https://proj.ruppin.ac.il/cgroup72/test2/tar1/api/User/UpdateUser',
+        method: 'POST', // or 'PATCH' if the server expects a PATCH request
+        url: 'https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/updateUser',
         data: updatedUserData,
         headers: {
           'Content-Type': 'application/json',
@@ -187,7 +290,8 @@ export default function EditProfile({ navigation }) {
       // console.log('User updated successfully:', response.data)
       // You can perform additional actions after successful update, such as updating the loggedInUser state
       if (response.data) {
-        loginUser(updatedUserData)
+        loginUser(response.data.userData)
+        console.log(response.data.userData)
         Alert.alert(
           'Updated Successful',
           'You have successfully updated your details!',
@@ -206,10 +310,13 @@ export default function EditProfile({ navigation }) {
       console.error('Error updating user:', error)
 
       // Handle the error if needed
-    } finally {
+    }
+    finally{
       setIsLoading(false)
+
     }
   }
+  
 
   return (
     <ScrollView

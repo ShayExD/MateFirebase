@@ -44,29 +44,8 @@ admin.initializeApp({
 const db = admin.firestore()
 
 const app = express()
-app.get('/', (req, res) => {
-  res.send('Checssssssk')
-})
 
-app.get('/user', async (req, res) => {
-  try {
-    const customerRef = await db.collection('users').get()
-    const users = []
-    customerRef.forEach((doc) => {
-      users.push({ id: doc.id, ...doc.data() })
-    })
-    console.log(users)
-    res.send(users)
-  } catch (error) {
-    console.error('Error fetching users:', error)
-    res.status(500).send('Error fetching users')
-  }
-})
-
-app.post('/user', (req, res) => {
-  console.log(req.body)
-  res.send('Checssssssk')
-})
+///////- User Services
 
 app.post('/loginUser', async (req, res) => {
   const { uid } = req.body; // Extract UID from request body
@@ -91,8 +70,6 @@ app.post('/loginUser', async (req, res) => {
   }
 });
 
-
-
 app.post('/createUser', async (req, res) => {
   const { uid, attributes } = req.body;
 
@@ -107,8 +84,6 @@ app.post('/createUser', async (req, res) => {
     res.status(500).send({ error: 'Failed to create user' });
   }
 });
-
-
 
 app.post('/updateUser', async (req, res) => {
   const { uid, attributes } = req.body;
@@ -132,7 +107,93 @@ app.post('/updateUser', async (req, res) => {
   }
 });
 
+app.get('/getAllUsers', async (req, res) => {
+  try {
+    // Use merge: true to update fields without overwriting the entire document
+    const usersFromFirestore = await db.collection('users').get();
+    const usersList = usersFromFirestore.docs.map(doc => ({
+      ...doc.data()
+    }));
 
+    console.log(usersList);
+    res.status(200).send(usersList);
+  } catch (error) {
+    console.error('Error to get all users:', error);
+    res.status(500).send({ error: 'Failed to get all users' });
+  }
+});
+
+///// - Trip Services
+
+app.post('/createTrip', async (req, res) => {
+  const {
+    aboutTrip,
+    destinations,
+    endDate,
+    joinedUsers,
+    limitUsers,
+    location,
+    manageByUid,
+    startDate,
+    tripInterests,
+    tripName,
+    tripPictureUrl,
+  } = req.body;
+
+  try {
+    const newTrip = {
+      aboutTrip,
+      destinations,
+      endDate: endDate,
+      joinedUsers,
+      limitUsers,
+      location,
+      manageByUid,
+      startDate: startDate,
+      tripInterests,
+      tripName,
+      tripPictureUrl,
+    };
+
+    const tripRef = await db.collection('trips').add(newTrip);
+    res.status(201).send({ message: 'Trip created successfully', tripId: tripRef.id });
+  } catch (error) {
+    console.error('Error creating trip:', error);
+    res.status(500).send({ error: 'Failed to create trip' });
+  }
+});
+
+app.get('/getAllTrips', async (req, res) => {
+
+  try {
+    const tripsFromFirestore = await db.collection('trips').get();
+    const trips = tripsFromFirestore.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      // .filter(trip => trip.manageByUid !== uid);
+    console.log(trips);
+    res.status(200).json(trips);
+  } catch (error) {
+    console.error('Error fetching trips:', error);
+    res.status(500).json({ error: 'Failed to fetch trips' });
+  }
+});
+
+app.delete('/deleteTrip', async (req, res) => {
+  const { tripId } = req.body; // Get the trip ID from the request body
+
+  if (!tripId) {
+    return res.status(400).json({ error: 'Trip ID is required' });
+  }
+
+  try {
+    // Delete the trip document from the Firestore collection
+    await db.collection('trips').doc(tripId).delete();
+    res.status(200).send({ message: 'Trip deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting trip:', error);
+    res.status(500).send({ error: 'Failed to delete trip' });
+  }
+});
 
 
 

@@ -59,7 +59,7 @@ export default function Home({ navigation }) {
   function getRecommendedUsers(loggedInUser, allUsers) {
     const recommendedUsers = allUsers
       .filter((user) => user.age !== 0)
-      .filter((user) => user.id !== loggedInUser.id)
+      .filter((user) => user.uid !== loggedInUser.uid)
       .map((user) => {
         const matchingScore = calculateMatchingScore(loggedInUser, user)
         return { ...user, matchingScore }
@@ -103,11 +103,12 @@ export default function Home({ navigation }) {
   const getAllUser = async () => {
     try {
       const response = await axios.get(
-        `https://proj.ruppin.ac.il/cgroup72/test2/tar1/api/User`,
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllUsers`,
       )
 
       // const updatedUserData = response.data.filter(user => user.id !== loggedInUser.id);
       updatedUserData = getRecommendedUsers(loggedInUser, response.data)
+      console.log(response.data)
 
       // console.log(updatedUserData)
       setData(updatedUserData)
@@ -243,9 +244,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    right: '0%',
+    left: '0%',
     paddingHorizontal: HorizontalScale(5),
-    top: VerticalScale(10),
+    // top: VerticalScale(10),
     borderRadius: '50%',
     textAlign: 'center',
     alignItems: 'center',
