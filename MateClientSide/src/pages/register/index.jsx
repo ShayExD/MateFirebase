@@ -113,8 +113,8 @@ export default function Register({ navigation }) {
             {
               uid: user.uid, // Send the UID of the created user
               attributes: {
-                email: email,
-                password: password,
+              email: email,
+              password: password,
               },
             },
             {

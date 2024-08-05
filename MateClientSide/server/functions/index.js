@@ -110,18 +110,30 @@ app.post('/createUser', async (req, res) => {
 
 
 
-
-
 app.post('/updateUser', async (req, res) => {
-  const { uid, attributes } = req.body
+  const { uid, attributes } = req.body;
+
+  if (!uid || !attributes) {
+    return res.status(400).json({ error: 'UID and attributes are required' });
+  }
 
   try {
-    await db.collection('users').doc(uid).set(attributes)
-    res.status(200).send({ message: 'User updated successfully',data: {} })
+    // Use merge: true to update fields without overwriting the entire document
+    await db.collection('users').doc(uid).set(attributes, { merge: true });
+    
+    // Fetch the updated user data
+    const updatedUserDoc = await db.collection('users').doc(uid).get();
+    const updatedUserData = updatedUserDoc.data();
+
+    res.status(200).send({ message: 'User updated successfully', userData: updatedUserData });
   } catch (error) {
-    console.error('Error creating user:', error)
-    res.status(500).send({ error: 'Failed to create user' })
+    console.error('Error updating user:', error);
+    res.status(500).send({ error: 'Failed to update user' });
   }
-})
+});
+
+
+
+
 
 export const mateapi = functions.https.onRequest(app)
