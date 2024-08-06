@@ -34,6 +34,12 @@ export default function Home({ navigation }) {
   const [userPostsRenderData, setuserPostsRenderData] = useState([])
   const [isLoadinguserPosts, setisLoadinguserPosts] = useState(false)
 
+  const [tripData, setTripData] = useState([]);
+  // const [tripsPageSize, setTripsPageSize] = useState(2);
+  // const [tripsCurrentPage, setTripsCurrentPage] = useState(1);
+  // const [tripsRenderData, setTripsRenderData] = useState([]);
+  // const [isLoadingTrips, setIsLoadingTrips] = useState(false);
+
   const pagination = (database, currentPage, pageSize) => {
     // console.log('currentPage' + currentPage)
     const startIndex = (currentPage - 1) * pageSize
@@ -44,7 +50,7 @@ export default function Home({ navigation }) {
     return database.slice(startIndex, endIndex)
   }
 
-  function calculateMatchingScore(user1, user2) {
+  function calculateUserMatchingScore(user1, user2) {
     let ageScore = 100 - Math.abs(user1.age - user2.age)
     let interestsScore =
       user1.tripInterests.filter((interest) =>
@@ -56,12 +62,28 @@ export default function Home({ navigation }) {
     return ageScore + interestsScore + travelPlanScore
   }
 
+  function calculateTripMatchingScore(user, trip) {
+    console.log(trip.tripInterests);
+    let interestsScore =
+      user.tripInterests.filter((interest) =>
+        trip.tripInterests.includes(interest),
+      ).length * 10;
+    let destinationsScore =
+      user.travelPlan.filter((plan) => trip.destinations.includes(plan))
+        .length * 10;
+    console.log(trip.destinations);
+
+    console.log(interestsScore + destinationsScore);
+
+    return interestsScore + destinationsScore;
+  }
+
   function getRecommendedUsers(loggedInUser, allUsers) {
     const recommendedUsers = allUsers
       .filter((user) => user.age !== 0)
       .filter((user) => user.uid !== loggedInUser.uid)
       .map((user) => {
-        const matchingScore = calculateMatchingScore(loggedInUser, user)
+        const matchingScore = calculateUserMatchingScore(loggedInUser, user)
         return { ...user, matchingScore }
       })
     recommendedUsers.sort((a, b) => b.matchingScore - a.matchingScore)
@@ -73,34 +95,9 @@ export default function Home({ navigation }) {
     // console.log('logOut')
   }
 
-  const trips = [
-    {
-      picUrl: require('../../../assets/images/TripPhoto.jpg'),
-      title: 'Bromo Mountain',
-      destination: 'Indonesia',
-      numOfPeople: 48,
-    },
-    {
-      picUrl: require('../../../assets/images/TripPhoto.jpg'),
-      title: 'Bromo Mountain',
-      destination: 'Indonesia',
-      numOfPeople: 48,
-    },
-    {
-      picUrl: require('../../../assets/images/TripPhoto.jpg'),
-      title: 'Bromo Mountain',
-      destination: 'Indonesia',
-      numOfPeople: 48,
-    },
-    {
-      picUrl: require('../../../assets/images/TripPhoto.jpg'),
-      title: 'Bromo Mountain',
-      destination: 'Indonesia',
-      numOfPeople: 48,
-    },
-  ]
 
-  const getAllUser = async () => {
+
+  const getAllUsers = async () => {
     try {
       const response = await axios.get(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllUsers`,
@@ -108,7 +105,7 @@ export default function Home({ navigation }) {
 
       // const updatedUserData = response.data.filter(user => user.id !== loggedInUser.id);
       updatedUserData = getRecommendedUsers(loggedInUser, response.data)
-      console.log(response.data)
+      // console.log(response.data)
 
       // console.log(updatedUserData)
       setData(updatedUserData)
@@ -121,8 +118,30 @@ export default function Home({ navigation }) {
     }
   }
 
+  
+  const getAllTrips = async () => {
+    try {
+      const response = await axios.get(
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`
+      );
+      // console.log(response.data);
+      const updatedTrips = response.data.map((trip) => {
+        // console.log(trip);
+        const matchingScore = calculateTripMatchingScore(loggedInUser, trip);
+        return { ...trip, matchingScore };
+      });
+      updatedTrips.sort((a, b) => b.matchingScore - a.matchingScore);
+      setTripData(updatedTrips);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
   useEffect(() => {
-    getAllUser()
+    getAllUsers()
+    getAllTrips()
+    // setTripsCurrentPage(1);
     setuserPostsCurretPage(1)
   }, [loggedInUser])
 
@@ -132,6 +151,13 @@ export default function Home({ navigation }) {
     setuserPostsRenderData(getInitPostData)
     setisLoadinguserPosts(false)
   }, [data])
+
+  useEffect(() => {
+    // setIsLoadingTrips(true);
+    // const getInitTripData = pagination(trips, 1, tripsPageSize);
+    // setTripsRenderData(getInitTripData);
+    // setIsLoadingTrips(false);
+  }, [tripData]);
 
   return (
     <SafeAreaView style={[Theme.screen, styles.screen]}>
@@ -159,13 +185,14 @@ export default function Home({ navigation }) {
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          data={trips}
+          data={tripData}
           renderItem={({ item }) => (
             <SingleTrip
-              picUrl={item.picUrl}
-              title={item.title}
-              destination={item.destination}
-              numOfPeople={item.numOfPeople}
+              picUrl={item.tripPictureUrl}
+              title={item.tripName}
+              destination={item.destinations}
+              numOfPeople={item.limitUsers
+              }
             ></SingleTrip>
           )}
         />
