@@ -21,12 +21,12 @@ import {
   windowHeight,
   windowWidth,
 } from '../../utils'
-const UploadImage = ({ setuUploadImage, uploadImage }) => {
+
+const UploadImage = ({ setuUploadImage, uploadImage,tripPhoto ,setTripPhoto}) => {
   // const { loggedInUser, setLoggedInUser } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  const [tripPhoto, setTripPhoto] = useState('')
+  // const [tripPhoto, setTripPhoto] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
-
   const [avatar, setAvatar] = useState(
     tripPhoto !== '' ? tripPhoto : 'https://i.imgur.com/LBIwlSy.png',
   )
@@ -60,6 +60,7 @@ const UploadImage = ({ setuUploadImage, uploadImage }) => {
       setIsLoading(true)
       setModalVisible(false)
       setAvatar(result.assets[0].uri)
+      setTripPhoto(result.assets[0].uri)
       uploadImage(result.assets[0].uri)
       setuUploadImage(result.assets[0].uri)
       // uploadImage(result.assets[0].uri)
