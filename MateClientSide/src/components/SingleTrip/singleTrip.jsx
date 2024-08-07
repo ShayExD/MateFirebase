@@ -34,7 +34,7 @@ const SingleTrip = ({ picUrl, title, destination, numOfPeople }) => {
                   color='#e6824a'
                   style={styles.icon}
                 />
-                <Text style={styles.iconText}>{destination}</Text>
+                <Text style={styles.iconText}>{destination[0]}</Text>
               </View>
             </View>
           </View>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: HorizontalScale(20),
   },
   text: {
-    textAlign: 'left',
+    textAlign: 'right',
     color: 'black',
     fontFamily: 'OpenSans-Bold',
     fontSize: 14,
