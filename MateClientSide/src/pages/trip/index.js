@@ -12,7 +12,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import DropDown from '../../components/DropDown/DropDown'
 import Button from '../../components/Button/Button'
-export default function Trip({ navigation }) {
+export default function ViewTrip({ navigation }) {
+const route = useRoute();
+const { trip } = route.params; 
   return (
     <ScrollView
       contentContainerStyle={[styles.screen]}
@@ -30,7 +32,7 @@ export default function Trip({ navigation }) {
           <View style={styles.header}>
             <View style={styles.place}>
               <Text style={[styles.primaryText, { fontWeight: 'bold' }]}>
-                פוארטו אסקונדידו מקסיקו
+                {trip.aboutTrip}
               </Text>
               <MaterialIcons
                 name='place'

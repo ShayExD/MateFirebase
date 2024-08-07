@@ -17,11 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "googleServicesFile": "./GoogleService-Info.plist",
-      "bundleIdentifier": "com.mycorp.myapp",
-      "permissions": [
-        "CAMERA",
-        "CAMERA_ROLL"
-      ]
+      "bundleIdentifier": "com.mycorp.myapp"
     },
     "android": {
       

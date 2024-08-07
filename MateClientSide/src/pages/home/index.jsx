@@ -162,6 +162,9 @@ export default function Home({ navigation }) {
           data={trips}
           renderItem={({ item }) => (
             <SingleTrip
+            handlePress={() => {
+              navigation.navigate('ViewTrip', { trip: item })
+            }}
               picUrl={item.picUrl}
               title={item.title}
               destination={item.destination}
