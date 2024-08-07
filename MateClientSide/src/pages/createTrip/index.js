@@ -1,4 +1,12 @@
-import { StyleSheet, Image, Text, View, ScrollView,ActivityIndicator,Alert } from 'react-native'
+import {
+  StyleSheet,
+  Image,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+  Alert,
+} from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import DatePicker from '../../components/DatePicker/datePicker'
 import MultiSelectDropdown from '../../components/MultiSelectDropdown/multiSelectDropdown'
@@ -20,13 +28,11 @@ import {
 } from '../../utils'
 import Theme from '../../../assets/styles/theme'
 export default function CreateTrip({ navigation }) {
-
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
-  useContext(AuthContext);
-  
+    useContext(AuthContext)
+
   const [tripName, setTripName] = useState('')
   const [aboutTrip, setAboutTrip] = useState('')
-  const [startLocation, setStartLocation] = useState('')
   const [tripImg, setTripImg] = useState('')
   const [numOfPeople, setNumOfPeople] = useState('')
   const [startDate, setStartDate] = useState('')
@@ -36,7 +42,7 @@ export default function CreateTrip({ navigation }) {
   const [destination, setDestination] = useState([])
   const [tripPhoto, setTripPhoto] = useState('')
   const [isImageUpload, setIsImageUpload] = useState(false)
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     const fetchData = async () => {
       const storedCountryData = await AsyncStorage.getItem('countryData')
@@ -48,47 +54,43 @@ export default function CreateTrip({ navigation }) {
     setSelectedInterests(selectedItems)
     // console.log(selectedInterests)
   }
-  const handleStartLocation = (selectedItems) => {
-    setStartLocation(selectedItems)
-    // console.log(destination)
-  }
 
   const handleSelectedDestinations = (selectedItems) => {
     setDestination(selectedItems)
     // console.log(destination)
   }
 
-  const resetFields = () => {
-    setTripName('');
-    setAboutTrip('');
-    setStartLocation('');
-    setTripImg('');
-    setTripPhoto('');
-    setNumOfPeople('');
-    setStartDate('');
-    setEndDate('');
-    setSelectedInterests([]);
-    setDestination([]);
-  };
+  const resetFields = async () => {
+    setTripName('')
+    setAboutTrip('')
+    setTripImg('')
+    setTripPhoto('')
+    setNumOfPeople('')
+    setStartDate('')
+    setEndDate('')
+    setSelectedInterests([])
+    setDestination([])
+    console.log('inside reset')
+    logAllFields()
+  }
 
   const logAllFields = () => {
     const fields = {
       tripName,
       aboutTrip,
-      startLocation,
       tripImg,
       numOfPeople,
       startDate,
       endDate,
       selectedInterests,
       destination,
-    };
-  
-    console.log('Field Values:', fields);
-  };
+    }
+
+    console.log('Field Values:', fields)
+  }
 
   const validateFields = () => {
-    logAllFields();
+    logAllFields()
     if (
       tripName === '' ||
       aboutTrip === '' ||
@@ -99,10 +101,10 @@ export default function CreateTrip({ navigation }) {
       selectedInterests.length === 0 ||
       destination.length === 0
     ) {
-      return false;
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
   const uploadImage = async (uri) => {
     try {
@@ -137,9 +139,9 @@ export default function CreateTrip({ navigation }) {
     }
   }
   const createTrip = async () => {
-    setLoading(true);
-    if(!validateFields()){
-      setLoading(false);
+    setLoading(true)
+    if (!validateFields()) {
+      setLoading(false)
       Alert.alert(
         'Error',
         'Please fill out all fields before creating the trip.',
@@ -147,18 +149,17 @@ export default function CreateTrip({ navigation }) {
           {
             text: 'OK',
             onPress: () => {
-              console.log('Validation error acknowledged');
+              console.log('Validation error acknowledged')
             },
           },
-        ]
-      );
-      return;
+        ],
+      )
+      return
     }
     try {
       const tripData = {
         tripName,
         aboutTrip,
-        location: startLocation,
         tripPictureUrl: tripImg,
         limitUsers: parseInt(numOfPeople),
         startDate,
@@ -167,8 +168,8 @@ export default function CreateTrip({ navigation }) {
         destinations: destination,
         manageByUid: loggedInUser.uid,
         joinedUsers: [loggedInUser],
-      };
-      console.log(tripData);
+      }
+      console.log(tripData)
       const response = await axios.post(
         'https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/createTrip',
         tripData,
@@ -176,48 +177,41 @@ export default function CreateTrip({ navigation }) {
           headers: {
             'Content-Type': 'application/json',
           },
-        }
-      );
-      setLoading(false);
-      Alert.alert(
-        'Trip Created Successfully',
-        'Your trip has been created!',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              console.log('Trip creation acknowledged');
-              navigation.navigate('myTabs', { screen: 'Home' });
-            },
+        },
+      )
+      setLoading(false)
+      Alert.alert('Trip Created Successfully', 'Your trip has been created!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            console.log('Trip creation acknowledged')
+            navigation.navigate('myTabs', { screen: 'Home' })
           },
-        ]
-      );
-      resetFields();
-      console.log('Success:', response.data.message);
+        },
+      ])
+      await resetFields()
+      console.log('fields after reset')
+      logAllFields()
+      console.log('Success:', response.data.message)
     } catch (error) {
-      setLoading(false);
-      Alert.alert(
-        'Error',
-        error.response?.data?.error || error.message,
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              console.log('Error acknowledged');
-            },
+      setLoading(false)
+      Alert.alert('Error', error.response?.data?.error || error.message, [
+        {
+          text: 'OK',
+          onPress: () => {
+            console.log('Error acknowledged')
           },
-        ]
-      );
-      console.error('Error:', error);
+        },
+      ])
+      console.error('Error:', error)
     }
-    
-  };
+  }
   return (
     <ScrollView
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
     >
-      <UploadImage setuUploadImage={setTripPhoto} uploadImage={uploadImage} tripPhoto={tripPhoto} setTripPhoto={setTripPhoto} />
+      <UploadImage setuUploadImage={setTripPhoto} uploadImage={uploadImage} />
       {/* <Image
         source={require('../../../assets/images/IntroImage.png')}
         resizeMode='cover'
@@ -276,10 +270,8 @@ export default function CreateTrip({ navigation }) {
         onSelectionsChange={handleSelectedDestinations}
         selectedItems={destination}
       ></MultiSelectDropdown>
-         {loading && (
-          <ActivityIndicator  size="small"
-              color="#0000ff"
-              style={styles.loader} />
+      {loading && (
+        <ActivityIndicator size='small' color='#0000ff' style={styles.loader} />
       )}
       <ButtonLower textContent={'יצירת הטיול'} handlePress={createTrip} />
     </ScrollView>
@@ -315,6 +307,5 @@ const styles = StyleSheet.create({
   loader: {
     alignItems: 'center',
     textAlign: 'center',
-
   },
 })

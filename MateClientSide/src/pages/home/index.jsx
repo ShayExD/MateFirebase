@@ -108,7 +108,7 @@ export default function Home({ navigation }) {
 
       // const updatedUserData = response.data.filter(user => user.id !== loggedInUser.id);
       updatedUserData = getRecommendedUsers(loggedInUser, response.data)
-      console.log(response.data)
+      // console.log(response.data)
 
       // console.log(updatedUserData)
       setData(updatedUserData)

@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+
 import {
   View,
   Image,
@@ -22,14 +24,32 @@ import {
   windowWidth,
 } from '../../utils'
 
-const UploadImage = ({ setuUploadImage, uploadImage,tripPhoto ,setTripPhoto}) => {
+const UploadImage = ({ setuUploadImage, uploadImage }) => {
   // const { loggedInUser, setLoggedInUser } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  // const [tripPhoto, setTripPhoto] = useState('')
+  const [tripPhoto, setTripPhoto] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [avatar, setAvatar] = useState(
-    tripPhoto !== '' ? tripPhoto : 'https://i.imgur.com/LBIwlSy.png',
+    tripPhoto !== ''
+      ? tripPhoto
+      : 'https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/TripImage_%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%91%D7%91%D7%95%D7%93%D7%A4%D7%A9%D7%98_e2o7id.jpg',
   )
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setTripPhoto('')
+    }, []),
+  )
+
+  useEffect(() => {
+    if (tripPhoto === '') {
+      setAvatar(
+        'https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/TripImage_%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%91%D7%91%D7%95%D7%93%D7%A4%D7%A9%D7%98_e2o7id.jpg',
+      )
+    } else {
+      setAvatar(tripPhoto)
+    }
+  }, [tripPhoto])
 
   useEffect(() => {
     requestPermissions()
@@ -86,7 +106,6 @@ const UploadImage = ({ setuUploadImage, uploadImage,tripPhoto ,setTripPhoto}) =>
       setModalVisible(false)
       setAvatar(result.assets[0].uri)
       uploadImage(result.assets[0].uri)
-      // console.log('בדיקה', result.assets[0].uri)
       setuUploadImage(result.assets[0].uri)
       // uploadImage(result.assets[0].uri)
     }
