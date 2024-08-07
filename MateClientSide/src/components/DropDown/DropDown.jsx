@@ -70,7 +70,7 @@ const DropDown = ({ header, content }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: VerticalScale(10),
-    width: '80%',
+    width: '90%',
   },
   dropdown: {
     height: 50,

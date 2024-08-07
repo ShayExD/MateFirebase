@@ -96,12 +96,7 @@ export default function ViewTrip({ navigation }) {
             </Text>
           </View>
         </View>
-        <Button
-          textContent={'הצטרף לקבוצה'}
-          handlePress={() => {
-            navigation.navigate('Login')
-          }}
-        />
+        
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
         <DropDown
           header={'תחומי עניין'}
@@ -110,6 +105,12 @@ export default function ViewTrip({ navigation }) {
         <DropDown
           header={'מנוהל ע"י'}
           content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} />}
+        />
+        <Button
+          textContent={'הצטרף לקבוצה'}
+          handlePress={() => {
+            navigation.navigate('Login')
+          }}
         />
       </View>
     </ScrollView>
@@ -158,6 +159,8 @@ const styles = StyleSheet.create({
   },
   details: {
     marginTop: VerticalScale(10),
+    marginBottom: VerticalScale(20),
+    
   },
   primaryText: {
     color: '#1C9FE2',
