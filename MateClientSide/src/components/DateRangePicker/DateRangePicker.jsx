@@ -31,9 +31,15 @@ const DateRangePicker = ({
   }
 
   const handleStartConfirm = (date) => {
-    onStartDateChange(date)
-    if (endDate && date > endDate) {
-      onEndDateChange(null) // נקה את תאריך הסיום אם תאריך ההתחלה לאחריו
+    const today = new Date()
+    today.setHours(0, 0, 0, 0) // Remove the time portion for comparison
+    if (date < today) {
+      Alert.alert('שגיאה', 'תאריך ההתחלה לא יכול להיות לפני היום הנוכחי.')
+    } else {
+      onStartDateChange(date)
+      if (endDate && date > endDate) {
+        onEndDateChange(null) // Clear end date if start date is after it
+      }
     }
     hideStartDatePicker()
   }
@@ -46,6 +52,9 @@ const DateRangePicker = ({
     }
     hideEndDatePicker()
   }
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // Remove the time portion for the minimum date
 
   return (
     <View style={styles.container}>
@@ -64,6 +73,7 @@ const DateRangePicker = ({
         mode='date'
         onConfirm={handleStartConfirm}
         onCancel={hideStartDatePicker}
+        minimumDate={today} // Set minimum date to today
       />
 
       <TouchableOpacity
@@ -81,6 +91,7 @@ const DateRangePicker = ({
         mode='date'
         onConfirm={handleEndConfirm}
         onCancel={hideEndDatePicker}
+        minimumDate={startDate || today} // Set minimum date to startDate or today
       />
     </View>
   )

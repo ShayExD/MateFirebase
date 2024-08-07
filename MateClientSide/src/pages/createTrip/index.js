@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import DatePicker from '../../components/DatePicker/datePicker'
-import MultiSelectDropdown from '../../components/MultiSelectDropdown/multiSelectDropdown'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ButtonLower from '../../components/ButtonLower/buttonLower'
 import DateRangePicker from '../../components/DateRangePicker/DateRangePicker'
@@ -18,7 +17,7 @@ import UploadImage from '../../components/UploadImage/uploadImage'
 import { AuthContext } from '../../../AuthContext'
 import DropdownComponent from '../../components/DropdownCountryCityComponents/dropdownCountryCityComponents'
 import axios from 'axios'
-
+import MultiSelectDropdownReset from '../../components/MultiSelectDropdownReset/multiSelectDropdownReset'
 import { TextInput } from 'react-native-paper'
 import {
   HorizontalScale,
@@ -43,6 +42,8 @@ export default function CreateTrip({ navigation }) {
   const [tripPhoto, setTripPhoto] = useState('')
   const [isImageUpload, setIsImageUpload] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [resetDropdowns, setResetDropdowns] = useState(false) // Add this state
+
   useEffect(() => {
     const fetchData = async () => {
       const storedCountryData = await AsyncStorage.getItem('countryData')
@@ -70,8 +71,8 @@ export default function CreateTrip({ navigation }) {
     setEndDate('')
     setSelectedInterests([])
     setDestination([])
-    console.log('inside reset')
-    logAllFields()
+    setResetDropdowns((prev) => !prev) // Trigger a re-render for dropdowns
+    console.log('Reset fields called')
   }
 
   const logAllFields = () => {
@@ -96,6 +97,7 @@ export default function CreateTrip({ navigation }) {
       aboutTrip === '' ||
       tripImg === '' ||
       numOfPeople === '' ||
+      numOfPeople > 30 ||
       startDate === '' ||
       endDate === '' ||
       selectedInterests.length === 0 ||
@@ -144,7 +146,7 @@ export default function CreateTrip({ navigation }) {
       setLoading(false)
       Alert.alert(
         'Error',
-        'Please fill out all fields before creating the trip.',
+        'Please fill out all fields before creating the trip and enter correct values.',
         [
           {
             text: 'OK',
@@ -169,7 +171,7 @@ export default function CreateTrip({ navigation }) {
         manageByUid: loggedInUser.uid,
         joinedUsers: [loggedInUser],
       }
-      console.log(tripData)
+      // console.log(tripData)
       const response = await axios.post(
         'https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/createTrip',
         tripData,
@@ -190,8 +192,6 @@ export default function CreateTrip({ navigation }) {
         },
       ])
       await resetFields()
-      console.log('fields after reset')
-      logAllFields()
       console.log('Success:', response.data.message)
     } catch (error) {
       setLoading(false)
@@ -243,13 +243,13 @@ export default function CreateTrip({ navigation }) {
         numberOfLines={4}
       />
       <TextInput
-        label='מספר אנשים'
+        label='מספר אנשים (מוגבל עד 30)'
         value={numOfPeople}
         onChangeText={setNumOfPeople}
         style={[styles.input, { textAlign: 'right' }]}
         mode='outlined'
         keyboardType='phone-pad'
-        activeOutlineColor='#E6824A'
+        activeOutlineColor={numOfPeople > 30 ? 'red' : '#E6824A'}
         selectionColor='gray'
       />
       <DateRangePicker
@@ -258,18 +258,20 @@ export default function CreateTrip({ navigation }) {
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
       />
-      <MultiSelectDropdown
+      <MultiSelectDropdownReset
         data={interests}
         title={'בחירת תחומי עניין בטיול'}
         onSelectionsChange={handleSelectedInterests}
         selectedItems={selectedInterests}
-      ></MultiSelectDropdown>
-      <MultiSelectDropdown
+        reset={resetDropdowns}
+      ></MultiSelectDropdownReset>
+      <MultiSelectDropdownReset
         data={countryData}
         title={'בחירת יעדים'}
         onSelectionsChange={handleSelectedDestinations}
         selectedItems={destination}
-      ></MultiSelectDropdown>
+        reset={resetDropdowns}
+      ></MultiSelectDropdownReset>
       {loading && (
         <ActivityIndicator size='small' color='#0000ff' style={styles.loader} />
       )}

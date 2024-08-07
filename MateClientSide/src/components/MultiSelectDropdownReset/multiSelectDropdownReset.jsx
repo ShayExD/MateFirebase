@@ -1,50 +1,59 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState,useCallback,useContext  } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale } from '../../utils'
 import { AuthContext } from '../../../AuthContext'
 
-const MultiSelectDropdown = (props) => {
-
-  const { loginUser,loggedInUser ,setLoggedInUser} = useContext(AuthContext);
+const MultiSelectDropdownReset = (props) => {
+  const { loginUser, loggedInUser, setLoggedInUser } = useContext(AuthContext)
 
   const [selected, setSelected] = useState([])
-  const [data, setData] = useState(props.data.slice(0, 10)); // Initial data, show first 10 items
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [data, setData] = useState(props.data.slice(0, 10)) // Initial data, show first 10 items
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [key, setKey] = useState(Math.random().toString())
 
   const handleSelectionChange = (selectedItems) => {
-    setSelected(selectedItems);
-    props.onSelectionsChange(selectedItems); // Call the callback function with selected items
-  };
+    setSelected(selectedItems)
+    props.onSelectionsChange(selectedItems) // Call the callback function with selected items
+  }
 
-  
+  useEffect(() => {
+    if (props.reset) {
+      setSelected([])
+      setKey(Math.random().toString()) // Change the key to force re-render
+      console.log('אחרי איפוס')
+      console.log(selected)
+    }
+  }, [props.reset])
+
   const loadMoreData = useCallback(() => {
     if (!loadingMore) {
-      setLoadingMore(true);
+      setLoadingMore(true)
       setTimeout(() => {
-        const newData = props.data.slice(data.length, data.length + 10); // Load next 10 items
-        setData([...data, ...newData]);
-        setLoadingMore(false);
-      }, 1000);
+        const newData = props.data.slice(data.length, data.length + 10) // Load next 10 items
+        setData([...data, ...newData])
+        setLoadingMore(false)
+      }, 1000)
     }
-  }, [data, loadingMore, props.data]);
+  }, [data, loadingMore, props.data])
 
   const handleEndReached = () => {
     if (!loadingMore) {
-      loadMoreData();
+      loadMoreData()
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
       <MultipleSelectList
+        key={key} // Use the key to force re-render
         placeholder={props.title}
         boxStyles={{
           direction: 'rtl',
           textAlign: 'center',
           minWidth: '100%',
-          alignItems:'center'
+          alignItems: 'center',
         }}
         inputStyles={{
           fontSize: 16,
@@ -60,7 +69,6 @@ const MultiSelectDropdown = (props) => {
         setSelected={(val) => handleSelectionChange(val)} // Pass the selected values to the handleSelectionChange function
         data={props.data}
         save='value'
-        // onSelect={() => alert(selected)}
         fontFamily='OpenSans'
         label={props.title}
         notFoundText='אין דטא להציג'
@@ -80,20 +88,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: VerticalScale(24),
-
   },
   label: {
-    textAlign:'left',
+    textAlign: 'left',
     color: 'black',
-    
     fontFamily: Theme.primaryText.fontFamily,
   },
   badges: {
-    // width:'45%',
-    alignItems:'center',
-    textAlign:'center',
+    alignItems: 'center',
+    textAlign: 'center',
     backgroundColor: Theme.primaryColor.color,
     fontFamily: Theme.primaryText.fontFamily,
   },
 })
-export default MultiSelectDropdown
+
+export default MultiSelectDropdownReset

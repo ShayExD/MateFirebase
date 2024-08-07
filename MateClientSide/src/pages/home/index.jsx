@@ -193,8 +193,8 @@ export default function Home({ navigation }) {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            console.log('fetch page number' + tripsCurrentPage )
-            console.log(tripsRenderData.length)
+            // console.log('fetch page number' + tripsCurrentPage )
+            // console.log(tripsRenderData.length)
             if (isLoadingTrips) {
               return
             }
