@@ -1,5 +1,5 @@
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native'
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useContext} from 'react'
 import {
   HorizontalScale,
   VerticalScale,
@@ -14,12 +14,15 @@ import DropDown from '../../components/DropDown/DropDown'
 import Button from '../../components/Button/Button'
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios'
+import { AuthContext } from '../../../AuthContext'
+import BackArrow from '../../components/BackArrow/backArrow'
 
 export default function ViewTrip({ navigation }) {
 const route = useRoute();
 const { trip } = route.params;
 const [tripData, setTripData] = useState(trip)
-
+const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
+useContext(AuthContext)
 
 
 const getTrip = async () =>{
@@ -39,11 +42,33 @@ const getTrip = async () =>{
 
 }
 
+const joinTrip = async () =>{
+
+try {
+  const response = await axios.post(
+    `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/joinTrip`,
+    {
+      tripId: tripData.id,
+      uid: loggedInUser.uid
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+  )
+  console.log(response);
+
+} 
+catch (error) {
+  console.error('Error', error.message)
+} 
+finally {
+}
+}
 
 useEffect(() => {
   getTrip();
-  
-
 
 }, [])
 
@@ -55,10 +80,12 @@ useEffect(() => {
       <View style={[Theme.screen, styles.screen]}>
         <View>
           <Image
-            source={require('../../../assets/images/IntroImage.png')}
+            source={{uri:tripData.tripPictureUrl}}
             resizeMode='cover'
             style={styles.image}
           />
+         <BackArrow></BackArrow>
+ 
         </View>
         <View style={styles.wrap}>
           <View style={styles.header}>
@@ -73,7 +100,7 @@ useEffect(() => {
                 style={[styles.icon]}
               />
             </View>
-            <Text style={[styles.primaryTitle]}>טיול גלישה</Text>
+            <Text style={[styles.primaryTitle]}>{tripData.tripName}</Text>
           </View>
           <View style={styles.content}>
             <View style={styles.iconText}>
@@ -104,7 +131,7 @@ useEffect(() => {
         <Button
           textContent={'הצטרף לקבוצה'}
           handlePress={() => {
-            navigation.navigate('Login')
+            joinTrip();
           }}
         />
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>

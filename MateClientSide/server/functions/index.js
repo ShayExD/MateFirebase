@@ -300,6 +300,7 @@ app.get('/getTrip/:tripId', async (req, res) => {
     }
 
     const tripData = tripDoc.data();
+    tripData.id = tripId; 
     res.status(200).json(tripData);
   } catch (error) {
     console.error('Error fetching trip:', error);
