@@ -24,7 +24,7 @@ const StackedAvatars = ({ members, maxDisplay = 3 }) => {
           </View>
         )}
       </View>
-      <Text style={styles.membersText}>{members.length} חברים בקבוצה</Text>
+      {/* <Text style={styles.membersText}>{members.length} חברים בקבוצה</Text> */}
     </View>
   );
 };

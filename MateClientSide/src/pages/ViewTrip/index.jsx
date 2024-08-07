@@ -79,6 +79,7 @@ export default function ViewTrip({ navigation }) {
                 {new Date(tripData.endDate).toLocaleDateString()}
               </Text>
             </View>
+            
             <View style={styles.iconText}>
               <Ionicons
                 name='person-outline'
@@ -89,12 +90,13 @@ export default function ViewTrip({ navigation }) {
               <Text style={[styles.primaryText]}>
                 {tripData.joinedUsers.length} נרשמו לטיול{' '}
               </Text>
-              <StackedAvatars members={tripData.joinedUsers} maxDisplay={4} />
             </View>
+            <StackedAvatars members={tripData.joinedUsers} maxDisplay={4} />
             <Text style={[styles.text, styles.details]}>
               {tripData.aboutTrip}
             </Text>
           </View>
+          
         </View>
         
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
