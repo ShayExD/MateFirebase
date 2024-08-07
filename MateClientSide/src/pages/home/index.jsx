@@ -185,6 +185,9 @@ export default function Home({ navigation }) {
           data={tripsRenderData}
           renderItem={({ item }) => (
             <SingleTrip
+            handlePress={() => {
+              navigation.navigate('ViewTrip', { trip: item })
+            }}
               picUrl={{ uri: item.tripPictureUrl }}
               title={item.tripName}
               destination={item.destinations}
