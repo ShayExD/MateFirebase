@@ -4,9 +4,9 @@ import { HorizontalScale, VerticalScale } from '../../utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Theme from '../../../assets/styles/theme'
-const SingleTrip = ({ picUrl, title, destination, numOfPeople }) => {
+const SingleTrip = ({ picUrl, title, destination, numOfPeople ,handlePress}) => {
   return (
-    <Pressable>
+    <Pressable onPress={handlePress}>
       <View style={styles.shadowContainer}>
         <View style={styles.container}>
           <Image

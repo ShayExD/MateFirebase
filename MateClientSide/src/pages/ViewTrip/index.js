@@ -12,6 +12,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import DropDown from '../../components/DropDown/DropDown'
 import Button from '../../components/Button/Button'
+import { useRoute } from '@react-navigation/native';
+
 export default function ViewTrip({ navigation }) {
 const route = useRoute();
 const { trip } = route.params; 
