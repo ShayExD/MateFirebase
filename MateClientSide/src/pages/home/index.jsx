@@ -34,11 +34,11 @@ export default function Home({ navigation }) {
   const [userPostsRenderData, setuserPostsRenderData] = useState([])
   const [isLoadinguserPosts, setisLoadinguserPosts] = useState(false)
 
-  const [tripData, setTripData] = useState([]);
-  // const [tripsPageSize, setTripsPageSize] = useState(2);
-  // const [tripsCurrentPage, setTripsCurrentPage] = useState(1);
-  // const [tripsRenderData, setTripsRenderData] = useState([]);
-  // const [isLoadingTrips, setIsLoadingTrips] = useState(false);
+  const [tripData, setTripData] = useState([])
+  const tripsPageSize = 2
+  const [tripsCurrentPage, setTripsCurrentPage] = useState(1)
+  const [tripsRenderData, setTripsRenderData] = useState([])
+  const [isLoadingTrips, setIsLoadingTrips] = useState(false)
 
   const pagination = (database, currentPage, pageSize) => {
     // console.log('currentPage' + currentPage)
@@ -63,19 +63,19 @@ export default function Home({ navigation }) {
   }
 
   function calculateTripMatchingScore(user, trip) {
-    console.log(trip.tripInterests);
+    // console.log(trip.tripInterests)
     let interestsScore =
       user.tripInterests.filter((interest) =>
         trip.tripInterests.includes(interest),
-      ).length * 10;
+      ).length * 10
     let destinationsScore =
       user.travelPlan.filter((plan) => trip.destinations.includes(plan))
-        .length * 10;
-    console.log(trip.destinations);
+        .length * 10
+    // console.log(trip.destinations)
 
-    console.log(interestsScore + destinationsScore);
+    // console.log(interestsScore + destinationsScore)
 
-    return interestsScore + destinationsScore;
+    return interestsScore + destinationsScore
   }
 
   function getRecommendedUsers(loggedInUser, allUsers) {
@@ -89,13 +89,12 @@ export default function Home({ navigation }) {
     recommendedUsers.sort((a, b) => b.matchingScore - a.matchingScore)
     return recommendedUsers
   }
+
   const logOut = () => {
     logoutUser()
     navigation.navigate('Login')
     // console.log('logOut')
   }
-
-
 
   const getAllUsers = async () => {
     try {
@@ -118,25 +117,23 @@ export default function Home({ navigation }) {
     }
   }
 
-  
   const getAllTrips = async () => {
     try {
       const response = await axios.get(
-        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`
-      );
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`,
+      )
       // console.log(response.data);
       const updatedTrips = response.data.map((trip) => {
         // console.log(trip);
-        const matchingScore = calculateTripMatchingScore(loggedInUser, trip);
-        return { ...trip, matchingScore };
-      });
-      updatedTrips.sort((a, b) => b.matchingScore - a.matchingScore);
-      setTripData(updatedTrips);
+        const matchingScore = calculateTripMatchingScore(loggedInUser, trip)
+        return { ...trip, matchingScore }
+      })
+      updatedTrips.sort((a, b) => b.matchingScore - a.matchingScore)
+      setTripData(updatedTrips)
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error)
     }
   }
-
 
   useEffect(() => {
     getAllUsers()
@@ -153,11 +150,11 @@ export default function Home({ navigation }) {
   }, [data])
 
   useEffect(() => {
-    // setIsLoadingTrips(true);
-    // const getInitTripData = pagination(trips, 1, tripsPageSize);
-    // setTripsRenderData(getInitTripData);
-    // setIsLoadingTrips(false);
-  }, [tripData]);
+    setIsLoadingTrips(true)
+    const getInitTripData = pagination(tripData, 1, tripsPageSize)
+    setTripsRenderData(getInitTripData)
+    setIsLoadingTrips(false)
+  }, [tripData])
 
   return (
     <SafeAreaView style={[Theme.screen, styles.screen]}>
@@ -185,16 +182,34 @@ export default function Home({ navigation }) {
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          data={tripData}
+          data={tripsRenderData}
           renderItem={({ item }) => (
             <SingleTrip
-              picUrl={item.tripPictureUrl}
+              picUrl={{ uri: item.tripPictureUrl }}
               title={item.tripName}
               destination={item.destinations}
-              numOfPeople={item.limitUsers
-              }
+              numOfPeople={item.limitUsers}
             ></SingleTrip>
           )}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => {
+            console.log('fetch page number' + tripsCurrentPage )
+            console.log(tripsRenderData.length)
+            if (isLoadingTrips) {
+              return
+            }
+            setIsLoadingTrips(true)
+            const contentToAppend = pagination(
+              tripData,
+              tripsCurrentPage + 1,
+              tripsPageSize,
+            )
+            if (contentToAppend.length > 0) {
+              setTripsCurrentPage(tripsCurrentPage + 1)
+              setTripsRenderData((prev) => [...prev, ...contentToAppend])
+            }
+            setIsLoadingTrips(false)
+          }}
         />
       </View>
       <View style={styles.content}>
