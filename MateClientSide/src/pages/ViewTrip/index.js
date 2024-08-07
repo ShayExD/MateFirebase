@@ -1,5 +1,5 @@
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native'
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import {
   HorizontalScale,
   VerticalScale,
@@ -13,10 +13,40 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import DropDown from '../../components/DropDown/DropDown'
 import Button from '../../components/Button/Button'
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios'
 
 export default function ViewTrip({ navigation }) {
 const route = useRoute();
-const { trip } = route.params; 
+const { trip } = route.params;
+const [tripData, setTripData] = useState(trip)
+
+
+
+const getTrip = async () =>{
+
+
+  try {
+    const response = await axios.get(
+      `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
+    )
+    setTripData(response.data);
+  } 
+  catch (error) {
+    console.error('Error fetching data:', error)
+  } 
+  finally {
+  }
+
+}
+
+
+useEffect(() => {
+  getTrip();
+  
+
+
+}, [])
+
   return (
     <ScrollView
       contentContainerStyle={[styles.screen]}
@@ -54,7 +84,7 @@ const { trip } = route.params;
                 style={styles.icon}
               />
               <Text style={[styles.primaryText]}>
-                7 באפריל 2024 - 31 מאי 2024
+              {(new Date(tripData.startDate)).toLocaleDateString()} - {(new Date(tripData.endDate)).toLocaleDateString()}
               </Text>
             </View>
             <View style={styles.iconText}>
@@ -64,13 +94,10 @@ const { trip } = route.params;
                 color='#1C9FE2'
                 style={styles.icon}
               />
-              <Text style={[styles.primaryText]}>64 אנשים נרשמו לטיול</Text>
+              <Text style={[styles.primaryText]}>{tripData.joinedUsers.length} נרשמו לטיול </Text>
             </View>
             <Text style={[styles.text, styles.details]}>
-              צאו להרפתקאת גלישה בפוארטו אסקונדידו, מקסיקו - גן עדן לגולשים.
-              חוויה מרגשת מחכה לכם בין גלים אגדיים ותרבות חוף ססגונית. הטיול
-              מתאים לכל רמות הגלישה, מלווה בהדרכה מקצועית, ומבטיח זכרונות שלא
-              ישכחו.
+             {tripData.aboutTrip}
             </Text>
           </View>
         </View>
@@ -80,9 +107,9 @@ const { trip } = route.params;
             navigation.navigate('Login')
           }}
         />
-        <DropDown header={'יעדים'}></DropDown>
-        <DropDown header={'תחומי עניין'}></DropDown>
-        <DropDown header={'מנוהל ע"י'}></DropDown>
+        <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
+        <DropDown header={'תחומי עניין'} content={tripData.tripInterests}></DropDown>
+        <DropDown header={'מנוהל ע"י'} content={tripData.joinedUsers[0].fullname} ></DropDown>
       </View>
     </ScrollView>
   )
