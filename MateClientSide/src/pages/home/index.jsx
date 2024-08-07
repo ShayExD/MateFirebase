@@ -188,7 +188,7 @@ export default function Home({ navigation }) {
           data={tripData}
           renderItem={({ item }) => (
             <SingleTrip
-              picUrl={item.tripPictureUrl}
+              picUrl={{ uri: item.tripPictureUrl }}
               title={item.tripName}
               destination={item.destinations}
               numOfPeople={item.limitUsers
