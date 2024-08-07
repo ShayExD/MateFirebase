@@ -1,5 +1,5 @@
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React,{useEffect,useState,useContext} from 'react'
 import {
   HorizontalScale,
   VerticalScale,
@@ -16,27 +16,63 @@ import { useRoute } from '@react-navigation/native'
 import StackedAvatars from '../../components/StackedAvatars/StackedAvatars'
 import  UserView  from '../../components/UserView/UserView'
 import axios from 'axios'
+import { AuthContext } from '../../../AuthContext'
+import BackArrow from '../../components/BackArrow/backArrow'
 
 export default function ViewTrip({ navigation }) {
-  const route = useRoute()
-  const { trip } = route.params
-  const [tripData, setTripData] = useState(trip)
+const route = useRoute();
+const { trip } = route.params;
+const [tripData, setTripData] = useState(trip)
+const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
+useContext(AuthContext)
 
-  const getTrip = async () => {
-    try {
-      const response = await axios.get(
-        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
-      )
-      setTripData(response.data)      
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    } finally {
-    }
+
+const getTrip = async () =>{
+
+
+  try {
+    const response = await axios.get(
+      `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
+    )
+    setTripData(response.data);
+  } 
+  catch (error) {
+    console.error('Error fetching data:', error)
+  } 
+  finally {
   }
 
-  useEffect(() => {
-    getTrip()
-  }, [])
+}
+
+const joinTrip = async () =>{
+
+try {
+  const response = await axios.post(
+    `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/joinTrip`,
+    {
+      tripId: tripData.id,
+      uid: loggedInUser.uid
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+  )
+  console.log(response);
+
+} 
+catch (error) {
+  console.error('Error', error.message)
+} 
+finally {
+}
+}
+
+useEffect(() => {
+  getTrip();
+
+}, [])
 
   return (
     <ScrollView
@@ -50,6 +86,8 @@ export default function ViewTrip({ navigation }) {
             resizeMode='cover'
             style={styles.image}
           />
+         <BackArrow></BackArrow>
+ 
         </View>
         <View style={styles.wrap}>
           <View style={styles.header}>
@@ -64,7 +102,7 @@ export default function ViewTrip({ navigation }) {
                 style={[styles.icon]}
               />
             </View>
-            <Text style={[styles.primaryTitle]}>טיול גלישה</Text>
+            <Text style={[styles.primaryTitle]}>{tripData.tripName}</Text>
           </View>
           <View style={styles.content}>
             <View style={styles.iconText}>
@@ -111,7 +149,7 @@ export default function ViewTrip({ navigation }) {
         <Button
           textContent={'הצטרף לקבוצה'}
           handlePress={() => {
-            navigation.navigate('Login')
+            joinTrip();
           }}
         />
       </View>
