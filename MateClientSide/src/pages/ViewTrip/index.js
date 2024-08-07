@@ -1,5 +1,5 @@
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native'
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   HorizontalScale,
   VerticalScale,
@@ -12,40 +12,31 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import DropDown from '../../components/DropDown/DropDown'
 import Button from '../../components/Button/Button'
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native'
+import StackedAvatars from '../../components/StackedAvatars/StackedAvatars'
+import  UserView  from '../../components/UserView/UserView'
 import axios from 'axios'
 
 export default function ViewTrip({ navigation }) {
-const route = useRoute();
-const { trip } = route.params;
-const [tripData, setTripData] = useState(trip)
+  const route = useRoute()
+  const { trip } = route.params
+  const [tripData, setTripData] = useState(trip)
 
-
-
-const getTrip = async () =>{
-
-
-  try {
-    const response = await axios.get(
-      `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
-    )
-    setTripData(response.data);
-  } 
-  catch (error) {
-    console.error('Error fetching data:', error)
-  } 
-  finally {
+  const getTrip = async () => {
+    try {
+      const response = await axios.get(
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
+      )
+      setTripData(response.data)      
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+    }
   }
 
-}
-
-
-useEffect(() => {
-  getTrip();
-  
-
-
-}, [])
+  useEffect(() => {
+    getTrip()
+  }, [])
 
   return (
     <ScrollView
@@ -55,7 +46,7 @@ useEffect(() => {
       <View style={[Theme.screen, styles.screen]}>
         <View>
           <Image
-            source={require('../../../assets/images/IntroImage.png')}
+            source={{ uri: tripData.tripPictureUrl }}
             resizeMode='cover'
             style={styles.image}
           />
@@ -84,7 +75,8 @@ useEffect(() => {
                 style={styles.icon}
               />
               <Text style={[styles.primaryText]}>
-              {(new Date(tripData.startDate)).toLocaleDateString()} - {(new Date(tripData.endDate)).toLocaleDateString()}
+                {new Date(tripData.startDate).toLocaleDateString()} -{' '}
+                {new Date(tripData.endDate).toLocaleDateString()}
               </Text>
             </View>
             <View style={styles.iconText}>
@@ -94,10 +86,13 @@ useEffect(() => {
                 color='#1C9FE2'
                 style={styles.icon}
               />
-              <Text style={[styles.primaryText]}>{tripData.joinedUsers.length} נרשמו לטיול </Text>
+              <Text style={[styles.primaryText]}>
+                {tripData.joinedUsers.length} נרשמו לטיול{' '}
+              </Text>
+              <StackedAvatars members={tripData.joinedUsers} maxDisplay={4} />
             </View>
             <Text style={[styles.text, styles.details]}>
-             {tripData.aboutTrip}
+              {tripData.aboutTrip}
             </Text>
           </View>
         </View>
@@ -108,8 +103,14 @@ useEffect(() => {
           }}
         />
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
-        <DropDown header={'תחומי עניין'} content={tripData.tripInterests}></DropDown>
-        <DropDown header={'מנוהל ע"י'} content={tripData.joinedUsers[0].fullname} ></DropDown>
+        <DropDown
+          header={'תחומי עניין'}
+          content={tripData.tripInterests}
+        ></DropDown>
+        <DropDown
+          header={'מנוהל ע"י'}
+          content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} />}
+        />
       </View>
     </ScrollView>
   )
@@ -123,19 +124,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    direction: 'ltr',
   },
   icon: {
-    marginRight: HorizontalScale(8),
+    marginLeft: HorizontalScale(8),
   },
   place: {
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     alignItems: 'center',
   },
   iconText: {
     marginTop: VerticalScale(10),
     flexDirection: 'row',
-    direction: 'rtl',
+    alignItems: 'center',
   },
   screen: {
     justifyContent: 'flex-start',
@@ -147,21 +147,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginBottom: windowHeight * 0.0234,
   },
-  title: {
-    marginTop: windowHeight * -0.079,
-    marginHorizontal: windowWidth * 0.1,
-    textAlign: 'center',
-    lineHeight: windowHeight * 0.0422,
-    marginBottom: windowHeight * 0.0234,
-  },
-  span: {
-    color: '#e6824a',
-  },
   content: {
-    textAlign: 'right',
+    alignItems: 'flex-end',
   },
   text: {
-    textAlign: 'right', // מגדיר את יישור הטקסט
+    textAlign: 'right',
     writingDirection: 'rtl',
     fontSize: Theme.primaryText.fontSize,
     color: 'gray',
@@ -173,14 +163,14 @@ const styles = StyleSheet.create({
     color: '#1C9FE2',
     fontFamily: 'OpenSans',
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: 'right',
     lineHeight: windowHeight * 0.0281,
   },
   primaryTitle: {
     color: 'black',
     fontFamily: 'OpenSans-ExtraBold',
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: 'right',
     fontWeight: 'bold',
   },
 })
