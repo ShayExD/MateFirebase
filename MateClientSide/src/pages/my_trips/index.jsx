@@ -16,6 +16,8 @@ import Header from '../../components/Header/header'
 import SingleTrip from '../../components/SingleTrip/singleTrip'
 import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { useIsFocused } from '@react-navigation/native';
+
 
 export default function MyTrips({ navigation }) {
   const { loggedInUser, logoutAndNavigate } = useContext(AuthContext)
@@ -23,6 +25,15 @@ export default function MyTrips({ navigation }) {
   const [futureTrips, setFutureTrips] = useState([])
   const [pastTrips, setPastTrips] = useState([])
   const [error, setError] = useState(null)
+  const isFocused = useIsFocused();
+
+
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchAllTrips();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     fetchAllTrips()
