@@ -141,8 +141,8 @@ const Tabs = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={styles.tabItem}>
-              <AntDesign
-                name='message'
+              <FontAwesome
+                name='commenting'
                 size={30}
                 color={focused ? '#e6824a' : '#7D848D'}
               />
