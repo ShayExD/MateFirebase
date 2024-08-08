@@ -184,8 +184,10 @@ const Tabs = () => {
       />
       <Tab.Screen
   name="Chat"
+  
   component={ChatPage}
   options={{
+    headerShown: false,
     tabBarButton: () => null, // This hides the tab button for Chat
     tabBarVisible: false, // This should hide the tab bar on the Chat screen
   }}
