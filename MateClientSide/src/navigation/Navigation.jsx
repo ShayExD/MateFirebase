@@ -11,6 +11,8 @@ import Home from '../pages/home'
 import Tabs from './tabs'
 import Trip from '../pages/ViewTrip'
 import CreateTrip from '../pages/createTrip'
+import MessagesPage from '../pages/messages'
+import ChatPage from '../pages/chat'
 const MainNavigation = () => {
   const Stack = createStackNavigator()
 
@@ -31,6 +33,8 @@ const MainNavigation = () => {
       <Stack.Screen name='CreateTrip' component={CreateTrip} />
       <Stack.Screen name='ViewTrip' component={Trip} />
       <Stack.Screen name='myTabs' component={Tabs} />
+      <Stack.Screen name="Messages" component={MessagesPage} options={{ headerShown: false }} />
+      <Stack.Screen name="Chat" component={ChatPage} options={{ headerShown: false }} />
 
       {/* <Stack.Screen name="PlanTrip" component={PlanTrip} /> */}
       {/* <Stack.Screen name="MyTabs" component={MyTabs} /> */}

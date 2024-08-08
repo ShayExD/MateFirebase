@@ -11,6 +11,7 @@ import { SingleCharToString } from '../../utils'
 import { useRoute } from '@react-navigation/native'
 import DropDown from '../../components/DropDown/DropDown'
 import { AuthContext } from '../../../AuthContext'
+import { startNewConversation } from '../../utils/chatUtils.jsx' // Assuming you have this utility function
 import SingleTrip from '../../components/SingleTrip/singleTrip' // Assuming SingleTrip is another component
 
 export default function ViewProfile({ navigation }) {
@@ -52,6 +53,17 @@ export default function ViewProfile({ navigation }) {
     console.log('edit profile')
   }
 
+  const handleStartChat = async () => {
+    if (isOwnProfile) return // Don't start a chat with yourself
+    const conversationId = await startNewConversation(loggedInUser.uid, profile.uid)
+    if (conversationId) {
+      navigation.navigate('Chat', { conversationId, otherUserId: profile.uid })
+    } else {
+      console.error('Failed to start conversation')
+      // You might want to show an error message to the user here
+    }
+  }
+
   const profile = route.params?.profile || loggedInUser
 
   if (!profile) {
@@ -82,15 +94,23 @@ export default function ViewProfile({ navigation }) {
         <Text style={[Theme.primaryTitle, styles.text]}>
           {profile.fullname.split(' ')[0]}, {profile.age}
         </Text>
-        {isOwnProfile && (
-          <Button
-            mode='contained'
-            onPress={handleEditProfile}
-            style={styles.editButton}
-          >
-            ערוך פרופיל
-          </Button>
-        )}
+        {isOwnProfile ? (
+            <Button
+              mode='contained'
+              onPress={handleEditProfile}
+              style={styles.button}
+            >
+              ערוך פרופיל
+            </Button>
+          ) : (
+            <Button
+              mode='contained'
+              onPress={handleStartChat}
+              style={styles.button}
+            >
+              התחל צ'אט
+            </Button>
+          )}
       </View>
       <View style={styles.inputsContainer}>
         <TextView

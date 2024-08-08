@@ -18,6 +18,7 @@ import MapPage from '../pages/map'
 import CreateTrip from '../pages/createTrip'
 import ViewProfile from '../pages/view_profile'
 import MyTrips from '../pages/my_trips'
+import MessagesPage from '../pages/messages'
 
 
 const Tab = createBottomTabNavigator()
@@ -128,6 +129,30 @@ const Tabs = () => {
                 ]}
               >
                 מפה
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Messages'
+        component={MessagesPage}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.tabItem}>
+              <AntDesign
+                name='pushpino'
+                size={30}
+                color={focused ? '#e6824a' : '#7D848D'}
+              />
+              <Text
+                style={[
+                  styles.tabText,
+                  { color: focused ? '#e6824a' : '#7D848D' },
+                ]}
+              >
+                הודעות שלי
               </Text>
             </View>
           ),
