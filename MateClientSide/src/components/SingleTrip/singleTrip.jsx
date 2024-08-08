@@ -4,40 +4,48 @@ import { HorizontalScale, VerticalScale } from '../../utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Theme from '../../../assets/styles/theme'
-const SingleTrip = ({ picUrl, title, destination, numOfPeople ,handlePress}) => {
+
+const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress, endDate }) => {
+  const isOver = new Date(endDate) < new Date()
+
   return (
     <Pressable onPress={handlePress}>
       <View style={styles.shadowContainer}>
-        <View style={styles.container}>
+        <View style={[styles.container, isOver && styles.containerOver]}>
           <Image
             resizeMode={'cover'}
-            // source={require('../../../assets/images/TripPhoto.jpg')}
             source={picUrl}
             style={styles.image}
           />
+          {isOver && <View style={styles.overlay} />}
           <View style={styles.information}>
-            <Text style={styles.text}>{title}</Text>
+            <Text style={[styles.text, isOver && styles.textOver]}>{title}</Text>
             <View style={styles.bottom}>
               <View style={styles.iconContainer}>
                 <Ionicons
                   name='person-outline'
                   size={15}
-                  color='#e6824a'
+                  color={isOver ? '#888' : '#e6824a'}
                   style={styles.icon}
                 />
-                <Text style={styles.iconText}>{numOfPeople}</Text>
+                <Text style={[styles.iconText, isOver && styles.textOver]}>{numOfPeople}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <EvilIcons
                   name='location'
                   size={15}
-                  color='#e6824a'
+                  color={isOver ? '#888' : '#e6824a'}
                   style={styles.icon}
                 />
-                <Text style={styles.iconText}>{destination[0]}</Text>
+                <Text style={[styles.iconText, isOver && styles.textOver]}>{destination[0]}</Text>
               </View>
             </View>
           </View>
+          {isOver && (
+            <View style={styles.endedBadge}>
+              <Text style={styles.endedText}>Ended</Text>
+            </View>
+          )}
         </View>
       </View>
     </Pressable>
@@ -67,11 +75,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     overflow: 'hidden',
   },
+  containerOver: {
+    opacity: 0.7,
+  },
   image: {
     width: '100%',
-    height: '60%', // Adjust the height as needed
+    height: '60%',
     borderTopLeftRadius: HorizontalScale(20),
     borderTopRightRadius: HorizontalScale(20),
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    zIndex: 1,
   },
   information: {
     paddingHorizontal: HorizontalScale(10),
@@ -85,9 +101,12 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 14,
   },
+  textOver: {
+    color: '#888',
+  },
   bottom: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Adjust as needed
+    justifyContent: 'space-between',
     marginTop: VerticalScale(20),
   },
   iconContainer: {
@@ -99,6 +118,21 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'OpenSans-Bold',
     fontSize: 10,
+  },
+  endedBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(255, 0, 0, 0.7)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    zIndex: 2,
+  },
+  endedText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 })
 

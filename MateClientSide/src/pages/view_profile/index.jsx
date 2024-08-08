@@ -18,33 +18,31 @@ export default function ViewProfile({ navigation }) {
   const { loggedInUser } = useContext(AuthContext)
   const isOwnProfile = !route.params?.profile
 
-  const [tripsRenderData, setTripsRenderData] = useState([]);
-  const [tripsCurrentPage, setTripsCurrentPage] = useState(1);
-  const [tripsPageSize] = useState(10);
-  const [isLoadingTrips, setIsLoadingTrips] = useState(false);
+  const [tripsRenderData, setTripsRenderData] = useState([])
+  const [tripsCurrentPage, setTripsCurrentPage] = useState(1)
+  const [tripsPageSize] = useState(10)
+  const [isLoadingTrips, setIsLoadingTrips] = useState(false)
 
   useEffect(() => {
     // Call getAllUserTrips when the component mounts
-    getAllUserTrips();
-    
-  }, []);
+    getAllUserTrips()
+  }, [])
 
   const getAllUserTrips = async () => {
     try {
       const response = await axios.post(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getUserTrips`,
         {
-          uid: loggedInUser.uid
+          uid: loggedInUser.uid,
         },
         {
           headers: {
             'Content-Type': 'application/json',
-          }
-        }
+          },
+        },
       )
-      setTripsRenderData(response.data);
-    } 
-    catch (error) {
+      setTripsRenderData(response.data)
+    } catch (error) {
       console.error('Error', error.message)
     }
   }
@@ -107,10 +105,7 @@ export default function ViewProfile({ navigation }) {
           }
         />
         <TextView title={'קצת עלי'} content={profile.introduction} />
-        <TagsView
-          title={'תחומי עניין בטיול'}
-          list={profile.tripInterests}
-        />
+        <TagsView title={'תחומי עניין בטיול'} list={profile.tripInterests} />
         <TagsView title={'יעדים לטיול'} list={profile.travelPlan} />
         <TextView
           iconName={'logo-instagram'}
@@ -118,46 +113,47 @@ export default function ViewProfile({ navigation }) {
           content={profile.instagram}
           allowCopy={true}
         />
-        <DropDown
-          header={'הטיולים שלי'}
-          content={
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={tripsRenderData}
-              renderItem={({ item }) => (
-                <SingleTrip
-                  handlePress={() => {
-                    navigation.navigate('ViewTrip', { trip: item })
-                  }}
-                  picUrl={{
-                    uri:
-                      item.tripPictureUrl ||
-                      'https://example.com/default-trip.png',
-                  }}
-                  title={item.tripName || 'Unnamed Trip'}
-                  destination={item.destinations || []}
-                  numOfPeople={item.joinedUsers.length || 0}
-                />
-              )}
-              onEndReachedThreshold={0.5}
-              onEndReached={() => {
-                if (isLoadingTrips) return
-                setIsLoadingTrips(true)
-                const contentToAppend = pagination(
-                  tripsRenderData,
-                  tripsCurrentPage + 1,
-                  tripsPageSize,
-                )
-                if (contentToAppend.length > 0) {
-                  setTripsCurrentPage(tripsCurrentPage + 1)
-                  setTripsRenderData((prev) => [...prev, ...contentToAppend])
-                }
-                setIsLoadingTrips(false)
-              }}
-            />
-          }
-        />
+        <View style={styles.tripsContainer}>
+          <Text style={styles.tripsTitle}>טיולים</Text>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={tripsRenderData}
+            renderItem={({ item }) => (
+              <SingleTrip
+                handlePress={() => {
+                  navigation.navigate('ViewTrip', { trip: item })
+                }}
+                picUrl={{
+                  uri:
+                    item.tripPictureUrl ||
+                    'https://example.com/default-trip.png',
+                }}
+                title={item.tripName || 'Unnamed Trip'}
+                destination={item.destinations || []}
+                numOfPeople={item.joinedUsers.length || 0}
+                endDate={item.endDate}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={styles.flatListContent}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              if (isLoadingTrips) return
+              setIsLoadingTrips(true)
+              const contentToAppend = pagination(
+                tripsRenderData,
+                tripsCurrentPage + 1,
+                tripsPageSize,
+              )
+              if (contentToAppend.length > 0) {
+                setTripsCurrentPage(tripsCurrentPage + 1)
+                setTripsRenderData((prev) => [...prev, ...contentToAppend])
+              }
+              setIsLoadingTrips(false)
+            }}
+          />
+        </View>
       </View>
     </ScrollView>
   )
@@ -213,5 +209,20 @@ const styles = StyleSheet.create({
     marginBottom: windowHeight * 0.0174,
     alignItems: 'center',
     marginVertical: windowHeight * 0.05,
+  },
+  tripsContainer: {
+    width: '90%',
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
+  tripsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: Theme.primaryColor.color,
+    textAlign: 'left',
+  },
+  flatListContent: {
+    paddingRight: 10, // Add some padding to the right side of the FlatList
   },
 })

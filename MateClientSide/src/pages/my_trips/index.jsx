@@ -54,8 +54,8 @@ export default function MyTrips({ navigation }) {
 
       const currentDate = new Date()
 
-      const future = userTrips.filter(trip => new Date(trip.startDate) > currentDate)
-      const past = userTrips.filter(trip => new Date(trip.startDate) <= currentDate)
+      const future = userTrips.filter(trip => new Date(trip.endDate) > currentDate)
+      const past = userTrips.filter(trip => new Date(trip.endDate) <= currentDate)
 
       setFutureTrips(future)
       setPastTrips(past)
