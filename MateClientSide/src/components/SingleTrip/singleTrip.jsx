@@ -4,9 +4,9 @@ import { HorizontalScale, VerticalScale } from '../../utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Theme from '../../../assets/styles/theme'
-const SingleTrip = ({ picUrl, title, destination, numOfPeople }) => {
+const SingleTrip = ({ picUrl, title, destination, numOfPeople ,handlePress}) => {
   return (
-    <Pressable>
+    <Pressable onPress={handlePress}>
       <View style={styles.shadowContainer}>
         <View style={styles.container}>
           <Image
@@ -34,7 +34,7 @@ const SingleTrip = ({ picUrl, title, destination, numOfPeople }) => {
                   color='#e6824a'
                   style={styles.icon}
                 />
-                <Text style={styles.iconText}>{destination}</Text>
+                <Text style={styles.iconText}>{destination[0]}</Text>
               </View>
             </View>
           </View>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: HorizontalScale(20),
   },
   text: {
-    textAlign: 'left',
+    textAlign: 'right',
     color: 'black',
     fontFamily: 'OpenSans-Bold',
     fontSize: 14,

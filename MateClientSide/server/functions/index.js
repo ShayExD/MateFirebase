@@ -193,6 +193,155 @@ app.delete('/deleteTrip', async (req, res) => {
   }
 });
 
+app.post('/joinTrip', async (req, res) => {
+  const { tripId, uid } = req.body; // Get the trip ID and user ID from the request body
+
+  if (!tripId || !uid) {
+    return res.status(400).json({ error: 'Trip ID and User ID are required' });
+  }
+
+  try {
+    // Retrieve the user document
+    const userDoc = await db.collection('users').doc(uid).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userData = userDoc.data();
+    console.log(userDoc.data());
+
+    // Retrieve the trip document
+    const tripDoc = await db.collection('trips').doc(tripId).get();
+
+    if (!tripDoc.exists) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+
+    const tripData = tripDoc.data();
+    const { joinedUsers, limitUsers } = tripData;
+
+    // Check if the trip has available slots
+    if (joinedUsers.length >= limitUsers) {
+      return res.status(400).json({ error: 'Trip is full' });
+    }
+
+    // Check if the user is already in the joinedUsers array
+    const isUserJoined = joinedUsers.some(user => user.uid === uid);
+
+    if (isUserJoined) {
+      return res.status(400).json({ error: 'User is already joined to the trip' });
+    }
+
+    // Add the user to the joinedUsers array
+    joinedUsers.push(userData);
+
+    // Update the trip document
+    await db.collection('trips').doc(tripId).update({ joinedUsers });
+
+    res.status(200).send({ message: 'User successfully joined the trip', joinedUsers });
+  } catch (error) {
+    console.error('Error joining trip:', error);
+    res.status(500).send({ error: 'Failed to join trip' });
+  }
+});
+
+app.post('/leaveTrip', async (req, res) => {
+  const { tripId, uid } = req.body; // Get the trip ID and user ID from the request body
+
+  if (!tripId || !uid) {
+    return res.status(400).json({ error: 'Trip ID and User ID are required' });
+  }
+
+  try {
+    // Retrieve the trip document
+    const tripDoc = await db.collection('trips').doc(tripId).get();
+
+    if (!tripDoc.exists) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+
+    const tripData = tripDoc.data();
+    let { joinedUsers, manageByUid } = tripData;
+
+    // Check if the user is the manager of the trip
+    if (manageByUid === uid) {
+      // Delete the trip document
+      await db.collection('trips').doc(tripId).delete();
+      return res.status(200).send({ message: 'Trip deleted successfully as the user is the manager' });
+    }
+
+    // Check if the user is in the joinedUsers array
+    const userIndex = joinedUsers.findIndex(user => user.uid === uid);
+
+    if (userIndex === -1) {
+      return res.status(400).json({ error: 'User is not joined to the trip' });
+    }
+
+    // Remove the user from the joinedUsers array
+    joinedUsers.splice(userIndex, 1);
+
+    // Update the trip document
+    await db.collection('trips').doc(tripId).update({ joinedUsers });
+
+    res.status(200).send({ message: 'User successfully left the trip', joinedUsers });
+  } catch (error) {
+    console.error('Error leaving trip:', error);
+    res.status(500).send({ error: 'Failed to leave trip' });
+  }
+});
 
 
-export const mateapi = functions.https.onRequest(app)
+app.get('/getTrip/:tripId', async (req, res) => {
+  const { tripId } = req.params; // Get the trip ID from the URL parameters
+
+  if (!tripId) {
+    return res.status(400).json({ error: 'Trip ID is required' });
+  }
+
+  try {
+    // Retrieve the trip document
+    const tripDoc = await db.collection('trips').doc(tripId).get();
+
+    if (!tripDoc.exists) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+
+    const tripData = tripDoc.data();
+    tripData.id = tripId; 
+    res.status(200).json(tripData);
+  } catch (error) {
+    console.error('Error fetching trip:', error);
+    res.status(500).json({ error: 'Failed to fetch trip' });
+  }
+});
+
+app.post('/getUserTrips', async (req, res) => {
+  const { uid } = req.body; // Get the user ID from the request body
+
+  if (!uid) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+  try {
+    // Retrieve all trips
+    const tripsFromFirestore = await db.collection('trips').get();
+    const trips = tripsFromFirestore.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    // Filter trips to include only those where the user is in the joinedUsers array
+    const userTrips = trips.filter(trip => 
+      trip.joinedUsers.some(user => user.uid === uid)
+    );
+
+    res.status(200).json(userTrips);
+  } catch (error) {
+    console.error('Error fetching user trips:', error);
+    res.status(500).json({ error: 'Failed to fetch user trips' });
+  }
+});
+
+
+export const mateapi = functions.https.onRequest(app);
