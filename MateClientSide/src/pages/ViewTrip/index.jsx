@@ -64,7 +64,13 @@ try {
     }
   )
   console.log(response);
+  setTripData((prevTripData) => ({
+    ...prevTripData,
+    joinedUsers: [...prevTripData.joinedUsers, loggedInUser],
+  }));
   setIsChange(!isChange);
+
+  setIsJoined(true)
 
 } 
 catch (error) {
@@ -96,6 +102,9 @@ const leaveTrip = async () =>{
     }
     // console.log(response);
     setIsChange(!isChange);
+    
+    setIsJoined(false);
+
     navigation.navigate('myTabs', { screen: 'Home' })
   
   } 
@@ -188,7 +197,12 @@ useEffect(() => {
           content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} onPress={() => navigation.navigate('ViewProfile', { profile: tripData.joinedUsers[0]})} />}
         />
         <Button
-          textContent={isUserJoined ? 'עזוב את הקבוצה' : 'הצטרף לקבוצה'}
+          textContent={ isUserJoined && loggedInUser.uid === tripData.manageByUid
+            ? 'מחק את הקבוצה'
+            : isUserJoined
+            ? 'עזוב את הקבוצה'
+            : 'הצטרף לקבוצה'}
+            
           handlePress={() => {
             if(isUserJoined){
               leaveTrip();
