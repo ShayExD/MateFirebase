@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ActivityIndicator, Alert } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
+import { StyleSheet, Text, View, ActivityIndicator, Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight, HorizontalScale } from '../../utils'
@@ -47,6 +47,11 @@ export default function Login() {
       .catch((error) => {
         console.error('Error fetching user data:', error)
         setLoading(false)
+        Alert.alert(
+          'Error',
+          'Failed to fetch user data. Please try again.',
+          [{ text: 'OK' }]
+        )
       })
   }
 
@@ -58,23 +63,58 @@ export default function Login() {
   }
 
   const handleLogin = () => {
-    setLoading(true)
-    const auth = getAuth(app)
-
+    if (!email.trim() || !password.trim()) {
+      Alert.alert(
+        'Input Error',
+        'Please enter both email and password',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+  
+    setLoading(true);
+    const auth = getAuth(app);
+  
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user
-        fetchUserData(user.uid)
+        const user = userCredential.user;
+        console.log('Login successful for user:', user.uid);
+        fetchUserData(user.uid);
       })
       .catch((error) => {
+        console.error('Authentication error:', error);
+        console.log('Error code:', error.code);
+        console.log('Error message:', error.message);
+  
+        let errorMessage = 'An error occurred during login. Please try again.';
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = 'No user found with this email address.';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'Incorrect password. Please try again.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address format.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'This user account has been disabled.';
+            break;
+          case 'auth/operation-not-allowed':
+            errorMessage = 'This login method is not allowed. Please contact support.';
+            console.error('Email/password sign-in is not enabled in Firebase console.');
+            break;
+          // Add more cases as needed
+        }
+  
         Alert.alert(
           'Authentication Error',
-          'User does not exist or incorrect password',
+          errorMessage,
           [{ text: 'OK', onPress: () => console.log('Auth error acknowledged') }]
-        )
-        setLoading(false)
-      })
-  }
+        );
+        setLoading(false);
+      });
+  };
 
   if (loading) {
     return (
