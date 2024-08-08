@@ -1,20 +1,41 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useStat,useContext } from 'react'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight } from '../../utils'
 import BackArrow from '../../components/BackArrow/backArrow'
 import { TextInput, Button } from 'react-native-paper'
 import Input from '../../components/Input/input'
+import { AuthContext } from '../../../AuthContext' // Adjust the import path as needed
 import ButtonLower from '../../components/ButtonLower/buttonLower'
 import { Avatar } from 'react-native-paper'
 import TextView from '../../components/TextView/textView'
 import TagsView from '../../components/TagsView/tagsView'
-import { useRoute } from '@react-navigation/native';
 import { SingleCharToString } from '../../utils'
-export default function ViewProfile() {
-const route = useRoute();
-const { profile } = route.params; 
+import { useRoute } from '@react-navigation/native'
 
+export default function ViewProfile({navigation}) {
+  const route = useRoute();
+  // const navigation = useNavigation();
+  const { loggedInUser } = useContext(AuthContext);
+  const isOwnProfile = !route.params?.profile;
+
+  const handleEditProfile = () => {
+    navigation.navigate('EditProfile', { profile: loggedInUser });
+    console.log("edit progfile");
+    
+    // Navigate to the EditProfile screen
+    // You'll need to create this screen and set up the navigation
+  };
+  // Use route params if available, otherwise use context
+  const profile = route.params?.profile || loggedInUser;
+
+  if (!profile) {
+    return (
+      <View style={styles.screen}>
+        <Text>No profile data available</Text>
+      </View>
+    );
+  }
   
   return (
     <ScrollView
@@ -30,6 +51,15 @@ const { profile } = route.params;
         <Text style={[Theme.primaryTitle, styles.text]}>
           {profile.fullname.split(' ')[0]},{profile.age}
         </Text>
+        {isOwnProfile && (
+          <Button 
+            mode="contained" 
+            onPress={handleEditProfile}
+            style={styles.editButton}
+          >
+            ערוך פרופיל
+          </Button>
+        )}
       </View>
       <View style={styles.inputsContainer}>
   

@@ -16,6 +16,7 @@ import Theme from '../../assets/styles/theme'
 import ComingSoon from '../pages/comingSoon'
 import MapPage from '../pages/map'
 import CreateTrip from '../pages/createTrip'
+import ViewProfile from '../pages/view_profile'
 
 
 const Tab = createBottomTabNavigator()
@@ -132,8 +133,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name='EditProfile'
-        component={EditProfile}
+        name='ViewProfile'
+        component={ViewProfile}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

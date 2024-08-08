@@ -30,7 +30,6 @@ const MainNavigation = () => {
       <Stack.Screen name='Trip' component={Trip} />
       <Stack.Screen name='CreateTrip' component={CreateTrip} />
       <Stack.Screen name='ViewTrip' component={Trip} />
-
       <Stack.Screen name='myTabs' component={Tabs} />
 
       {/* <Stack.Screen name="PlanTrip" component={PlanTrip} /> */}
