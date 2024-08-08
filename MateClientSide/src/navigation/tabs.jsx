@@ -19,7 +19,7 @@ import CreateTrip from '../pages/createTrip'
 import ViewProfile from '../pages/view_profile'
 import MyTrips from '../pages/my_trips'
 import MessagesPage from '../pages/messages'
-
+import ChatPage from '../pages/chat'
 
 const Tab = createBottomTabNavigator()
 
@@ -142,7 +142,7 @@ const Tabs = () => {
           tabBarIcon: ({ focused }) => (
             <View style={styles.tabItem}>
               <AntDesign
-                name='pushpino'
+                name='message'
                 size={30}
                 color={focused ? '#e6824a' : '#7D848D'}
               />
@@ -182,6 +182,16 @@ const Tabs = () => {
           ),
         }}
       />
+      <Tab.Screen
+  name="Chat"
+  component={ChatPage}
+  options={{
+    tabBarButton: () => null, // This hides the tab button for Chat
+    tabBarVisible: false, // This should hide the tab bar on the Chat screen
+  }}
+/>
+
+
     </Tab.Navigator>
   )
 }
