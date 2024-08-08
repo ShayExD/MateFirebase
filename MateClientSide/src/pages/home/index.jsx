@@ -212,6 +212,7 @@ export default function Home({ navigation }) {
               picUrl={{ uri: item.tripPictureUrl || 'https://example.com/default-trip.png' }}
               title={item.tripName || 'Unnamed Trip'}
               destination={item.destinations || []}
+              max={'/'+item.limitUsers || ''}
               numOfPeople={item.joinedUsers.length || 0}
             />
           )}

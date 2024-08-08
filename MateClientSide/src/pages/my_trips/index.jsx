@@ -26,7 +26,7 @@ export default function MyTrips({ navigation }) {
 
   useEffect(() => {
     fetchAllTrips()
-  }, [loggedInUser])
+  }, [])
 
   const fetchAllTrips = async () => {
     if (!loggedInUser || !loggedInUser.uid) {

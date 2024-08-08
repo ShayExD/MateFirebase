@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Theme from '../../../assets/styles/theme'
 
-const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress, endDate }) => {
+const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress,max ,endDate}) => {
   const isOver = new Date(endDate) < new Date()
 
   return (
@@ -28,7 +28,7 @@ const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress, endD
                   color={isOver ? '#888' : '#e6824a'}
                   style={styles.icon}
                 />
-                <Text style={[styles.iconText, isOver && styles.textOver]}>{numOfPeople}</Text>
+                <Text style={[styles.iconText, isOver && styles.textOver]}>{numOfPeople}{max}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <EvilIcons
