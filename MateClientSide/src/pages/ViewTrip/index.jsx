@@ -198,10 +198,10 @@ useEffect(() => {
         />
         <Button
           textContent={ isUserJoined && loggedInUser.uid === tripData.manageByUid
-            ? 'מחק את הקבוצה'
+            ? 'מחק את הטיול'
             : isUserJoined
-            ? 'עזוב את הקבוצה'
-            : 'הצטרף לקבוצה'}
+            ? 'עזוב את הטיול'
+            : 'הצטרף לטיול'}
             
           handlePress={() => {
             if(isUserJoined){

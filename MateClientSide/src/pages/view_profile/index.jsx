@@ -53,6 +53,10 @@ export default function ViewProfile({ navigation }) {
     console.log('edit profile')
   }
 
+  const handleMyTrips = () => {
+    navigation.navigate('MyTrips', { screen: 'Home' })
+  }
+
   const handleStartChat = async () => {
     if (isOwnProfile) return // Don't start a chat with yourself
     const conversationId = await startNewConversation(loggedInUser.uid, profile.uid)
@@ -95,6 +99,7 @@ export default function ViewProfile({ navigation }) {
           {profile.fullname.split(' ')[0]}, {profile.age}
         </Text>
         {isOwnProfile ? (
+          <View style={styles.buttonContainer}>
             <Button
               mode='contained'
               onPress={handleEditProfile}
@@ -102,6 +107,14 @@ export default function ViewProfile({ navigation }) {
             >
               ערוך פרופיל
             </Button>
+            <Button
+              mode='contained'
+              onPress={handleMyTrips}
+              style={[styles.button,{backgroundColor:"orange"}]}
+            >
+              מעבר לטיולים שלי
+            </Button>
+            </View>
           ) : (
             <Button
               mode='contained'
@@ -199,6 +212,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     direction: 'rtl',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
   labelContainer: {
     minWidth: '90%',
     maxWidth: '90%',
@@ -218,6 +236,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+    marginHorizontal: 5,
+
   },
   editButton: {
     marginVertical: 10,

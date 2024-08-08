@@ -139,7 +139,8 @@ export default function Home({ navigation }) {
       )
 
       const currentDate = new Date();
-      const futureTrips = response.data.filter(trip => new Date(trip.startDate) > currentDate);
+      const futureTrips = response.data.filter(trip => new Date(trip.startDate) >= currentDate);
+
       const updatedTrips = futureTrips.map((trip) => {
         const matchingScore = calculateTripMatchingScore(loggedInUser || {}, trip)
         return { ...trip, matchingScore }

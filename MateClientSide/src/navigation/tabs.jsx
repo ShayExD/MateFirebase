@@ -162,24 +162,26 @@ const Tabs = () => {
         name='MyTrips'
         component={MyTrips}
         options={{
+          tabBarVisible: false, 
           headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <View style={styles.tabItem}>
-              <AntDesign
-                name='pushpino'
-                size={30}
-                color={focused ? '#e6824a' : '#7D848D'}
-              />
-              <Text
-                style={[
-                  styles.tabText,
-                  { color: focused ? '#e6824a' : '#7D848D' },
-                ]}
-              >
-                טיולים שלי
-              </Text>
-            </View>
-          ),
+          tabBarButton: () => null
+          // tabBarIcon: ({ focused }) => (
+          //   <View style={styles.tabItem}>
+          //     <AntDesign
+          //       name='pushpino'
+          //       size={30}
+          //       color={focused ? '#e6824a' : '#7D848D'}
+          //     />
+          //     <Text
+          //       style={[
+          //         styles.tabText,
+          //         { color: focused ? '#e6824a' : '#7D848D' },
+          //       ]}
+          //     >
+          //       טיולים שלי
+          //     </Text>
+          //   </View>
+          // ),
         }}
       />
       <Tab.Screen

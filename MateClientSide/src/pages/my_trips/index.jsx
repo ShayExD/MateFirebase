@@ -53,7 +53,7 @@ export default function MyTrips({ navigation }) {
       const response = await axios.get(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`
       )
-      console.log('API Response:', response.data)
+      // console.log('API Response:', response.data)
 
       const allTrips = response.data
       const userTrips = allTrips.filter(trip => 
@@ -61,7 +61,7 @@ export default function MyTrips({ navigation }) {
         (trip.joinedUsers && trip.joinedUsers.some(user => user.uid === loggedInUser.uid))
       )
 
-      console.log('Filtered User Trips:', userTrips)
+      // console.log('Filtered User Trips:', userTrips)
 
       const currentDate = new Date()
 

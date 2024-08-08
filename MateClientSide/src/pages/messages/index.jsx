@@ -23,7 +23,7 @@ const MessagesPage = ({ navigation }) => {
       (snapshot) => {
         const conversationsData = snapshot.docs.map(doc => {
           const data = doc.data();
-          console.log('Conversation data:', data); // Debug log
+          // console.log('Conversation data:', data); // Debug log
           const otherUser = data.participants.find(p => p.id !== loggedInUser.uid);
           
           return {
@@ -34,7 +34,7 @@ const MessagesPage = ({ navigation }) => {
             lastMessageTimestamp: data.lastMessageTimestamp ? data.lastMessageTimestamp.toDate() : null
           };
         });
-        console.log('Processed conversations:', conversationsData); // Debug log
+        // console.log('Processed conversations:', conversationsData); // Debug log
         setConversations(conversationsData);
       },
       (error) => {
@@ -46,9 +46,9 @@ const MessagesPage = ({ navigation }) => {
   }, [loggedInUser.uid]);
 
   const renderConversation = ({ item }) => {
-    console.log('Rendering conversation item:', item); // Debug log
+    // console.log('Rendering conversation item:', item); // Debug log
     return (
-      <Pressable onPress={() => navigation.navigate('Chat', { conversationId: item.id, otherUserId: item.otherUser.id })}>
+      <Pressable onPress={() => navigation.navigate('Chat', { conversationId: item.id, otherUserId: item.otherUser.id , otherUser:item.otherUser})}>
         <View style={styles.conversationItem}>
           <Avatar.Image 
             size={50} 

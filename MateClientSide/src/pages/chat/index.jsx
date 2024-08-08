@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Pressable } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, Pressable,ScrollView } from 'react-native';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { AuthContext } from '../../../AuthContext';
@@ -11,8 +11,7 @@ const ChatPage = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const { loggedInUser } = useContext(AuthContext);
-  const { conversationId, otherUserId } = route.params;
-
+  const { conversationId, otherUserId,otherUser } = route.params;
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, 'conversations', conversationId, 'messages'), orderBy('timestamp', 'desc')),
@@ -28,6 +27,10 @@ const ChatPage = ({ route, navigation }) => {
 
     return () => unsubscribe();
   }, [conversationId]);
+
+
+
+
 
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return;
@@ -91,7 +94,7 @@ const ChatPage = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <BackArrow />
+
       <FlatList
         inverted
         data={messages}
@@ -119,9 +122,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: 10,
+    color: 'black',
+    flex: 1,
+  },
   messagesContainer: {
     paddingHorizontal: 10,
     paddingBottom: 10,
+    flexGrow: 1,
   },
   messageContainer: {
     marginVertical: 5,
