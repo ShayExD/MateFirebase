@@ -134,6 +134,12 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 10,
   },
+  editButton: {
+    marginVertical: 10,
+    backgroundColor: Theme.primaryColor.color,
+    borderRadius: 10,
+
+  },
   avatarContainer: {
     marginTop: windowHeight * 0.1,
     marginBottom: windowHeight * 0.0174,

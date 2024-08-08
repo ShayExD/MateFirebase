@@ -204,7 +204,7 @@ export default function Home({ navigation }) {
               picUrl={{ uri: item.tripPictureUrl || 'https://example.com/default-trip.png' }}
               title={item.tripName || 'Unnamed Trip'}
               destination={item.destinations || []}
-              numOfPeople={item.limitUsers || 0}
+              numOfPeople={item.joinedUsers.length || 0}
             />
           )}
           onEndReachedThreshold={0.5}

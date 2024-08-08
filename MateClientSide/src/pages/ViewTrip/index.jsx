@@ -144,7 +144,7 @@ useEffect(() => {
         ></DropDown>
         <DropDown
           header={'מנוהל ע"י'}
-          content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} />}
+          content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} onPress={() => navigation.navigate('ViewProfile', { profile: tripData.joinedUsers[0]})} />}
         />
         <Button
           textContent={'הצטרף לקבוצה'}

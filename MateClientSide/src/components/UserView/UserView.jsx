@@ -1,23 +1,25 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Theme from '../../../assets/styles/theme';
-import { Avatar } from 'react-native-paper';
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import Theme from '../../../assets/styles/theme'
+import { Avatar } from 'react-native-paper'
 
-const UserView = ({ title, content, avatar }) => {
+const UserView = ({ title, content, avatar ,onPress}) => {
   return (
-    <View style={styles.labelContainer}>
-      <Text style={styles.smallTitle}>{title}</Text>
-      <View style={styles.contentContainer}>
-        <Text style={styles.textAttributes}>{content}</Text>
-        <Avatar.Image
-          size={40}
-          source={{uri: avatar}}
-          style={styles.avatar}
-        />
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.labelContainer}>
+        <Text style={styles.smallTitle}>{title}</Text>
+        <View style={styles.contentContainer}>
+          <Text style={styles.textAttributes}>{content}</Text>
+          <Avatar.Image
+            size={40}
+            source={{ uri: avatar }}
+            style={styles.avatar}
+          />
+        </View>
       </View>
-    </View>
-  );
-};
+    </TouchableOpacity>
+  )
+}
 
 const styles = StyleSheet.create({
   labelContainer: {
@@ -47,6 +49,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'right',
   },
-});
+})
 
-export default UserView;
+export default UserView
