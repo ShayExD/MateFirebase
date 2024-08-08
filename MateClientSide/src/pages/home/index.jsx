@@ -152,6 +152,11 @@ export default function Home({ navigation }) {
     setIsLoadingTrips(false)
   }, [tripData])
 
+  const handleHeaderPress = () => {
+    console.log("Header pressed");
+    
+    navigation.navigate('ViewProfile');
+  };
   if (!loggedInUser) {
     console.log("No logged-in user, rendering null")
     return null
@@ -174,6 +179,7 @@ export default function Home({ navigation }) {
     <SafeAreaView style={[Theme.screen, styles.screen]}>
       <View style={styles.topBar}>
         <Header
+          onPress={handleHeaderPress}
           nickName={loggedInUser.fullname || 'Guest'}
           picUri={loggedInUser.profileImage || 'https://example.com/default-avatar.png'}
         />
