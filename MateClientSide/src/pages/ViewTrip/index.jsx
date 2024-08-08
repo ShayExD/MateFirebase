@@ -19,10 +19,13 @@ import axios from 'axios'
 import { AuthContext } from '../../../AuthContext'
 import BackArrow from '../../components/BackArrow/backArrow'
 
+
 export default function ViewTrip({ navigation }) {
 const route = useRoute();
 const { trip } = route.params;
 const [tripData, setTripData] = useState(trip)
+const [isChange,setIsChange]= useState(false);
+const [isUserJoined,setIsJoined] = useState(false);
 const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
 useContext(AuthContext)
 
@@ -35,6 +38,7 @@ const getTrip = async () =>{
       `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
     )
     setTripData(response.data);
+    
   } 
   catch (error) {
     console.error('Error fetching data:', error)
@@ -45,7 +49,7 @@ const getTrip = async () =>{
 }
 
 const joinTrip = async () =>{
-
+console.log(isUserJoined)
 try {
   const response = await axios.post(
     `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/joinTrip`,
@@ -60,6 +64,7 @@ try {
     }
   )
   console.log(response);
+  setIsChange(!isChange);
 
 } 
 catch (error) {
@@ -69,10 +74,47 @@ finally {
 }
 }
 
+const leaveTrip = async () =>{
+  console.log(tripData.id)
+  console.log(loggedInUser.uid)
+  try {
+    const response = await axios.post(
+      `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/leaveTrip`,
+      {
+        tripId: tripData.id,
+        uid: loggedInUser.uid
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+    if(tripData.manageByUid  === loggedInUser.uid ){
+      navigation.navigate('myTabs', { screen: 'Home' })
+      return;
+    }
+    // console.log(response);
+    setIsChange(!isChange);
+    navigation.navigate('myTabs', { screen: 'Home' })
+  
+  } 
+  catch (error) {
+    console.error('Error', error.message)
+  } 
+  finally {
+  }
+}
+
+
 useEffect(() => {
   getTrip();
+  setIsJoined(tripData.joinedUsers.some(user => user.uid === loggedInUser.uid));
 
-}, [])
+}, [isChange])
+
+
+
 
   return (
     <ScrollView
@@ -93,7 +135,6 @@ useEffect(() => {
           <View style={styles.header}>
             <View style={styles.place}>
               <Text style={[styles.primaryText, { fontWeight: 'bold' }]}>
-                {trip.aboutTrip}
               </Text>
               <MaterialIcons
                 name='place'
@@ -147,9 +188,15 @@ useEffect(() => {
           content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} />}
         />
         <Button
-          textContent={'הצטרף לקבוצה'}
+          textContent={isUserJoined ? 'עזוב את הקבוצה' : 'הצטרף לקבוצה'}
           handlePress={() => {
-            joinTrip();
+            if(isUserJoined){
+              leaveTrip();
+            }
+            else{
+              
+              joinTrip();
+            }
           }}
         />
       </View>

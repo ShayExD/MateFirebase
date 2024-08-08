@@ -127,7 +127,10 @@ export default function Home({ navigation }) {
       const response = await axios.get(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`,
       )
-      const updatedTrips = response.data.map((trip) => {
+
+      const currentDate = new Date();
+      const futureTrips = response.data.filter(trip => new Date(trip.startDate) > currentDate);
+      const updatedTrips = futureTrips.map((trip) => {
         const matchingScore = calculateTripMatchingScore(loggedInUser || {}, trip)
         return { ...trip, matchingScore }
       })
@@ -144,6 +147,11 @@ export default function Home({ navigation }) {
     setuserPostsRenderData(getInitPostData)
     setisLoadinguserPosts(false)
   }, [data])
+
+
+  useEffect(() => {
+    getAllTrips();
+  }, [navigation])
 
   useEffect(() => {
     setIsLoadingTrips(true)
