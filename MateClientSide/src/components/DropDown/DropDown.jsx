@@ -32,14 +32,28 @@ const DropDown = ({ header, content }) => {
     } else if (React.isValidElement(content)) {
       // Render React component
       return content;
-    } else {
-      // Fallback for unexpected content type
-      return (
-        <View style={styles.singleValueContainer}>
-          <Text style={styles.singleValueText}>Invalid content type</Text>
-        </View>
-      );
+    } else if (typeof content === 'object' && content !== null) {
+      // Handle object with component and props
+      const [Component, props] = Object.entries(content)[0];
+      
+      if (typeof Component === 'function') {
+        return <Component {...props} />;
+      } else {
+        console.warn(`Invalid component provided`);
+        return (
+          <View style={styles.singleValueContainer}>
+            <Text style={styles.singleValueText}>Invalid component provided</Text>
+          </View>
+        );
+      }
     }
+    
+    // Fallback for unexpected content type
+    return (
+      <View style={styles.singleValueContainer}>
+        <Text style={styles.singleValueText}>Invalid content type</Text>
+      </View>
+    );
   };
 
   return (
@@ -56,7 +70,7 @@ const DropDown = ({ header, content }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: VerticalScale(10),
-    width: '80%',
+    width: '90%',
   },
   dropdown: {
     height: 50,
@@ -74,7 +88,7 @@ const styles = StyleSheet.create({
     writingDirection: 'rtl',
   },
   dropdownContent: {
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
     marginTop: 8,

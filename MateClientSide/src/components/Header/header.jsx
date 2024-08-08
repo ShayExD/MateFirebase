@@ -1,19 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { HorizontalScale, VerticalScale } from '../../utils';
-import Theme from '../../../assets/styles/theme';
-import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../../AuthContext';
 
-const Header = ({ nickName, picUri }) => {
+const Header = ({ nickName, onPress }) => {
   const { loggedInUser } = useContext(AuthContext);
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.text]}>{nickName}</Text>
-      <Avatar.Image size={40} source={{ uri: loggedInUser.profileImage }} style={styles.image} />
-    </View>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+      <Text style={styles.text}>{nickName}</Text>
+      <Avatar.Image 
+        size={40} 
+        source={{ uri: loggedInUser?.profileImage || 'https://example.com/default-avatar.png' }} 
+        style={styles.image} 
+      />
+    </TouchableOpacity>
   );
 };
 
@@ -37,8 +39,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   image: {
-    marginLeft: '0px',
-    paddingLeft: '0px',
+    marginLeft: 0,
+    paddingLeft: 0,
   },
 });
 

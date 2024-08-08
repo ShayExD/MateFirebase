@@ -323,12 +323,8 @@ export default function EditProfile({ navigation }) {
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
     >
-      {/* <BackArrow /> */}
+      <BackArrow />
 
-      <Pressable style={styles.icon} onPress={logOut}>
-        <AntDesign name='logout' size={30} color='#e6824a' />
-        <Text>התנתק</Text>
-      </Pressable>
       <Text style={[Theme.primaryTitle, styles.title]}>בניית הפרופיל שלך</Text>
       <View style={styles.avatarContainer}>
         <AvatarComponent

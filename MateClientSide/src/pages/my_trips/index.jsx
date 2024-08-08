@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   FlatList,
+  Alert,
 } from 'react-native'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, HorizontalScale } from '../../utils'
@@ -41,13 +42,15 @@ export default function MyTrips({ navigation }) {
       const response = await axios.get(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`
       )
-      const allTrips = response.data
-      console.log('All Trips:', allTrips)
+      console.log('API Response:', response.data)
 
+      const allTrips = response.data
       const userTrips = allTrips.filter(trip => 
         trip.manageByUid === loggedInUser.uid || 
         (trip.joinedUsers && trip.joinedUsers.some(user => user.uid === loggedInUser.uid))
       )
+
+      console.log('Filtered User Trips:', userTrips)
 
       const currentDate = new Date()
 
@@ -58,7 +61,9 @@ export default function MyTrips({ navigation }) {
       setPastTrips(past)
     } catch (error) {
       console.error('Error fetching trips:', error)
+      console.log('Error details:', error.response?.data)
       setError('Failed to load trips. Please try again.')
+      Alert.alert('Error', 'Failed to load trips. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -136,6 +141,7 @@ export default function MyTrips({ navigation }) {
   )
 }
 
+
 const styles = StyleSheet.create({
   screen: { alignItems: 'center' },
   topBar: {
@@ -160,14 +166,5 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
     textAlign: 'center',
     alignItems: 'center',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  emptyText: {
-    textAlign: 'center',
-    marginTop: 10,
   },
 })
