@@ -23,6 +23,7 @@ const MessagesPage = ({ navigation }) => {
       (snapshot) => {
         const conversationsData = snapshot.docs.map(doc => {
           const data = doc.data();
+          console.log('Conversation data:', data); // Debug log
           const otherUser = data.participants.find(p => p.id !== loggedInUser.uid);
           
           return {
@@ -33,7 +34,11 @@ const MessagesPage = ({ navigation }) => {
             lastMessageTimestamp: data.lastMessageTimestamp ? data.lastMessageTimestamp.toDate() : null
           };
         });
+        console.log('Processed conversations:', conversationsData); // Debug log
         setConversations(conversationsData);
+      },
+      (error) => {
+        console.error("Error fetching conversations:", error);
       }
     );
 
@@ -41,17 +46,18 @@ const MessagesPage = ({ navigation }) => {
   }, [loggedInUser.uid]);
 
   const renderConversation = ({ item }) => {
+    console.log('Rendering conversation item:', item); // Debug log
     return (
       <Pressable onPress={() => navigation.navigate('Chat', { conversationId: item.id, otherUserId: item.otherUser.id })}>
         <View style={styles.conversationItem}>
           <Avatar.Image 
             size={50} 
-            source={{ uri: item.otherUser.profileImage || DEFAULT_PROFILE_IMAGE }}
+            source={{ uri: item.otherUser?.profileImage || DEFAULT_PROFILE_IMAGE }}
           />
           <View style={styles.conversationInfo}>
-            <Text style={styles.conversationName}>{item.otherUser.name}</Text>
+            <Text style={styles.conversationName}>{item.otherUser?.name || 'Unknown User'}</Text>
             <Text style={styles.lastMessage} numberOfLines={1} ellipsizeMode="tail">
-              {item.lastMessage}
+              {item.lastMessage || 'No messages yet'}
             </Text>
           </View>
           {item.lastMessageTimestamp && (
@@ -90,6 +96,7 @@ const MessagesPage = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

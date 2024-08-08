@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, Pressable } from 'react-native';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { AuthContext } from '../../../AuthContext';
 import BackArrow from '../../components/BackArrow/backArrow';
@@ -20,6 +20,7 @@ const ChatPage = ({ route, navigation }) => {
         const messagesData = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
+          timestamp: doc.data().timestamp?.toDate(),
         }));
         setMessages(messagesData);
       }
@@ -31,20 +32,59 @@ const ChatPage = ({ route, navigation }) => {
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return;
 
-    await addDoc(collection(db, 'conversations', conversationId, 'messages'), {
+    const messageData = {
       text: inputMessage,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
-    });
+    };
 
-    setInputMessage('');
+    try {
+      // Add the message to the messages subcollection
+      const messageRef = await addDoc(collection(db, 'conversations', conversationId, 'messages'), messageData);
+
+      // Update the conversation document with the last message
+      await updateDoc(doc(db, 'conversations', conversationId), {
+        lastMessage: inputMessage,
+        lastMessageTimestamp: serverTimestamp(),
+      });
+
+      setInputMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      // You might want to show an error message to the user here
+    }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return '';
+    const now = new Date();
+    const messageDate = new Date(timestamp);
+    
+    if (now.toDateString() === messageDate.toDateString()) {
+      // If the message is from today, show the time
+      return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else {
+      // If the message is from a different day, show the date and time
+      return messageDate.toLocaleString([], { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit'
+      });
+    }
   };
 
   const renderMessage = ({ item }) => {
     const isOwnMessage = item.senderId === loggedInUser.uid;
     return (
-      <View style={[styles.messageBubble, isOwnMessage ? styles.ownMessage : styles.otherMessage]}>
-        <Text style={styles.messageText}>{item.text}</Text>
+      <View style={[styles.messageContainer, isOwnMessage ? styles.ownMessageContainer : styles.otherMessageContainer]}>
+        <View style={[styles.messageBubble, isOwnMessage ? styles.ownMessage : styles.otherMessage]}>
+          <Text style={[styles.messageText, isOwnMessage && styles.ownMessageText]}>{item.text}</Text>
+        </View>
+        <Text style={[styles.timestamp, isOwnMessage ? styles.ownTimestamp : styles.otherTimestamp]}>
+          {formatTimestamp(item.timestamp)}
+        </Text>
       </View>
     );
   };
@@ -83,22 +123,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 10,
   },
+  messageContainer: {
+    marginVertical: 5,
+    maxWidth: '80%',
+  },
+  ownMessageContainer: {
+    alignSelf: 'flex-end',
+  },
+  otherMessageContainer: {
+    alignSelf: 'flex-start',
+  },
   messageBubble: {
-    maxWidth: '70%',
     padding: 10,
     borderRadius: 20,
-    marginVertical: 5,
   },
   ownMessage: {
-    alignSelf: 'flex-end',
     backgroundColor: Theme.primaryColor.color,
   },
   otherMessage: {
-    alignSelf: 'flex-start',
     backgroundColor: '#eee',
   },
   messageText: {
     color: '#333',
+  },
+  ownMessageText: {
+    color: '#fff',
+  },
+  timestamp: {
+    fontSize: 10,
+    color: '#888',
+    marginTop: 2,
+  },
+  ownTimestamp: {
+    textAlign: 'right',
+  },
+  otherTimestamp: {
+    textAlign: 'left',
   },
   inputContainer: {
     flexDirection: 'row',
