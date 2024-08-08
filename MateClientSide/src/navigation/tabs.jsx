@@ -17,6 +17,7 @@ import ComingSoon from '../pages/comingSoon'
 import MapPage from '../pages/map'
 import CreateTrip from '../pages/createTrip'
 import ViewProfile from '../pages/view_profile'
+import MyTrips from '../pages/my_trips'
 
 
 const Tab = createBottomTabNavigator()
@@ -133,14 +134,14 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name='ViewProfile'
-        component={ViewProfile}
+        name='MyTrips'
+        component={MyTrips}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={styles.tabItem}>
               <AntDesign
-                name='user'
+                name='pushpino'
                 size={30}
                 color={focused ? '#e6824a' : '#7D848D'}
               />
@@ -150,7 +151,7 @@ const Tabs = () => {
                   { color: focused ? '#e6824a' : '#7D848D' },
                 ]}
               >
-                פרופיל
+                טיולים שלי
               </Text>
             </View>
           ),
