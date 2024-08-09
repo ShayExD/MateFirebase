@@ -141,6 +141,10 @@ const ChatPage = ({ route, navigation }) => {
     )
   }
 
+  const customHandlePress = () => {
+    navigation.navigate('myTabs', { screen: 'Messages' });
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -148,7 +152,7 @@ const ChatPage = ({ route, navigation }) => {
       keyboardVerticalOffset={0} // Adjust this offset if needed
     >
       <View style={styles.container}>
-        <BackArrow/>
+        <BackArrow onPress={customHandlePress}/>
         <View style={styles.header}>
           <Image
             source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
