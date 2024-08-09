@@ -87,7 +87,7 @@ const MessagesPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <BackArrow />
-      <Text style={styles.title}>Messages</Text>
+      <Text style={styles.title}>השיחות שלי</Text>
       <FlatList
         data={conversations}
         renderItem={renderConversation}
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     marginTop: 90,
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign:'right',
     marginBottom: 20,
     color: Theme.primaryColor.color,
   },
