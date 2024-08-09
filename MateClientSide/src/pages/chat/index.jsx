@@ -6,9 +6,6 @@ import {
   TextInput,
   StyleSheet,
   Pressable,
-  ScrollView,
-  keyboardVerticalOffset,
-  Keyboard,
   KeyboardAvoidingView,
   Image,
   Platform,
@@ -23,6 +20,7 @@ import {
   serverTimestamp,
   doc,
   updateDoc,
+  writeBatch
 } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import { AuthContext } from '../../../AuthContext'
@@ -31,12 +29,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale } from '../../utils'
 
+const DEFAULT_AVATAR = 'https://example.com/default-avatar.png'
+
 const ChatPage = ({ route, navigation }) => {
   const [messages, setMessages] = useState([])
   const [inputMessage, setInputMessage] = useState('')
-  const { loggedInUser } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(true)
+  const { loggedInUser } = useContext(AuthContext)
   const { conversationId, otherUserId, otherUser } = route.params
+
   useEffect(() => {
     setIsLoading(true)
     const unsubscribe = onSnapshot(
@@ -52,6 +53,7 @@ const ChatPage = ({ route, navigation }) => {
         }))
         setMessages(messagesData)
         setIsLoading(false)
+        markMessagesAsSeen(messagesData)
       },
       (error) => {
         console.error("Error fetching messages:", error)
@@ -61,6 +63,27 @@ const ChatPage = ({ route, navigation }) => {
 
     return () => unsubscribe()
   }, [conversationId])
+
+  const markMessagesAsSeen = async (messagesData) => {
+    const batch = writeBatch(db)
+    const unseenMessages = messagesData.filter(
+      msg => msg.senderId !== loggedInUser.uid && !msg.seen
+    )
+
+    unseenMessages.forEach(msg => {
+      const messageRef = doc(db, 'conversations', conversationId, 'messages', msg.id)
+      batch.update(messageRef, { seen: true })
+    })
+
+    if (unseenMessages.length > 0) {
+      try {
+        await batch.commit()
+      } catch (error) {
+        console.error("Error marking messages as seen:", error)
+      }
+    }
+  }
+
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return
 
@@ -68,16 +91,15 @@ const ChatPage = ({ route, navigation }) => {
       text: inputMessage,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
+      seen: false
     }
 
     try {
-      // Add the message to the messages subcollection
       const messageRef = await addDoc(
         collection(db, 'conversations', conversationId, 'messages'),
         messageData,
       )
 
-      // Update the conversation document with the last message
       await updateDoc(doc(db, 'conversations', conversationId), {
         lastMessage: inputMessage,
         lastMessageTimestamp: serverTimestamp(),
@@ -86,7 +108,6 @@ const ChatPage = ({ route, navigation }) => {
       setInputMessage('')
     } catch (error) {
       console.error('Error sending message:', error)
-      // You might want to show an error message to the user here
     }
   }
 
@@ -96,19 +117,17 @@ const ChatPage = ({ route, navigation }) => {
     const messageDate = new Date(timestamp)
 
     if (now.toDateString() === messageDate.toDateString()) {
-      // If the message is from today, show the time
       return messageDate.toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
       })
     } else {
-      // If the message is from a different day, show the date and time
       return messageDate.toLocaleString([], {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit',
+        minute: '2-digit'
       })
     }
   }
@@ -119,9 +138,7 @@ const ChatPage = ({ route, navigation }) => {
       <View
         style={[
           styles.messageContainer,
-          isOwnMessage
-            ? styles.ownMessageContainer
-            : styles.otherMessageContainer,
+          isOwnMessage ? styles.ownMessageContainer : styles.otherMessageContainer,
         ]}
       >
         <View
@@ -130,36 +147,32 @@ const ChatPage = ({ route, navigation }) => {
             isOwnMessage ? styles.ownMessage : styles.otherMessage,
           ]}
         >
-          <Text
-            style={[styles.messageText, isOwnMessage && styles.ownMessageText]}
-          >
+          <Text style={[styles.messageText, isOwnMessage && styles.ownMessageText]}>
             {item.text}
           </Text>
         </View>
-        <Text
-          style={[
-            styles.timestamp,
-            isOwnMessage ? styles.ownTimestamp : styles.otherTimestamp,
-          ]}
-        >
-          {formatTimestamp(item.timestamp)}
-        </Text>
+        <View style={styles.messageFooter}>
+          <Text style={styles.timestamp}>{formatTimestamp(item.timestamp)}</Text>
+          {isOwnMessage && (
+            <Ionicons
+              name={item.seen ? "checkmark-done" : "checkmark"}
+              size={16}
+              color={item.seen ? Theme.primaryColor.color : "#888"}
+            />
+          )}
+        </View>
       </View>
     )
-  }
-
-  const customHandlePress = () => {
-    navigation.navigate('myTabs', { screen: 'Messages' });
   }
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={0} // Adjust this offset if needed
+      keyboardVerticalOffset={0}
     >
       <View style={styles.container}>
-        <BackArrow onPress={customHandlePress}/>
+        <BackArrow />
         <View style={styles.header}>
           <Image
             source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
@@ -201,21 +214,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  headerContainer: {
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    marginTop: VerticalScale(50),
     backgroundColor: '#fff',
     borderBottomWidth: 1,
+    justifyContent: 'center',
     borderBottomColor: '#eee',
   },
-  title: {
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  userName: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
     marginLeft: 10,
-    color: 'black',
+  },
+  loaderContainer: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   messagesContainer: {
     paddingHorizontal: 10,
@@ -248,16 +271,16 @@ const styles = StyleSheet.create({
   ownMessageText: {
     color: '#fff',
   },
+  messageFooter: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 2,
+  },
   timestamp: {
     fontSize: 10,
     color: '#888',
-    marginTop: 2,
-  },
-  ownTimestamp: {
-    textAlign: 'right',
-  },
-  otherTimestamp: {
-    textAlign: 'left',
+    marginRight: 5,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -273,32 +296,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginRight: 10,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    marginTop:VerticalScale(50),
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    justifyContent: 'center',
-    borderBottomColor: '#eee',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginLeft: 10,
-  },
-  userName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   sendButton: {
     justifyContent: 'center',
