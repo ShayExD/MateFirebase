@@ -101,8 +101,10 @@ const ChatPage = ({ route, navigation }) => {
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return
 
+    const inputText = inputMessage;
+    setInputMessage('')
     const messageData = {
-      text: inputMessage,
+      text: inputText,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
       seen: false
@@ -116,12 +118,11 @@ const ChatPage = ({ route, navigation }) => {
 
       // Update the conversation document with the last message and increment unread count
       await updateDoc(doc(db, 'conversations', conversationId), {
-        lastMessage: inputMessage,
+        lastMessage: inputText,
         lastMessageTimestamp: serverTimestamp(),
         [`unreadCount.${otherUserId}`]: increment(1)
       })
 
-      setInputMessage('')
     } catch (error) {
       console.error('Error sending message:', error)
     }
@@ -181,6 +182,10 @@ const ChatPage = ({ route, navigation }) => {
     )
   }
 
+  const customHandlePress = () => {
+    navigation.navigate('myTabs', { screen: 'Messages' });
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -188,7 +193,7 @@ const ChatPage = ({ route, navigation }) => {
       keyboardVerticalOffset={0}
     >
       <View style={styles.container}>
-        <BackArrow />
+      <BackArrow onPress={customHandlePress} />
         <View style={styles.header}>
           <Image
             source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
