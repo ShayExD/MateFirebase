@@ -6,6 +6,9 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  keyboardVerticalOffset,
+  Platform,Keyboard
 } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import DatePicker from '../../components/DatePicker/datePicker'
@@ -207,6 +210,11 @@ export default function CreateTrip({ navigation }) {
     }
   }
   return (
+    <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={10} // Adjust this offset if needed
+    >
     <ScrollView
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
@@ -277,6 +285,7 @@ export default function CreateTrip({ navigation }) {
       )}
       <ButtonLower textContent={'יצירת הטיול'} handlePress={createTrip} />
     </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

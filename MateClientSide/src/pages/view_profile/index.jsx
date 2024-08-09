@@ -49,12 +49,11 @@ export default function ViewProfile({ navigation }) {
   }
 
   const handleEditProfile = () => {
-    navigation.navigate('EditProfile', { profile: loggedInUser })
-    console.log('edit profile')
+    navigation.navigate('myTabs', { screen: 'EditProfile' });
   }
 
   const handleMyTrips = () => {
-    navigation.navigate('MyTrips', { screen: 'Home' })
+    navigation.navigate('MyTrips')
   }
 
   const handleStartChat = async () => {

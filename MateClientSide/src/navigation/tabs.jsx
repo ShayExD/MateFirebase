@@ -194,7 +194,16 @@ const Tabs = () => {
     tabBarVisible: false, // This should hide the tab bar on the Chat screen
   }}
 />
-
+<Tab.Screen
+  name="EditProfile"
+  
+  component={EditProfile}
+  options={{
+    headerShown: false,
+    tabBarButton: () => null, // This hides the tab button for Chat
+    tabBarVisible: false, // This should hide the tab bar on the Chat screen
+  }}
+/>
 
     </Tab.Navigator>
   )
