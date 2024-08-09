@@ -1,128 +1,183 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Pressable,ScrollView,keyboardVerticalOffset,Keyboard,KeyboardAvoidingView,Platform } from 'react-native';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../firebase';
-import { AuthContext } from '../../../AuthContext';
-import BackArrow from '../../components/BackArrow/backArrow';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Theme from '../../../assets/styles/theme';
+import React, { useState, useEffect, useContext } from 'react'
+import {
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  keyboardVerticalOffset,
+  Keyboard,
+  KeyboardAvoidingView,
+  Image,
+  Platform,
+} from 'react-native'
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+  doc,
+  updateDoc,
+} from 'firebase/firestore'
+import { db } from '../../../firebase'
+import { AuthContext } from '../../../AuthContext'
+import BackArrow from '../../components/BackArrow/backArrow'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Theme from '../../../assets/styles/theme'
+import { VerticalScale } from '../../utils'
 
 const ChatPage = ({ route, navigation }) => {
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
-  const { loggedInUser } = useContext(AuthContext);
-  const { conversationId, otherUserId,otherUser } = route.params;
+  const [messages, setMessages] = useState([])
+  const [inputMessage, setInputMessage] = useState('')
+  const { loggedInUser } = useContext(AuthContext)
+  const { conversationId, otherUserId, otherUser } = route.params
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      query(collection(db, 'conversations', conversationId, 'messages'), orderBy('timestamp', 'desc')),
+      query(
+        collection(db, 'conversations', conversationId, 'messages'),
+        orderBy('timestamp', 'desc'),
+      ),
       (snapshot) => {
-        const messagesData = snapshot.docs.map(doc => ({
+        const messagesData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
           timestamp: doc.data().timestamp?.toDate(),
-        }));
-        setMessages(messagesData);
-      }
-    );
+        }))
+        setMessages(messagesData)
+      },
+    )
 
-    return () => unsubscribe();
-  }, [conversationId]);
-
-
-
-
+    return () => unsubscribe()
+  }, [conversationId])
 
   const sendMessage = async () => {
-    if (inputMessage.trim() === '') return;
+    if (inputMessage.trim() === '') return
 
     const messageData = {
       text: inputMessage,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
-    };
+    }
 
     try {
       // Add the message to the messages subcollection
-      const messageRef = await addDoc(collection(db, 'conversations', conversationId, 'messages'), messageData);
+      const messageRef = await addDoc(
+        collection(db, 'conversations', conversationId, 'messages'),
+        messageData,
+      )
 
       // Update the conversation document with the last message
       await updateDoc(doc(db, 'conversations', conversationId), {
         lastMessage: inputMessage,
         lastMessageTimestamp: serverTimestamp(),
-      });
+      })
 
-      setInputMessage('');
+      setInputMessage('')
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message:', error)
       // You might want to show an error message to the user here
     }
-  };
+  }
 
   const formatTimestamp = (timestamp) => {
-    if (!timestamp) return '';
-    const now = new Date();
-    const messageDate = new Date(timestamp);
-    
+    if (!timestamp) return ''
+    const now = new Date()
+    const messageDate = new Date(timestamp)
+
     if (now.toDateString() === messageDate.toDateString()) {
       // If the message is from today, show the time
-      return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return messageDate.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
     } else {
       // If the message is from a different day, show the date and time
-      return messageDate.toLocaleString([], { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit'
-      });
+      return messageDate.toLocaleString([], {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
     }
-  };
+  }
 
   const renderMessage = ({ item }) => {
-    const isOwnMessage = item.senderId === loggedInUser.uid;
+    const isOwnMessage = item.senderId === loggedInUser.uid
     return (
-      <View style={[styles.messageContainer, isOwnMessage ? styles.ownMessageContainer : styles.otherMessageContainer]}>
-        <View style={[styles.messageBubble, isOwnMessage ? styles.ownMessage : styles.otherMessage]}>
-          <Text style={[styles.messageText, isOwnMessage && styles.ownMessageText]}>{item.text}</Text>
+      <View
+        style={[
+          styles.messageContainer,
+          isOwnMessage
+            ? styles.ownMessageContainer
+            : styles.otherMessageContainer,
+        ]}
+      >
+        <View
+          style={[
+            styles.messageBubble,
+            isOwnMessage ? styles.ownMessage : styles.otherMessage,
+          ]}
+        >
+          <Text
+            style={[styles.messageText, isOwnMessage && styles.ownMessageText]}
+          >
+            {item.text}
+          </Text>
         </View>
-        <Text style={[styles.timestamp, isOwnMessage ? styles.ownTimestamp : styles.otherTimestamp]}>
+        <Text
+          style={[
+            styles.timestamp,
+            isOwnMessage ? styles.ownTimestamp : styles.otherTimestamp,
+          ]}
+        >
           {formatTimestamp(item.timestamp)}
         </Text>
       </View>
-    );
-  };
+    )
+  }
 
   return (
-
     <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={0} // Adjust this offset if needed
-      >
-    <View style={styles.container}>
-
-      <FlatList
-        inverted
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.messagesContainer}
-      />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={inputMessage}
-          onChangeText={setInputMessage}
-          placeholder="Type a message..."
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={0} // Adjust this offset if needed
+    >
+      <View style={styles.container}>
+        <BackArrow/>
+        <View style={styles.header}>
+          <Image
+            source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
+            style={styles.avatar}
+          />
+          <Text style={styles.userName}>{otherUser.name}</Text>
+        </View>
+        <FlatList
+          inverted
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.messagesContainer}
         />
-        <Pressable onPress={sendMessage} style={styles.sendButton}>
-          <Ionicons name="send" size={24} color={Theme.primaryColor.color} />
-        </Pressable>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={inputMessage}
+            onChangeText={setInputMessage}
+            placeholder='Type a message...'
+          />
+          <Pressable onPress={sendMessage} style={styles.sendButton}>
+            <Ionicons name='send' size={24} color={Theme.primaryColor.color} />
+          </Pressable>
+        </View>
       </View>
-    </View>
     </KeyboardAvoidingView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -202,10 +257,31 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginRight: 10,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    marginTop:VerticalScale(50),
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    borderBottomColor: '#eee',
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
   sendButton: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+})
 
-export default ChatPage;
+export default ChatPage

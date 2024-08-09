@@ -1,5 +1,5 @@
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native'
-import React,{useEffect,useState,useContext} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {
   HorizontalScale,
   VerticalScale,
@@ -14,116 +14,99 @@ import DropDown from '../../components/DropDown/DropDown'
 import Button from '../../components/Button/Button'
 import { useRoute } from '@react-navigation/native'
 import StackedAvatars from '../../components/StackedAvatars/StackedAvatars'
-import  UserView  from '../../components/UserView/UserView'
+import UserView from '../../components/UserView/UserView'
 import axios from 'axios'
 import { AuthContext } from '../../../AuthContext'
 import BackArrow from '../../components/BackArrow/backArrow'
 
-
 export default function ViewTrip({ navigation }) {
-const route = useRoute();
-const { trip } = route.params;
-const [tripData, setTripData] = useState(trip)
-const [isChange,setIsChange]= useState(false);
-const [isUserJoined,setIsJoined] = useState(false);
-const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
-useContext(AuthContext)
+  const route = useRoute()
+  const { trip } = route.params
+  const [tripData, setTripData] = useState(trip)
+  const [isChange, setIsChange] = useState(false)
+  const [isUserJoined, setIsJoined] = useState(false)
+  const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
+    useContext(AuthContext)
 
-
-const getTrip = async () =>{
-
-
-  try {
-    const response = await axios.get(
-      `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
-    )
-    setTripData(response.data);
-    
-  } 
-  catch (error) {
-    console.error('Error fetching data:', error)
-  } 
-  finally {
+  const getTrip = async () => {
+    try {
+      const response = await axios.get(
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getTrip/${trip.id}`,
+      )
+      setTripData(response.data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+    }
   }
 
-}
+  const joinTrip = async () => {
+    console.log(isUserJoined)
+    try {
+      const response = await axios.post(
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/joinTrip`,
+        {
+          tripId: tripData.id,
+          uid: loggedInUser.uid,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      console.log(response)
+      setTripData((prevTripData) => ({
+        ...prevTripData,
+        joinedUsers: [...prevTripData.joinedUsers, loggedInUser],
+      }))
+      setIsChange(!isChange)
 
-const joinTrip = async () =>{
-console.log(isUserJoined)
-try {
-  const response = await axios.post(
-    `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/joinTrip`,
-    {
-      tripId: tripData.id,
-      uid: loggedInUser.uid
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      setIsJoined(true)
+    } catch (error) {
+      console.error('Error', error.message)
+    } finally {
     }
-  )
-  console.log(response);
-  setTripData((prevTripData) => ({
-    ...prevTripData,
-    joinedUsers: [...prevTripData.joinedUsers, loggedInUser],
-  }));
-  setIsChange(!isChange);
+  }
 
-  setIsJoined(true)
-
-} 
-catch (error) {
-  console.error('Error', error.message)
-} 
-finally {
-}
-}
-
-const leaveTrip = async () =>{
-  console.log(tripData.id)
-  console.log(loggedInUser.uid)
-  try {
-    const response = await axios.post(
-      `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/leaveTrip`,
-      {
-        tripId: tripData.id,
-        uid: loggedInUser.uid
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        }
+  const leaveTrip = async () => {
+    console.log(tripData.id)
+    console.log(loggedInUser.uid)
+    try {
+      const response = await axios.post(
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/leaveTrip`,
+        {
+          tripId: tripData.id,
+          uid: loggedInUser.uid,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      if (tripData.manageByUid === loggedInUser.uid) {
+        navigation.navigate('myTabs', { screen: 'Home' })
+        return
       }
-    )
-    if(tripData.manageByUid  === loggedInUser.uid ){
+      // console.log(response);
+      setIsChange(!isChange)
+
+      setIsJoined(false)
+
       navigation.navigate('myTabs', { screen: 'Home' })
-      return;
+    } catch (error) {
+      console.error('Error', error.message)
+    } finally {
     }
-    // console.log(response);
-    setIsChange(!isChange);
-    
-    setIsJoined(false);
-
-    navigation.navigate('myTabs', { screen: 'Home' })
-  
-  } 
-  catch (error) {
-    console.error('Error', error.message)
-  } 
-  finally {
   }
-}
 
-
-useEffect(() => {
-  getTrip();
-  setIsJoined(tripData.joinedUsers.some(user => user.uid === loggedInUser.uid));
-
-}, [isChange])
-
-
-
+  useEffect(() => {
+    getTrip()
+    setIsJoined(
+      tripData.joinedUsers.some((user) => user.uid === loggedInUser.uid),
+    )
+  }, [isChange])
 
   return (
     <ScrollView
@@ -137,14 +120,12 @@ useEffect(() => {
             resizeMode='cover'
             style={styles.image}
           />
-         <BackArrow></BackArrow>
- 
+          <BackArrow></BackArrow>
         </View>
         <View style={styles.wrap}>
           <View style={styles.header}>
             <View style={styles.place}>
-              <Text style={[styles.primaryText, { fontWeight: 'bold' }]}>
-              </Text>
+              <Text style={[styles.primaryText, { fontWeight: 'bold' }]}></Text>
               <MaterialIcons
                 name='place'
                 size={20}
@@ -167,7 +148,7 @@ useEffect(() => {
                 {new Date(tripData.endDate).toLocaleDateString()}
               </Text>
             </View>
-            
+
             <View style={styles.iconText}>
               <Ionicons
                 name='person-outline'
@@ -184,9 +165,8 @@ useEffect(() => {
               {tripData.aboutTrip}
             </Text>
           </View>
-          
         </View>
-        
+
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
         <DropDown
           header={'תחומי עניין'}
@@ -194,22 +174,28 @@ useEffect(() => {
         ></DropDown>
         <DropDown
           header={'מנוהל ע"י'}
-          content={<UserView  content={tripData.joinedUsers[0].fullname} avatar={tripData.joinedUsers[0].profileImage} onPress={() => navigation.navigate('ViewProfile', { profile: tripData.joinedUsers[0]})} />}
+          content={
+            <UserView
+            key={tripData.joinedUsers[0].uid}
+            content={tripData.joinedUsers[0].fullname}
+            avatar={tripData.joinedUsers[0].profileImage}
+            onPress={() => navigation.navigate('ViewProfile', { profile: tripData.joinedUsers[0] })}
+          />
+          }
         />
         <Button
-          textContent={ isUserJoined && loggedInUser.uid === tripData.manageByUid
-            ? 'מחק את הטיול'
-            : isUserJoined
-            ? 'עזוב את הטיול'
-            : 'הצטרף לטיול'}
-            
+          textContent={
+            isUserJoined && loggedInUser.uid === tripData.manageByUid
+              ? 'מחק את הקבוצה'
+              : isUserJoined
+              ? 'עזוב את הקבוצה'
+              : 'הצטרף לקבוצה'
+          }
           handlePress={() => {
-            if(isUserJoined){
-              leaveTrip();
-            }
-            else{
-              
-              joinTrip();
+            if (isUserJoined) {
+              leaveTrip()
+            } else {
+              joinTrip()
             }
           }}
         />
@@ -261,7 +247,6 @@ const styles = StyleSheet.create({
   details: {
     marginTop: VerticalScale(10),
     marginBottom: VerticalScale(20),
-    
   },
   primaryText: {
     color: '#1C9FE2',

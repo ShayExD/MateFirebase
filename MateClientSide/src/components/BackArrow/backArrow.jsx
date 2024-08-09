@@ -24,6 +24,7 @@ export default BackArrow
 
 const styles = StyleSheet.create({
   container: {
+    zIndex: 999,
     position: 'absolute',
     left: '5%',
     top: VerticalScale(56),

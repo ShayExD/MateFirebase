@@ -18,7 +18,7 @@ import SingleTrip from '../../components/SingleTrip/singleTrip'
 import SingleProfile from '../../components/SingleProfile/singleProfile'
 import Spinner from 'react-native-loading-spinner-overlay'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native'
 
 export default function Home({ navigation }) {
   const { loggedInUser, logoutAndNavigate } = useContext(AuthContext)
@@ -36,27 +36,26 @@ export default function Home({ navigation }) {
   const [isLoadingTrips, setIsLoadingTrips] = useState(false)
   const [error, setError] = useState(null)
 
-  const isFocused = useIsFocused();
-
+  const isFocused = useIsFocused()
 
   useEffect(() => {
-    console.log("Home component mounted or loggedInUser changed")
+    console.log('Home component mounted or loggedInUser changed')
     const checkAuthStatus = async () => {
-      console.log("Checking auth status...")
-      console.log("Current loggedInUser:", loggedInUser)
+      console.log('Checking auth status...')
+      console.log('Current loggedInUser:', loggedInUser)
 
       if (!loggedInUser) {
-        console.log("User is not logged in, navigating to Login screen")
+        console.log('User is not logged in, navigating to Login screen')
         navigation.navigate('Login')
       } else {
-        console.log("User is logged in, fetching data")
+        console.log('User is logged in, fetching data')
         try {
           await Promise.all([getAllUsers(), getAllTrips()])
           setIsLoading(false)
-          console.log("Loading complete, ready to render")
+          console.log('Loading complete, ready to render')
         } catch (error) {
-          console.error("Error fetching data:", error)
-          setError("Failed to load data. Please try again.")
+          console.error('Error fetching data:', error)
+          setError('Failed to load data. Please try again.')
           setIsLoading(false)
         }
       }
@@ -81,16 +80,17 @@ export default function Home({ navigation }) {
         (user2.tripInterests || []).includes(interest),
       ).length * 10
     let travelPlanScore =
-      (user1.travelPlan || []).filter((plan) => (user2.travelPlan || []).includes(plan))
-        .length * 10
+      (user1.travelPlan || []).filter((plan) =>
+        (user2.travelPlan || []).includes(plan),
+      ).length * 10
     return ageScore + interestsScore + travelPlanScore
   }
 
   useEffect(() => {
     if (isFocused) {
-      getAllTrips();
+      getAllTrips()
     }
-  }, [isFocused]);
+  }, [isFocused])
 
   function calculateTripMatchingScore(user, trip) {
     let interestsScore =
@@ -98,8 +98,9 @@ export default function Home({ navigation }) {
         (trip.tripInterests || []).includes(interest),
       ).length * 10
     let destinationsScore =
-      (user.travelPlan || []).filter((plan) => (trip.destinations || []).includes(plan))
-        .length * 10
+      (user.travelPlan || []).filter((plan) =>
+        (trip.destinations || []).includes(plan),
+      ).length * 10
     return interestsScore + destinationsScore
   }
 
@@ -108,7 +109,10 @@ export default function Home({ navigation }) {
       .filter((user) => (user.age || 0) !== 0)
       .filter((user) => user.uid !== (loggedInUser?.uid || ''))
       .map((user) => {
-        const matchingScore = calculateUserMatchingScore(loggedInUser || {}, user)
+        const matchingScore = calculateUserMatchingScore(
+          loggedInUser || {},
+          user,
+        )
         return { ...user, matchingScore }
       })
     recommendedUsers.sort((a, b) => b.matchingScore - a.matchingScore)
@@ -116,7 +120,7 @@ export default function Home({ navigation }) {
   }
 
   const logOut = () => {
-    console.log("Logout initiated")
+    console.log('Logout initiated')
     logoutAndNavigate(navigation)
   }
 
@@ -125,7 +129,10 @@ export default function Home({ navigation }) {
       const response = await axios.get(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllUsers`,
       )
-      const updatedUserData = getRecommendedUsers(loggedInUser || {}, response.data)
+      const updatedUserData = getRecommendedUsers(
+        loggedInUser || {},
+        response.data,
+      )
       setData(updatedUserData)
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -138,11 +145,16 @@ export default function Home({ navigation }) {
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`,
       )
 
-      const currentDate = new Date();
-      const futureTrips = response.data.filter(trip => new Date(trip.startDate) >= currentDate);
+      const currentDate = new Date()
+      const futureTrips = response.data.filter(
+        (trip) => new Date(trip.startDate) >= currentDate,
+      )
 
       const updatedTrips = futureTrips.map((trip) => {
-        const matchingScore = calculateTripMatchingScore(loggedInUser || {}, trip)
+        const matchingScore = calculateTripMatchingScore(
+          loggedInUser || {},
+          trip,
+        )
         return { ...trip, matchingScore }
       })
       updatedTrips.sort((a, b) => b.matchingScore - a.matchingScore)
@@ -159,9 +171,8 @@ export default function Home({ navigation }) {
     setisLoadinguserPosts(false)
   }, [data])
 
-
   useEffect(() => {
-    getAllTrips();
+    getAllTrips()
   }, [navigation])
 
   useEffect(() => {
@@ -172,12 +183,12 @@ export default function Home({ navigation }) {
   }, [tripData])
 
   const handleHeaderPress = () => {
-    console.log("Header pressed");
-    
-    navigation.navigate('ViewProfile');
-  };
+    console.log('Header pressed')
+
+    navigation.navigate('ViewProfile')
+  }
   if (!loggedInUser) {
-    console.log("No logged-in user, rendering null")
+    console.log('No logged-in user, rendering null')
     return null
   }
 
@@ -200,7 +211,10 @@ export default function Home({ navigation }) {
         <Header
           onPress={handleHeaderPress}
           nickName={loggedInUser.fullname || 'Guest'}
-          picUri={loggedInUser.profileImage || 'https://example.com/default-avatar.png'}
+          picUri={
+            loggedInUser.profileImage ||
+            'https://example.com/default-avatar.png'
+          }
         />
         <Pressable style={styles.icon} onPress={logOut}>
           <AntDesign name='logout' size={30} color='#e6824a' />
@@ -220,10 +234,14 @@ export default function Home({ navigation }) {
               handlePress={() => {
                 navigation.navigate('ViewTrip', { trip: item })
               }}
-              picUrl={{ uri: item.tripPictureUrl || 'https://example.com/default-trip.png' }}
+              key={item.id.toString()}
+              picUrl={{
+                uri:
+                  item.tripPictureUrl || 'https://example.com/default-trip.png',
+              }}
               title={item.tripName || 'Unnamed Trip'}
               destination={item.destinations || []}
-              max={'/'+item.limitUsers || ''}
+              max={'/' + item.limitUsers || ''}
               numOfPeople={item.joinedUsers.length || 0}
             />
           )}
@@ -254,12 +272,16 @@ export default function Home({ navigation }) {
           data={userPostsRenderData}
           renderItem={({ item }) => (
             <SingleProfile
+              key={item.uid.toString()}
               handlePress={() => {
                 navigation.navigate('ViewProfile', { profile: item })
               }}
               name={item.fullname || 'Anonymous'}
               details={item.introduction || 'No introduction'}
-              profileImg={{ uri: item.profileImage || 'https://example.com/default-avatar.png' }}
+              profileImg={{
+                uri:
+                  item.profileImage || 'https://example.com/default-avatar.png',
+              }}
               age={item.age || 'N/A'}
               city={item.city || 'Unknown'}
               ig={item.instagram || 'N/A'}

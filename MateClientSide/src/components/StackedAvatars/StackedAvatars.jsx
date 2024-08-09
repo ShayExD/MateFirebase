@@ -11,7 +11,13 @@ const StackedAvatars = ({ members, maxDisplay = 3 }) => {
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
         {displayedMembers.map((member, index) => (
-          <View key={member.id} style={[styles.avatarWrapper, { zIndex: maxDisplay - index }]}>
+          <View 
+            key={member.uid || member.id || `member-${index}`} 
+            style={[
+              styles.avatarWrapper, 
+              // { zIndex: maxDisplay - index, marginLeft: index !== 0 ? -15 : 0 }
+            ]}
+          >
             <Avatar.Image
               size={40}
               source={{ uri: member.profileImage }}
@@ -19,11 +25,12 @@ const StackedAvatars = ({ members, maxDisplay = 3 }) => {
           </View>
         ))}
         {remainingCount > 0 && (
-          <View style={[styles.avatarWrapper, styles.countWrapper, { zIndex: 0 }]}>
+          <View style={[styles.avatarWrapper, styles.countWrapper, { zIndex: 0, marginLeft: -15 }]}>
             <Text style={styles.countText}>+{remainingCount}</Text>
           </View>
         )}
       </View>
+      {/* Uncomment the following line if you want to show the total member count */}
       {/* <Text style={styles.membersText}>{members.length} חברים בקבוצה</Text> */}
     </View>
   );
