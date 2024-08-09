@@ -90,7 +90,8 @@ export default function MyTrips({ navigation }) {
       picUrl={{ uri: item.tripPictureUrl || 'https://example.com/default-trip.png' }}
       title={item.tripName || 'Unnamed Trip'}
       destination={item.destinations || []}
-      numOfPeople={item.limitUsers || 0}
+      max={'/' + item.limitUsers || ''}
+      numOfPeople={item.joinedUsers.length || 0}
     />
   )
 
