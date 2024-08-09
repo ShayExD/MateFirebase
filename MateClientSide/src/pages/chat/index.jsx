@@ -21,7 +21,8 @@ import {
   doc,
   updateDoc,
   writeBatch,
-  increment
+  increment,
+  getDoc
 } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import { AuthContext } from '../../../AuthContext'
@@ -70,9 +71,24 @@ const ChatPage = ({ route, navigation }) => {
 
   const resetUnreadCount = async () => {
     try {
-      await updateDoc(doc(db, 'conversations', conversationId), {
-        [`unreadCount.${loggedInUser.uid}`]: 0
-      })
+      const conversationRef = doc(db, 'conversations', conversationId)
+      const conversationSnap = await getDoc(conversationRef)
+      
+      if (conversationSnap.exists()) {
+        const conversationData = conversationSnap.data()
+        const currentUnreadCount = conversationData.unreadCount?.[loggedInUser.uid] || 0
+        
+        if (currentUnreadCount > 0) {
+          await updateDoc(conversationRef, {
+            [`unreadCount.${loggedInUser.uid}`]: 0
+          })
+          console.log("Unread count reset successfully")
+        } else {
+          console.log("Unread count is already 0")
+        }
+      } else {
+        console.log("Conversation document not found")
+      }
     } catch (error) {
       console.error("Error resetting unread count:", error)
     }
