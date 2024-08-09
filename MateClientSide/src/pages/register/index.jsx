@@ -103,7 +103,7 @@ export default function Register({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        // console.log('signUp user', user);
+        console.log('signUp user', user);
         setErrorFirebase('');
   
         // Send a request to the server to add the user to the Firestore users collection
@@ -139,7 +139,6 @@ export default function Register({ navigation }) {
                     // Navigate only if necessary; otherwise, just close the alert
                     console.log('User creation acknowledged');
                     navigation.navigate('myTabs', { screen: 'EditProfile' }); // Uncomment if you actually want to navigate
-                    // navigation.navigate( 'EditProfile'); // Uncomment if you actually want to navigate
 
                   },
                 },
