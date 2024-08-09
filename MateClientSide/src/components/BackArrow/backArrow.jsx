@@ -5,7 +5,7 @@ import Theme from '../../../assets/styles/theme'
 import { VerticalScale } from '../../utils'
 import { useNavigation } from '@react-navigation/native'
 
-const BackArrow = () => {
+const BackArrow = ({ onPress }) => {
   const navigation = useNavigation()
 
   const handlePress = () => {
@@ -13,7 +13,7 @@ const BackArrow = () => {
   }
   return (
     <View style={styles.container}>
-      <Pressable onPress={handlePress}>
+      <Pressable onPress={onPress || handlePress}>
         <IconButton icon='arrow-left' background={'F7F7F9'} />
       </Pressable>
     </View>
