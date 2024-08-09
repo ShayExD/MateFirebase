@@ -20,7 +20,8 @@ import {
   serverTimestamp,
   doc,
   updateDoc,
-  writeBatch
+  writeBatch,
+  increment
 } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import { AuthContext } from '../../../AuthContext'
@@ -61,8 +62,21 @@ const ChatPage = ({ route, navigation }) => {
       }
     )
 
+    // Reset unread count when opening the chat
+    resetUnreadCount()
+
     return () => unsubscribe()
   }, [conversationId])
+
+  const resetUnreadCount = async () => {
+    try {
+      await updateDoc(doc(db, 'conversations', conversationId), {
+        [`unreadCount.${loggedInUser.uid}`]: 0
+      })
+    } catch (error) {
+      console.error("Error resetting unread count:", error)
+    }
+  }
 
   const markMessagesAsSeen = async (messagesData) => {
     const batch = writeBatch(db)
@@ -87,12 +101,8 @@ const ChatPage = ({ route, navigation }) => {
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return
 
-    const inputText = inputMessage;
-
-    setInputMessage('')
-
     const messageData = {
-      text: inputText,
+      text: inputMessage,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
       seen: false
@@ -104,11 +114,14 @@ const ChatPage = ({ route, navigation }) => {
         messageData,
       )
 
+      // Update the conversation document with the last message and increment unread count
       await updateDoc(doc(db, 'conversations', conversationId), {
-        lastMessage: inputText,
+        lastMessage: inputMessage,
         lastMessageTimestamp: serverTimestamp(),
+        [`unreadCount.${otherUserId}`]: increment(1)
       })
 
+      setInputMessage('')
     } catch (error) {
       console.error('Error sending message:', error)
     }
@@ -246,7 +259,6 @@ const styles = StyleSheet.create({
   messagesContainer: {
     paddingHorizontal: 10,
     paddingBottom: 10,
-    flexGrow: 1,
   },
   messageContainer: {
     marginVertical: 5,

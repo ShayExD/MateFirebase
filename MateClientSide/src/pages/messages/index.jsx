@@ -29,7 +29,6 @@ const MessagesPage = ({ navigation }) => {
       (snapshot) => {
         const conversationsData = snapshot.docs.map((doc) => {
           const data = doc.data()
-          // console.log('Conversation data:', data); // Debug log
           const otherUser = data.participants.find(
             (p) => p.id !== loggedInUser.uid,
           )
@@ -42,9 +41,9 @@ const MessagesPage = ({ navigation }) => {
             lastMessageTimestamp: data.lastMessageTimestamp
               ? data.lastMessageTimestamp.toDate()
               : null,
+            unreadCount: data.unreadCount?.[loggedInUser.uid] || 0, // Add this line
           }
         })
-        // console.log('Processed conversations:', conversationsData); // Debug log
         setConversations(conversationsData)
       },
       (error) => {
@@ -56,7 +55,6 @@ const MessagesPage = ({ navigation }) => {
   }, [loggedInUser.uid])
 
   const renderConversation = ({ item }) => {
-    // console.log('Rendering conversation item:', item); // Debug log
     return (
       <Pressable
         onPress={() =>
@@ -79,18 +77,28 @@ const MessagesPage = ({ navigation }) => {
               {item.otherUser?.name || 'Unknown User'}
             </Text>
             <Text
-              style={styles.lastMessage}
+              style={[
+                styles.lastMessage,
+                item.unreadCount > 0 && styles.unreadMessage,
+              ]}
               numberOfLines={1}
               ellipsizeMode='tail'
             >
               {item.lastMessage || 'No messages yet'}
             </Text>
           </View>
-          {item.lastMessageTimestamp && (
-            <Text style={styles.timestamp}>
-              {formatTimestamp(item.lastMessageTimestamp)}
-            </Text>
-          )}
+          <View style={styles.rightContainer}>
+            {item.lastMessageTimestamp && (
+              <Text style={styles.timestamp}>
+                {formatTimestamp(item.lastMessageTimestamp)}
+              </Text>
+            )}
+            {item.unreadCount > 0 && (
+              <View style={styles.unreadBadge}>
+                <Text style={styles.unreadCount}>{item.unreadCount}</Text>
+              </View>
+            )}
+          </View>
         </View>
       </Pressable>
     )
@@ -102,13 +110,11 @@ const MessagesPage = ({ navigation }) => {
     const messageDate = new Date(timestamp)
 
     if (now.toDateString() === messageDate.toDateString()) {
-      // If the message is from today, show the time
       return messageDate.toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
       })
     } else {
-      // If the message is from a different day, show the date
       return messageDate.toLocaleDateString()
     }
   }
@@ -130,7 +136,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-
     padding: 20,
   },
   title: {
@@ -157,7 +162,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 10,
     textAlign: 'right',
-    // alignItems: 'left',
   },
   lastMessage: {
     fontSize: 14,
@@ -165,6 +169,29 @@ const styles = StyleSheet.create({
     color: '#888',
     marginTop: 4,
     textAlign: 'right',
+  },
+  unreadMessage: {
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  rightContainer: {
+    alignItems: 'flex-end',
+  },
+  timestamp: {
+    fontSize: 12,
+    color: '#888',
+    marginBottom: 5,
+  },
+  unreadBadge: {
+    backgroundColor: Theme.primaryColor.color,
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  unreadCount: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 })
 
