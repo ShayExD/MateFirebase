@@ -37,8 +37,27 @@ const ChatPage = ({ route, navigation }) => {
   const [messages, setMessages] = useState([])
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [otherUserData, setOtherUserData] = useState(null)
   const { loggedInUser } = useContext(AuthContext)
-  const { conversationId, otherUserId, otherUser } = route.params
+  const { conversationId, otherUserId } = route.params
+
+  useEffect(() => {
+    const fetchOtherUserData = async () => {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', otherUserId))
+        if (userDoc.exists()) {
+          console.log("User data:", userDoc.data())
+          setOtherUserData(userDoc.data())
+        } else {
+          console.log("No such user!")
+        }
+      } catch (error) {
+        console.error("Error fetching other user data:", error)
+      }
+    }
+
+    fetchOtherUserData()
+  }, [otherUserId])
 
   useEffect(() => {
     setIsLoading(true)
@@ -63,7 +82,6 @@ const ChatPage = ({ route, navigation }) => {
       }
     )
 
-    // Reset unread count when opening the chat
     resetUnreadCount()
 
     return () => unsubscribe()
@@ -209,13 +227,13 @@ const ChatPage = ({ route, navigation }) => {
       keyboardVerticalOffset={0}
     >
       <View style={styles.container}>
-      <BackArrow onPress={customHandlePress} />
+        <BackArrow onPress={customHandlePress} />
         <View style={styles.header}>
           <Image
-            source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
+            source={{ uri: otherUserData?.profileImage || DEFAULT_AVATAR }}
             style={styles.avatar}
           />
-          <Text style={styles.userName}>{otherUser.name}</Text>
+          <Text style={styles.userName}>{otherUserData?.fullname || 'Loading...'}</Text>
         </View>
         {isLoading ? (
           <View style={styles.loaderContainer}>
