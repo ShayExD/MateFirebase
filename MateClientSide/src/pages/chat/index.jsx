@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   Image,
   Platform,
+  ActivityIndicator
 } from 'react-native'
 import {
   collection,
@@ -34,8 +35,10 @@ const ChatPage = ({ route, navigation }) => {
   const [messages, setMessages] = useState([])
   const [inputMessage, setInputMessage] = useState('')
   const { loggedInUser } = useContext(AuthContext)
+  const [isLoading, setIsLoading] = useState(true)
   const { conversationId, otherUserId, otherUser } = route.params
   useEffect(() => {
+    setIsLoading(true)
     const unsubscribe = onSnapshot(
       query(
         collection(db, 'conversations', conversationId, 'messages'),
@@ -48,12 +51,16 @@ const ChatPage = ({ route, navigation }) => {
           timestamp: doc.data().timestamp?.toDate(),
         }))
         setMessages(messagesData)
+        setIsLoading(false)
       },
+      (error) => {
+        console.error("Error fetching messages:", error)
+        setIsLoading(false)
+      }
     )
 
     return () => unsubscribe()
   }, [conversationId])
-
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return
 
@@ -156,13 +163,19 @@ const ChatPage = ({ route, navigation }) => {
           />
           <Text style={styles.userName}>{otherUser.name}</Text>
         </View>
-        <FlatList
-          inverted
-          data={messages}
-          renderItem={renderMessage}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.messagesContainer}
-        />
+        {isLoading ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color={Theme.primaryColor.color} />
+          </View>
+        ) : (
+          <FlatList
+            inverted
+            data={messages}
+            renderItem={renderMessage}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.messagesContainer}
+          />
+        )}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -277,6 +290,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sendButton: {
     justifyContent: 'center',
