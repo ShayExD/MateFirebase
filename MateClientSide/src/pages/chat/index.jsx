@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Pressable,ScrollView } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, Pressable,ScrollView,keyboardVerticalOffset,Keyboard,KeyboardAvoidingView,Platform } from 'react-native';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { AuthContext } from '../../../AuthContext';
@@ -93,6 +93,12 @@ const ChatPage = ({ route, navigation }) => {
   };
 
   return (
+
+    <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0} // Adjust this offset if needed
+      >
     <View style={styles.container}>
 
       <FlatList
@@ -114,6 +120,7 @@ const ChatPage = ({ route, navigation }) => {
         </Pressable>
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

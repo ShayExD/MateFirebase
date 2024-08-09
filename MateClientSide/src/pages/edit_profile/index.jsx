@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable,KeyboardAvoidingView,Keyboard,Platform  } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight } from '../../utils'
@@ -319,6 +319,11 @@ export default function EditProfile({ navigation }) {
   
 
   return (
+    <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={10} // Adjust this offset if needed
+      >
     <ScrollView
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
@@ -410,6 +415,7 @@ export default function EditProfile({ navigation }) {
 
       <ButtonLower textContent={'עדכון פרטים'} handlePress={updateUser} />
     </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
