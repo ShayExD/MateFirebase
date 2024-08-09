@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '0%',
     paddingHorizontal: HorizontalScale(5),
-    borderRadius: '50%',
+    borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
   },

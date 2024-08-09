@@ -13,6 +13,22 @@ export const AuthProvider = ({ children }) => {
     setLoggedInUser(user);
   };
 
+  // const defaultValues = {
+  //   uid:0,
+  //   fullname: '',
+  //   password: '',
+  //   introduction: '',
+  //   gender: ' ', 
+  //   age: 0,
+  //   instagram: '',
+  //   email: '',
+  //   phoneNumber: '',
+  //   profileImage: 'https://i.imgur.com/LBIwlSy.png',
+  //   city: '',
+  //   travelPlan: [], 
+  //   tripInterests: [], 
+  // }
+
   const logoutAndNavigate = useCallback(async (navigation) => {
     if (isLoggingOut) return;
 

@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
     left: '5%',
     top: VerticalScale(56),
     backgroundColor: '#F7F7F9',
-    borderRadius: '50%',
+    borderRadius: 50,
   },
 })
