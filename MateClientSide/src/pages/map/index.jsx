@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button, Image, Linking,StyleSheet, Pressable } from 'react-native'
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  Linking,
+  StyleSheet,
+  Pressable,
+} from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 import { VerticalScale } from '../../utils'
 import {
@@ -16,8 +24,8 @@ const MapPage = () => {
   const [hotels, setHotels] = useState([])
   const [selectedHotel, setSelectedHotel] = useState(null)
   const [selectedHotelPhoto, setSelectedHotelPhoto] = useState(null)
-  const [visible,SetVisible] = useState(true)
-  const GOOGLE_PLACES_API_KEY = 'AIzaSyB_5ASA2fagdnDwIvc6XxGcOdPpH0H_Z5I'
+  const [visible, SetVisible] = useState(true)
+  const GOOGLE_PLACES_API_KEY = 'AIzaSyDcsjFGoylFJsjZNk5w0nWygHg1JWsyifE'
   const getLocation = async () => {
     try {
       // Request permission to access the device's location
@@ -49,8 +57,7 @@ const MapPage = () => {
       }
     } catch (error) {
       console.error('Error getting hotel photo:', error)
-    }
-    finally{
+    } finally {
       SetVisible(true)
     }
   }
@@ -91,11 +98,9 @@ const MapPage = () => {
       setHotels(data.results)
     } catch (error) {
       console.error('Error searching nearby hotels:', error)
-    }
-    finally {
+    } finally {
       setIsLoading(false)
     }
-    
   }
 
   useEffect(() => {
@@ -149,37 +154,42 @@ const MapPage = () => {
           ))}
         </MapView>
       ) : (
-        <Text style={{justifyContent:'center'}}>Loading location...</Text>
+        <Text style={{ justifyContent: 'center' }}>Loading location...</Text>
       )}
-    
+
       {visible && selectedHotel && (
         <View
           style={{
             alignItems: 'center',
-            backgroundColor: 'white', 
+            backgroundColor: 'white',
             padding: 20,
           }}
           accessibilityElementsHidden={visible}
         >
-          <Pressable style={[styles.icon,{right:'5%',left:'auto'}]} onPress={()=>{SetVisible(false);}} >
-          <Fontisto
-            name='close'
-            size={30}
-            color='#46A2FF'
-          />
+          <Pressable
+            style={[styles.icon, { right: '5%', left: 'auto' }]}
+            onPress={() => {
+              SetVisible(false)
+            }}
+          >
+            <Fontisto name='close' size={30} color='#46A2FF' />
           </Pressable>
 
-          <Pressable style={[styles.icon]} onPress={navigateToHotel} >
-          <Fontisto
-            name='navigate'
-            size={30}
-            color='#46A2FF'
-          />
-          <Text style={[Theme.primaryText,{marginHorizontal:0,fontSize:14}]}>ניווט</Text>
+          <Pressable style={[styles.icon]} onPress={navigateToHotel}>
+            <Fontisto name='navigate' size={30} color='#46A2FF' />
+            <Text
+              style={[Theme.primaryText, { marginHorizontal: 0, fontSize: 14 }]}
+            >
+              ניווט
+            </Text>
           </Pressable>
 
           {selectedHotel.name && (
-            <Text style={[Theme.primaryTitle,{marginTop:VerticalScale(40)}]}>{selectedHotel.name}</Text>
+            <Text
+              style={[Theme.primaryTitle, { marginTop: VerticalScale(40) }]}
+            >
+              {selectedHotel.name}
+            </Text>
           )}
           {selectedHotelPhoto && (
             <Image
@@ -203,8 +213,6 @@ const MapPage = () => {
               Address: {selectedHotel.vicinity}
             </Text>
           )}
-          
-        
         </View>
       )}
     </View>
@@ -212,7 +220,6 @@ const MapPage = () => {
 }
 
 const styles = StyleSheet.create({
-
   spinnerText: {
     color: '#FFF',
   },
@@ -224,8 +231,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
   },
-  
 })
-
 
 export default MapPage

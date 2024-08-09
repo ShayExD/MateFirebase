@@ -87,8 +87,12 @@ const ChatPage = ({ route, navigation }) => {
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return
 
+    const inputText = inputMessage;
+
+    setInputMessage('')
+
     const messageData = {
-      text: inputMessage,
+      text: inputText,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
       seen: false
@@ -101,11 +105,10 @@ const ChatPage = ({ route, navigation }) => {
       )
 
       await updateDoc(doc(db, 'conversations', conversationId), {
-        lastMessage: inputMessage,
+        lastMessage: inputText,
         lastMessageTimestamp: serverTimestamp(),
       })
 
-      setInputMessage('')
     } catch (error) {
       console.error('Error sending message:', error)
     }
