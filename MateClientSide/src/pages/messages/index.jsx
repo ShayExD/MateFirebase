@@ -1,17 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native'
+import { View, Text, FlatList, StyleSheet, Pressable,Alert } from 'react-native'
 import {
   collection,
   query,
   where,
   onSnapshot,
   orderBy,
+  doc,
+  deleteDoc
+
 } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import { AuthContext } from '../../../AuthContext'
 import BackArrow from '../../components/BackArrow/backArrow'
 import { Avatar } from 'react-native-paper'
 import Theme from '../../../assets/styles/theme'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { Swipeable } from 'react-native-gesture-handler'
+
+
 
 const DEFAULT_PROFILE_IMAGE = 'https://example.com/default-profile-image.png'
 
@@ -57,6 +64,9 @@ const MessagesPage = ({ navigation }) => {
 
   const renderConversation = ({ item }) => {
     return (
+      <Swipeable
+        renderLeftActions={() => renderRightActions(item.id)}
+      >
       <Pressable
         onPress={() =>
           navigation.navigate('Chat', {
@@ -102,6 +112,7 @@ const MessagesPage = ({ navigation }) => {
           </View>
         </View>
       </Pressable>
+      </Swipeable>
     )
   }
 
@@ -119,6 +130,26 @@ const MessagesPage = ({ navigation }) => {
       return messageDate.toLocaleDateString()
     }
   }
+
+  const deleteConversation = async (conversationId) => {
+    try {
+      await deleteDoc(doc(db, 'conversations', conversationId))
+    } catch (error) {
+      console.error('Error deleting conversation:', error)
+    }
+  }
+
+  const renderRightActions = (conversationId) => {
+    return (
+      <Pressable
+        onPress={() => deleteConversation(conversationId)}
+        style={styles.deleteButton}
+      >
+        <Ionicons name="trash" size={24} color="#fff" />
+      </Pressable>
+    )
+  }
+
 
   return (
     <View style={styles.container}>
@@ -193,6 +224,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    borderRadius: 10,
+    marginTop: 10,
   },
 })
 
