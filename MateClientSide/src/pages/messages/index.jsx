@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: Theme.primaryColor.color,
   },
+  
   conversationItem: {
     flexDirection: 'row-reverse',
     alignItems: 'center',
