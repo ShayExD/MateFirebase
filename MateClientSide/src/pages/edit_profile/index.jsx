@@ -105,6 +105,7 @@ export default function EditProfile({ navigation }) {
         const uploadedFileName = response.data[0]
         const uploadedImageURI = `https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/${uploadedFileName}`
         setProfilePicture(uploadedImageURI)
+        console.log(uploadedImageURI)
         // setLoggedInUser((prevUser) => ({
         //   ...prevUser,
         //   profileImage: uploadedImageURI,
@@ -293,10 +294,7 @@ export default function EditProfile({ navigation }) {
           <Text style={styles.errorText}>{phoneNumberError}</Text>
         )}
 
-        {/* <DatePickerComponent
-					selectedDate={selectedDate}
-					onDateChange={setSelectedDate}
-				/> */}
+
         <AgePicker selectedAge={age} onAgeChange={setAge} />
 
         <GenderPicker
