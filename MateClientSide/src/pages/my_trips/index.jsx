@@ -6,7 +6,8 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Alert,
+  Alert,  Platform, 
+  StatusBar
 } from 'react-native'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, HorizontalScale } from '../../utils'
@@ -100,7 +101,7 @@ export default function MyTrips({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={[Theme.screen, styles.screen]}>
+    <SafeAreaView style={[Theme.screen, styles.screen,{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}]}>
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}

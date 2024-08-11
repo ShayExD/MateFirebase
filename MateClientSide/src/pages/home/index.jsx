@@ -5,6 +5,9 @@ import {
   View,
   SafeAreaView,
   FlatList,
+  Platform, 
+  StatusBar
+
 } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import Theme from '../../../assets/styles/theme'
@@ -188,7 +191,7 @@ useEffect(() => {
   };
 
   return (
-    <SafeAreaView style={[Theme.screen, styles.screen]}>
+    <SafeAreaView style={[Theme.screen, styles.screen,{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}]}>
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}

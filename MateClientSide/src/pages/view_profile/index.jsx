@@ -34,7 +34,7 @@ export default function ViewProfile({ navigation }) {
       const response = await axios.post(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getUserTrips`,
         {
-          uid: loggedInUser.uid,
+          uid: profile.uid,
         },
         {
           headers: {

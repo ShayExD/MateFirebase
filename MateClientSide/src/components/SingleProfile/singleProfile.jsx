@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Image,Platform } from 'react-native'
 import { HorizontalScale, VerticalScale } from '../../utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -51,14 +51,20 @@ const styles = StyleSheet.create({
   shadowContainer: {
     borderRadius: HorizontalScale(20),
     // overflow: 'hidden',
-    shadowColor: '#c4c4c4',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
+    ...(Platform.OS === 'ios' && {
+      shadowColor: '#c4c4c4',
+      shadowOffset: {
+        width: 0,
+        height: 5,
+      },
+      shadowOpacity: 0.3,
+      shadowRadius: 3.84,
+      elevation: 5
+    }),
+    ...(Platform.OS === 'android' && {
+      elevation: 0, // Ensure no elevation on Android
+    })    
+    
   },
   container: {
     marginTop: VerticalScale(20),
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
     // height: '%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -45,
+    marginTop: VerticalScale(-45),
     backgroundColor: Theme.primaryColor.color,
     // opacity: 0.7,
     zIndex: 999,

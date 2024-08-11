@@ -291,7 +291,7 @@ export default function CreateTrip({ navigation }) {
 
 const styles = StyleSheet.create({
   screen: {
-    flexGrow: '1',
+    flexGrow: Platform.OS === 'ios' ? '1' :1,
     width: '100%',
     marginVertical: 30,
     alignItems: 'center',

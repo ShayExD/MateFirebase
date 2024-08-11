@@ -330,7 +330,7 @@ export default function EditProfile({ navigation }) {
 
 const styles = StyleSheet.create({
   screen: {
-    flexGrow: '1',
+    flexGrow: Platform.OS === 'ios' ? '1' :1,
     width: '100%',
     paddingVertical: 20,
     alignItems: 'center',
