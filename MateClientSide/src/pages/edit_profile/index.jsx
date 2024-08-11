@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     left: '8%',
     top: VerticalScale(70),
     // backgroundColor: 'red',
-    borderRadius: '50%',
+    borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
   },

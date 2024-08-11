@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   title: { textAlign: 'right' },
   bell: {
     backgroundColor: '#E3E3E3',
-    borderRadius: '50%',
+    borderRadius: 50,
     height: VerticalScale(50),
     width: HorizontalScale(50),
     justifyContent: 'center',
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     left: '0%',
     paddingHorizontal: HorizontalScale(5),
     // top: VerticalScale(10),
-    borderRadius: '50%',
+    borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
   },
