@@ -1,9 +1,32 @@
 // src/utils/chatUtils.js
-import { collection, addDoc, serverTimestamp, getDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDoc, doc, updateDoc,query,getDocs,where } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 export const startNewConversation = async (currentUserId, otherUserId) => {
   try {
+
+    const conversationQuery = query(
+      collection(db, 'conversations'),
+      where('participantIds', 'array-contains', currentUserId)
+    );
+    
+    const conversationSnapshot = await getDocs(conversationQuery);
+
+    let existingConversation = null;
+    
+    conversationSnapshot.forEach(docSnapshot => {
+      const data = docSnapshot.data();
+      if (data.participantIds.includes(otherUserId)) {
+        existingConversation = docSnapshot;
+      }
+    });
+
+    if (existingConversation) {
+      // Conversation already exists, return the existing conversation ID
+      return existingConversation.id;
+    }
+
+
     // Fetch current user data
     const currentUserDoc = await getDoc(doc(db, 'users', currentUserId));
     const currentUserData = currentUserDoc.data();
