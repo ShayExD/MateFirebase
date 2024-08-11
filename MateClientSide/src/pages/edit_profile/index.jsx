@@ -1,4 +1,13 @@
-import { StyleSheet, Text, View, ScrollView, Pressable,KeyboardAvoidingView,Keyboard,Platform  } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+} from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight } from '../../utils'
@@ -25,7 +34,7 @@ export default function EditProfile({ navigation }) {
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
     useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  const [isImageUpload, setIsImageUpload ]= useState(false)
+  const [isImageUpload, setIsImageUpload] = useState(false)
   const [profilePicture, setProfilePicture] = useState(
     loggedInUser.profileImage,
   )
@@ -109,116 +118,19 @@ export default function EditProfile({ navigation }) {
         //   ...prevUser,
         //   profileImage: uploadedImageURI,
         // }))
-        setIsImageUpload(true);
-        
+        setIsImageUpload(true)
       }
     } catch (error) {
       console.error('Upload error:', error)
     } finally {
       // setIsLoading(false)
-      console.log("check")
+      console.log('check')
     }
   }
 
-  // const updateUser = async () => {
-  //   setIsLoading(true)
-  //   // await uploadImage(profilePicture)
-  //   try {
-  //     if (!phoneNumberPattern.test(phoneNumber)) {
-  //       setPhoneNumberError(
-  //         'Invalid phone number format. Please enter 10 digits.',
-  //       )
-  //       return
-  //     } else {
-  //       setPhoneNumberError('')
-  //     }
-  //     // uploadImage(profilePicture)
-  //     const updatedUserData = {
-  //       id: loggedInUser.id,
-  //       fullname: fullName,
-  //       password: loggedInUser.password,
-  //       introduction: description,
-  //       gender: mapToSingleChar(gender),
-  //       age: age,
-  //       instagram: instagram,
-  //       email: loggedInUser.email,
-  //       phoneNumber: phoneNumber,
-  //       profileImage: profilePicture,
-  //       city: city,
-  //       travelPlan: destination,
-  //       tripInterests: selectedInterests,
-  //     }
-
-  //     if (
-  //       fullName == '' ||
-  //       description == '' ||
-  //       gender == ' ' ||
-  //       instagram == '' ||
-  //       phoneNumber == '' ||
-  //       profilePicture == '' ||
-  //       city == '' ||
-  //       destination.length == 0 ||
-  //       selectedInterests.length == 0
-  //       // isImageUpload===false
-  //     ) {
-  //       // Alert user to fill all fields
-  //       Alert.alert(
-  //         'Updated failed',
-  //         'You have to fill all the fields, please update your details!',
-  //         [
-  //           {
-  //             text: 'OK',
-  //           },
-  //         ],
-  //       )
-  //       return
-  //     }
-  //     // await uploadImage(profilePicture)
-
-  //     // console.log(updatedUserData)
-
-  //     const response = await axios({
-  //       method: 'PUT', // or 'PATCH' if the server expects a PATCH request
-  //       url: 'https://proj.ruppin.ac.il/cgroup72/test2/tar1/api/User/UpdateUser',
-  //       data: updatedUserData,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     })
-
-  //     // console.log('User updated successfully:', response.data)
-  //     // You can perform additional actions after successful update, such as updating the loggedInUser state
-  //     if (response.data) {
-  //       loginUser(updatedUserData)
-  //       Alert.alert(
-  //         'Updated Successful',
-  //         'You have successfully updated your details!',
-  //         [
-  //           {
-  //             text: 'OK',
-  //             onPress: () => {
-  //               navigation.navigate('myTabs', { screen: 'Home' })
-  //             },
-  //           },
-  //         ],
-  //       )
-  //     }
-  //     // Example: Update the loggedInUser state with the updated user data
-  //   } catch (error) {
-  //     console.error('Error updating user:', error)
-
-  //     // Handle the error if needed
-  //   }
-  //   finally{
-  //     setIsLoading(false)
-
-  //   }
-  // }
-
-
   const updateUser = async () => {
     setIsLoading(true)
-    console.log("check")
+    console.log('check')
     // await uploadImage(profilePicture)
     try {
       if (!phoneNumberPattern.test(phoneNumber)) {
@@ -231,23 +143,22 @@ export default function EditProfile({ navigation }) {
       }
       // uploadImage(profilePicture)
       const updatedUserData = {
-        uid:loggedInUser.uid,
-        
-        attributes:{
-        fullname: fullName,
-        password: loggedInUser.password,
-        introduction: description,
-        gender: mapToSingleChar(gender),
-        age: age,
-        instagram: instagram,
-        email: loggedInUser.email,
-        phoneNumber: phoneNumber,
-        profileImage: profilePicture,
-        city: city,
-        travelPlan: destination,
-        tripInterests: selectedInterests,
-        }
-        
+        uid: loggedInUser.uid,
+
+        attributes: {
+          fullname: fullName,
+          password: loggedInUser.password,
+          introduction: description,
+          gender: mapToSingleChar(gender),
+          age: age,
+          instagram: instagram,
+          email: loggedInUser.email,
+          phoneNumber: phoneNumber,
+          profileImage: profilePicture,
+          city: city,
+          travelPlan: destination,
+          tripInterests: selectedInterests,
+        },
       }
 
       if (
@@ -310,111 +221,110 @@ export default function EditProfile({ navigation }) {
       console.error('Error updating user:', error)
 
       // Handle the error if needed
-    }
-    finally{
+    } finally {
       setIsLoading(false)
-
     }
   }
-  
 
   return (
     <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={10} // Adjust this offset if needed
-      >
-    <ScrollView
-      contentContainerStyle={[styles.screen]}
-      showsVerticalScrollIndicator={false}
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={10} // Adjust this offset if needed
     >
-      <BackArrow />
+      <ScrollView
+        contentContainerStyle={[styles.screen]}
+        showsVerticalScrollIndicator={false}
+      >
+        <BackArrow />
 
-      <Text style={[Theme.primaryTitle, styles.title]}>בניית הפרופיל שלך</Text>
-      <View style={styles.avatarContainer}>
-        <AvatarComponent
-          uploadImage={uploadImage}
-          setProfilePicture={setProfilePicture}
-        />
-      </View>
-      <View style={styles.inputsContainer}>
-        <Spinner
-          visible={isLoading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerText}
-          overlayColor='rgba(0, 0, 0, 0.6)'
-        />
-        <TextInput
-          label={'שם מלא'}
-          value={fullName}
-          onChangeText={setFullName}
-          style={styles.input}
-          mode='outlined'
-          activeOutlineColor='#E6824A'
-          selectionColor='gray'
-        />
-        <TextInput
-          label={'קצת עלי'}
-          value={description}
-          onChangeText={setDescription}
-          style={styles.input}
-          mode='outlined'
-          activeOutlineColor='#E6824A'
-          selectionColor='gray'
-        />
-        <TextInput
-          label={'אינסטגרם'}
-          value={instagram}
-          onChangeText={setInstagram}
-          style={[styles.input, { textAlign: 'left' }]}
-          mode='outlined'
-          activeOutlineColor='#E6824A'
-          selectionColor='gray'
-        />
-        <TextInput
-          label='מספר פלאפון'
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          style={[styles.input, { textAlign: 'left' }]}
-          mode='outlined'
-          keyboardType='phone-pad'
-          activeOutlineColor='#E6824A'
-          selectionColor='gray'
-        />
+        <Text style={[Theme.primaryTitle, styles.title]}>
+          בניית הפרופיל שלך
+        </Text>
+        <View style={styles.avatarContainer}>
+          <AvatarComponent
+            uploadImage={uploadImage}
+            setProfilePicture={setProfilePicture}
+          />
+        </View>
+        <View style={styles.inputsContainer}>
+          <Spinner
+            visible={isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerText}
+            overlayColor='rgba(0, 0, 0, 0.6)'
+          />
+          <TextInput
+            label={'שם מלא'}
+            value={fullName}
+            onChangeText={setFullName}
+            style={styles.input}
+            mode='outlined'
+            activeOutlineColor='#E6824A'
+            selectionColor='gray'
+          />
+          <TextInput
+            label={'קצת עלי'}
+            value={description}
+            onChangeText={setDescription}
+            style={styles.input}
+            mode='outlined'
+            activeOutlineColor='#E6824A'
+            selectionColor='gray'
+          />
+          <TextInput
+            label={'אינסטגרם'}
+            value={instagram}
+            onChangeText={setInstagram}
+            style={[styles.input, { textAlign: 'left' }]}
+            mode='outlined'
+            activeOutlineColor='#E6824A'
+            selectionColor='gray'
+          />
+          <TextInput
+            label='מספר פלאפון'
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            style={[styles.input, { textAlign: 'left' }]}
+            mode='outlined'
+            keyboardType='phone-pad'
+            activeOutlineColor='#E6824A'
+            selectionColor='gray'
+          />
 
-        {phoneNumberError !== '' && (
-          <Text style={styles.errorText}>{phoneNumberError}</Text>
-        )}
+          {phoneNumberError !== '' && (
+            <Text style={styles.errorText}>{phoneNumberError}</Text>
+          )}
 
-        {/* <DatePickerComponent
+          {/* <DatePickerComponent
 					selectedDate={selectedDate}
 					onDateChange={setSelectedDate}
 				/> */}
-        <AgePicker selectedAge={age} onAgeChange={setAge} />
+          <AgePicker selectedAge={age} onAgeChange={setAge} />
 
-        <GenderPicker
-          onGenderChange={setGender}
-          selectedGender={gender}
-        ></GenderPicker>
-        <MultiSelectDropdown
-          data={interests}
-          title={'בחירת תחומי עניין בטיול'}
-          onSelectionsChange={handleSelectedInterests}
-        ></MultiSelectDropdown>
-        <MultiSelectDropdown
-          data={countryData}
-          title={'בחירת יעדים'}
-          onSelectionsChange={handleSelectedDestinations}
-          selectedItems={loggedInUser.travelPlan}
-        ></MultiSelectDropdown>
-        <CitiesComponent
-          onSelectCity={handleSelectedCity}
-          defualtOptionCheck={loggedInUser.city}
-        />
-      </View>
+          <GenderPicker
+            onGenderChange={setGender}
+            selectedGender={gender}
+          ></GenderPicker>
+          <MultiSelectDropdown
+            data={interests}
+            title={'בחירת תחומי עניין בטיול'}
+            onSelectionsChange={handleSelectedInterests}
+          ></MultiSelectDropdown>
+          <MultiSelectDropdown
+            data={countryData}
+            title={'בחירת יעדים'}
+            onSelectionsChange={handleSelectedDestinations}
+            selectedItems={loggedInUser.travelPlan}
+          ></MultiSelectDropdown>
+          <CitiesComponent
+            onSelectCity={handleSelectedCity}
+            defualtOptionCheck={loggedInUser.city}
+          />
+        </View>
 
-      <ButtonLower textContent={'עדכון פרטים'} handlePress={updateUser} />
-    </ScrollView>
+        <ButtonLower textContent={'עדכון פרטים'} handlePress={updateUser} />
+      </ScrollView>
     </KeyboardAvoidingView>
   )
 }
