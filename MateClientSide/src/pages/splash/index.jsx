@@ -76,7 +76,6 @@ export default function Splash({navigation}) {
       }
       }
       loadFonts();
-   
       }, []);
    
    
@@ -92,7 +91,7 @@ export default function Splash({navigation}) {
    return (
       <View style={[Theme.screen,styles.screen]}>
        <Image
-       source={require("../../../assets/images/logo.png")}
+       source={{uri:"https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/logo.png"}}
        resizeMode="contain"
        style = {styles.image}/>
        </View>

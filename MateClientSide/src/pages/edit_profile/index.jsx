@@ -83,6 +83,7 @@ export default function EditProfile({ navigation }) {
 
   const uploadImage = async (uri) => {
     try {
+      setIsLoading(true)
       const formData = new FormData()
       const randomKey = Math.random().toString(36).substring(7)
       formData.append('files', {
@@ -111,13 +112,16 @@ export default function EditProfile({ navigation }) {
         //   profileImage: uploadedImageURI,
         // }))
         setIsImageUpload(true);
+        setIsLoading(false)
+
         
       }
     } catch (error) {
       console.error('Upload error:', error)
+      setIsLoading(false)
+
     } finally {
       // setIsLoading(false)
-      console.log("check")
     }
   }
 
