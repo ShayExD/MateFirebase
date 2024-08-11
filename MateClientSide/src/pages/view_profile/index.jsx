@@ -60,7 +60,7 @@ export default function ViewProfile({ navigation }) {
     if (isOwnProfile) return // Don't start a chat with yourself
     const conversationId = await startNewConversation(loggedInUser.uid, profile.uid)
     if (conversationId) {
-      navigation.navigate('Chat', { conversationId, otherUserId: profile.uid })
+      navigation.navigate('Chat', { conversationId, otherUserId: profile.uid, otherUser:profile })
     } else {
       console.error('Failed to start conversation')
       // You might want to show an error message to the user here

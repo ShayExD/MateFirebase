@@ -199,7 +199,7 @@ const ChatPage = ({ route, navigation }) => {
             source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
             style={styles.avatar}
           />
-          <Text style={styles.userName}>{otherUser.name}</Text>
+          <Text style={styles.userName}>{otherUser.fullname}</Text>
         </View>
         {isLoading ? (
           <View style={styles.loaderContainer}>

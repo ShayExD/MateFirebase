@@ -70,6 +70,32 @@ app.post('/loginUser', async (req, res) => {
   }
 });
 
+app.get('/getUserByUid/:uid', async (req, res) => {
+  const { uid } = req.params; // Get the UID from the URL parameters
+
+  console.log(uid)
+
+  if (!uid) {
+    return res.status(400).json({ error: 'UID is required' });
+  }
+
+  try {
+    // Retrieve the user document
+    const userDoc = await db.collection('users').doc(uid).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userData = userDoc.data();
+    userData.uid = uid; // Include the UID in the response
+    res.status(200).json(userData);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
 app.post('/createUser', async (req, res) => {
   const { uid, attributes } = req.body;
 

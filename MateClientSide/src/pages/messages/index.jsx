@@ -44,6 +44,7 @@ const MessagesPage = ({ navigation }) => {
             unreadCount: data.unreadCount?.[loggedInUser.uid] || 0, // Add this line
           }
         })
+        console.log("השיחות",conversationsData);
         setConversations(conversationsData)
       },
       (error) => {
@@ -74,7 +75,7 @@ const MessagesPage = ({ navigation }) => {
           />
           <View style={styles.conversationInfo}>
             <Text style={styles.conversationName}>
-              {item.otherUser?.name || 'Unknown User'}
+              {item.otherUser?.fullname || 'Unknown User'}
             </Text>
             <Text
               style={[

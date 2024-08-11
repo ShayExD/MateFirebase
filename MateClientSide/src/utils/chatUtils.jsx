@@ -16,12 +16,12 @@ export const startNewConversation = async (currentUserId, otherUserId) => {
     const participants = [
       {
         id: currentUserId,
-        name: currentUserData.fullname || 'Unknown User',
+        fullname: currentUserData.fullname || 'Unknown User',
         profileImage: currentUserData.profileImage || null
       },
       {
         id: otherUserId,
-        name: otherUserData.fullname || 'Unknown User',
+        fullname: otherUserData.fullname || 'Unknown User',
         profileImage: otherUserData.profileImage || null
       }
     ];

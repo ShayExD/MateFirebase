@@ -92,10 +92,24 @@ export default function Home({ navigation }) {
     return recommendedUsers
   }
 
+  const getUserByUid = async () => {
+    try {
+      const response = await axios.get(
+        `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getUserByUid/${loggedInUser.uid}`,
+      )
+      // console.log("GetUserByUid:" ,response.data)
+      setLoggedInUser(response.data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+    }
+  }
+
 
 useEffect(() => {
   if (isFocused) {
     getAllTrips()
+    getUserByUid()
   }
 }, [isFocused])
 

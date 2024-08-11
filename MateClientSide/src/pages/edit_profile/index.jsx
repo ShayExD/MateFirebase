@@ -105,10 +105,10 @@ export default function EditProfile({ navigation }) {
         const uploadedFileName = response.data[0]
         const uploadedImageURI = `https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/${uploadedFileName}`
         setProfilePicture(uploadedImageURI)
-        setLoggedInUser((prevUser) => ({
-          ...prevUser,
-          profileImage: uploadedImageURI,
-        }))
+        // setLoggedInUser((prevUser) => ({
+        //   ...prevUser,
+        //   profileImage: uploadedImageURI,
+        // }))
         setIsImageUpload(true);
         
       }
