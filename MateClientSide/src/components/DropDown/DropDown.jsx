@@ -82,6 +82,7 @@ const DropDown = ({ header, content }) => {
 
 const styles = StyleSheet.create({
   container: {
+
     marginBottom: VerticalScale(10),
     width: '90%',
   },
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   },
   singleValueContainer: {
     padding: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
     marginTop: 8,

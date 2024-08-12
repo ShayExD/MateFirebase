@@ -239,7 +239,7 @@ export default function CreateTrip({ navigation }) {
         label={'תאור הטיול'}
         value={aboutTrip}
         onChangeText={setAboutTrip}
-        maxLength={1000} // הגבלת מספר האותיות
+        maxLength={1500} // הגבלת מספר האותיות
         style={[
           styles.input,
           { textAlign: 'right', height: VerticalScale(100) },

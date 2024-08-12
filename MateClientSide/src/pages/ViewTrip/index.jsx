@@ -176,12 +176,16 @@ export default function ViewTrip({ navigation }) {
               </Text>
             </View>
             <StackedAvatars members={tripData.joinedUsers} maxDisplay={4} />
-            <Text style={[styles.text, styles.details]}>
+           
+            {/* <Text style={[styles.text, styles.details]}>
               {tripData.aboutTrip}
-            </Text>
+            </Text> */}
           </View>
         </View>
-
+        <DropDown
+             header={'תיאור הטיול '}
+         content={tripData.aboutTrip}
+        ></DropDown>
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
         <DropDown
           header={'תחומי עניין'}

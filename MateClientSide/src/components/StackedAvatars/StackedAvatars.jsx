@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import Theme from '../../../assets/styles/theme';
+import { VerticalScale } from '../../utils';
 
 const StackedAvatars = ({ members, maxDisplay = 3 }) => {
   const displayedMembers = members.slice(0, maxDisplay);
@@ -39,6 +40,7 @@ const StackedAvatars = ({ members, maxDisplay = 3 }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-end',
+    marginBottom:VerticalScale(10),
   },
   avatarContainer: {
     flexDirection: 'row-reverse', // For RTL layout
