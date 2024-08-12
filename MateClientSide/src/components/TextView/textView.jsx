@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert,Platform } from 'react-native';
 import Theme from '../../../assets/styles/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Clipboard from 'expo-clipboard';
@@ -30,7 +30,7 @@ const TextView = ({ title, content, iconName, allowCopy }) => {
 
 const styles = StyleSheet.create({
   smallTitle: {
-    textAlign: 'right',
+    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
     color: Theme.primaryColor.color,
     fontSize: 16,
     fontWeight: 'bold',
@@ -45,8 +45,10 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'gray',
     marginBottom: 10,
-    direction: 'rtl',
-    alignItems: 'flex-start',
+    // direction: 'rtl',
+    direction: Platform.OS === 'ios' ? 'rtl' : 'ltr',
+    alignItems: Platform.OS === 'ios' ? 'flex-start' : 'flex-end',
+
   },
   titleContainer: {
     flexDirection: 'row',
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   textAttributes: {
-    textAlign: 'left',
+    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
     color: 'black',
     fontSize: 18,
     flex: 1,

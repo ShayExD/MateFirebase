@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList,I18nManager,Platform } from 'react-native'
 import axios from 'axios'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight } from '../../utils'
@@ -26,7 +26,9 @@ export default function ViewProfile({ navigation }) {
 
   useEffect(() => {
     // Call getAllUserTrips when the component mounts
-    getAllUserTrips()
+    getAllUserTrips();
+    // I18nManager.forceRTL(true);
+
   }, [])
 
   const getAllUserTrips = async () => {
@@ -135,6 +137,8 @@ export default function ViewProfile({ navigation }) {
               ? 'woman'
               : 'male-female-outline'
           }
+          style={{textAlign: Platform.OS === 'ios' ? 'left' : 'right',
+          }}
         />
         <TextView title={'קצת עלי'} content={profile.introduction} />
         <TagsView title={'תחומי עניין בטיול'} list={profile.tripInterests} />
@@ -212,7 +216,7 @@ const styles = StyleSheet.create({
     direction: 'rtl',
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     padding: 10,
   },
@@ -223,7 +227,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     borderWidth: 1,
     borderColor: 'gray',
     marginBottom: 10,
@@ -259,7 +263,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: Theme.primaryColor.color,
-    textAlign: 'left',
+    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
   },
   flatListContent: {
     paddingRight: 10, // Add some padding to the right side of the FlatList

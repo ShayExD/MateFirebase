@@ -311,8 +311,8 @@ const styles = StyleSheet.create({
   input: {
     width: '90%',
     marginBottom: VerticalScale(24),
-    direction: 'rtl',
-    textAlign: 'right',
+    direction: Platform.OS === 'ios' ? 'rtl' : 'ltr',
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
     fontFamily: Theme.primaryText.fontFamily,
   },
   loader: {

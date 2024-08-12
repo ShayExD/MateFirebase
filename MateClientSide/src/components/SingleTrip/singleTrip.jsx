@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.5,
       shadowRadius: 3.84,
+      elevation: 5
     }),
     ...(Platform.OS === 'android' && {
       elevation: 0, // Ensure no elevation on Android
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: HorizontalScale(20),
   },
   text: {
-    textAlign: 'right',
+    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
     color: 'black',
     fontFamily: 'OpenSans-Bold',
     fontSize: 14,
