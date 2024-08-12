@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     writingDirection: 'rtl',
   },
   singleValueContainer: {
+    textAlign:Platform.OS === 'ios' ? 'right' : 'left',
     padding: 10,
     // borderWidth: 1,
     borderColor: '#ccc',
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
   },
   singleValueText: {
     fontSize: 16,
-    textAlign: 'right',
+    textAlign:Platform.OS === 'ios' ? 'right' : 'left',
     writingDirection: 'rtl',
   },
 })
