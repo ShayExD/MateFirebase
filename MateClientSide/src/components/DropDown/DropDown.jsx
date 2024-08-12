@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import { VerticalScale } from '../../utils';
+import React, { useState } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Platform,
+} from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
+import { VerticalScale } from '../../utils'
 
 const DropDown = ({ header, content }) => {
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 
   const handleDropdownPress = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-  };
+    setIsDropdownVisible(!isDropdownVisible)
+  }
 
   const renderContent = () => {
     if (Array.isArray(content)) {
@@ -21,51 +28,57 @@ const DropDown = ({ header, content }) => {
             </View>
           ))}
         </ScrollView>
-      );
+      )
     } else if (typeof content === 'string' || typeof content === 'number') {
       // Render single value
       return (
         <View style={styles.singleValueContainer}>
           <Text style={styles.singleValueText}>{content}</Text>
         </View>
-      );
+      )
     } else if (React.isValidElement(content)) {
       // Render React component
-      return content;
+      return content
     } else if (typeof content === 'object' && content !== null) {
       // Handle object with component and props
-      const [Component, props] = Object.entries(content)[0];
-      
+      const [Component, props] = Object.entries(content)[0]
+
       if (typeof Component === 'function') {
-        return <Component {...props} />;
+        return <Component {...props} />
       } else {
-        console.warn(`Invalid component provided`);
+        console.warn(`Invalid component provided`)
         return (
           <View style={styles.singleValueContainer}>
-            <Text style={styles.singleValueText}>Invalid component provided</Text>
+            <Text style={styles.singleValueText}>
+              Invalid component provided
+            </Text>
           </View>
-        );
+        )
       }
     }
-    
+
     // Fallback for unexpected content type
     return (
       <View style={styles.singleValueContainer}>
         <Text style={styles.singleValueText}>Invalid content type</Text>
       </View>
-    );
-  };
+    )
+  }
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdown} onPress={handleDropdownPress}>
         <Text style={styles.selectedTextStyle}>{header}</Text>
-        <FontAwesome name={isDropdownVisible ? 'angle-up' : 'angle-down'} size={20} color='#000' />
+        <FontAwesome
+          name={isDropdownVisible ? 'angle-up' : 'angle-down'}
+          size={20}
+          color='#000'
+        />
       </TouchableOpacity>
       {isDropdownVisible && renderContent()}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +93,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: 'row-reverse',
+    flexDirection: Platform.OS === 'ios' ? 'row-reverse' : 'row',
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -97,7 +110,7 @@ const styles = StyleSheet.create({
   },
   dropdownItem: {
     padding: 10,
-    flexDirection: 'row-reverse',
+    flexDirection: Platform.OS === 'ios' ? 'row-reverse' : 'row',
     justifyContent: 'flex-start',
   },
   dropdownItemText: {
@@ -117,6 +130,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     writingDirection: 'rtl',
   },
-});
+})
 
-export default DropDown;
+export default DropDown

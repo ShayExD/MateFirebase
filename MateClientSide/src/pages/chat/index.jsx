@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Image,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native'
 import {
   collection,
@@ -21,7 +21,7 @@ import {
   doc,
   updateDoc,
   writeBatch,
-  increment
+  increment,
 } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import { AuthContext } from '../../../AuthContext'
@@ -57,9 +57,9 @@ const ChatPage = ({ route, navigation }) => {
         markMessagesAsSeen(messagesData)
       },
       (error) => {
-        console.error("Error fetching messages:", error)
+        console.error('Error fetching messages:', error)
         setIsLoading(false)
-      }
+      },
     )
 
     // Reset unread count when opening the chat
@@ -71,21 +71,27 @@ const ChatPage = ({ route, navigation }) => {
   const resetUnreadCount = async () => {
     try {
       await updateDoc(doc(db, 'conversations', conversationId), {
-        [`unreadCount.${loggedInUser.uid}`]: 0
+        [`unreadCount.${loggedInUser.uid}`]: 0,
       })
     } catch (error) {
-      console.error("Error resetting unread count:", error)
+      console.error('Error resetting unread count:', error)
     }
   }
 
   const markMessagesAsSeen = async (messagesData) => {
     const batch = writeBatch(db)
     const unseenMessages = messagesData.filter(
-      msg => msg.senderId !== loggedInUser.uid && !msg.seen
+      (msg) => msg.senderId !== loggedInUser.uid && !msg.seen,
     )
 
-    unseenMessages.forEach(msg => {
-      const messageRef = doc(db, 'conversations', conversationId, 'messages', msg.id)
+    unseenMessages.forEach((msg) => {
+      const messageRef = doc(
+        db,
+        'conversations',
+        conversationId,
+        'messages',
+        msg.id,
+      )
       batch.update(messageRef, { seen: true })
     })
 
@@ -93,7 +99,7 @@ const ChatPage = ({ route, navigation }) => {
       try {
         await batch.commit()
       } catch (error) {
-        console.error("Error marking messages as seen:", error)
+        console.error('Error marking messages as seen:', error)
       }
     }
   }
@@ -101,13 +107,13 @@ const ChatPage = ({ route, navigation }) => {
   const sendMessage = async () => {
     if (inputMessage.trim() === '') return
 
-    const inputText = inputMessage;
+    const inputText = inputMessage
     setInputMessage('')
     const messageData = {
       text: inputText,
       senderId: loggedInUser.uid,
       timestamp: serverTimestamp(),
-      seen: false
+      seen: false,
     }
 
     try {
@@ -120,9 +126,8 @@ const ChatPage = ({ route, navigation }) => {
       await updateDoc(doc(db, 'conversations', conversationId), {
         lastMessage: inputText,
         lastMessageTimestamp: serverTimestamp(),
-        [`unreadCount.${otherUserId}`]: increment(1)
+        [`unreadCount.${otherUserId}`]: increment(1),
       })
-
     } catch (error) {
       console.error('Error sending message:', error)
     }
@@ -144,7 +149,7 @@ const ChatPage = ({ route, navigation }) => {
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       })
     }
   }
@@ -155,7 +160,9 @@ const ChatPage = ({ route, navigation }) => {
       <View
         style={[
           styles.messageContainer,
-          isOwnMessage ? styles.ownMessageContainer : styles.otherMessageContainer,
+          isOwnMessage
+            ? styles.ownMessageContainer
+            : styles.otherMessageContainer,
         ]}
       >
         <View
@@ -164,17 +171,21 @@ const ChatPage = ({ route, navigation }) => {
             isOwnMessage ? styles.ownMessage : styles.otherMessage,
           ]}
         >
-          <Text style={[styles.messageText, isOwnMessage && styles.ownMessageText]}>
+          <Text
+            style={[styles.messageText, isOwnMessage && styles.ownMessageText]}
+          >
             {item.text}
           </Text>
         </View>
         <View style={styles.messageFooter}>
-          <Text style={styles.timestamp}>{formatTimestamp(item.timestamp)}</Text>
+          <Text style={styles.timestamp}>
+            {formatTimestamp(item.timestamp)}
+          </Text>
           {isOwnMessage && (
             <Ionicons
-              name={item.seen ? "checkmark-done" : "checkmark"}
+              name={item.seen ? 'checkmark-done' : 'checkmark'}
               size={16}
-              color={item.seen ? Theme.primaryColor.color : "#888"}
+              color={item.seen ? Theme.primaryColor.color : '#888'}
             />
           )}
         </View>
@@ -183,17 +194,17 @@ const ChatPage = ({ route, navigation }) => {
   }
 
   const customHandlePress = () => {
-    navigation.navigate('myTabs', { screen: 'Messages' });
+    navigation.navigate('myTabs', { screen: 'Messages' })
   }
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
       keyboardVerticalOffset={0}
     >
       <View style={styles.container}>
-      <BackArrow onPress={customHandlePress} />
+        <BackArrow onPress={customHandlePress} />
         <View style={styles.header}>
           <Image
             source={{ uri: otherUser.profileImage || DEFAULT_AVATAR }}
@@ -203,7 +214,7 @@ const ChatPage = ({ route, navigation }) => {
         </View>
         {isLoading ? (
           <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color={Theme.primaryColor.color} />
+            <ActivityIndicator size='large' color={Theme.primaryColor.color} />
           </View>
         ) : (
           <FlatList

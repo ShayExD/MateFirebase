@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet,Platform } from 'react-native';
-import Theme from '../../../assets/styles/theme';
+import React from 'react'
+import { View, Text, StyleSheet, Platform } from 'react-native'
+import Theme from '../../../assets/styles/theme'
 
 const TagsView = ({ title, list }) => {
   return (
@@ -14,8 +14,8 @@ const TagsView = ({ title, list }) => {
         ))}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   smallTitle: {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
-    alignItems: Platform.OS === 'ios' ? 'flex-start' : 'flex-end',
+    alignItems: 'flex-start',
     marginBottom: 10,
   },
   tagsContainer: {
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
   },
-});
+})
 
-export default TagsView;
+export default TagsView

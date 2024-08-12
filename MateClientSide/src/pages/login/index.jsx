@@ -1,36 +1,33 @@
-import { StyleSheet, Text, View,ActivityIndicator } from 'react-native'
-import React,{useState,useContext} from 'react'
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import React, { useState, useContext } from 'react'
 import Theme from '../../../assets/styles/theme'
-import { VerticalScale, windowHeight,HorizontalScale } from '../../utils'
+import { VerticalScale, windowHeight, HorizontalScale } from '../../utils'
 import BackArrow from '../../components/BackArrow/backArrow'
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper'
 import Input from '../../components/Input/input'
 import ButtonLower from '../../components/ButtonLower/buttonLower'
-import axios from 'axios';
+import axios from 'axios'
 import { AuthContext } from '../../../AuthContext'
-import { Alert } from 'react-native';
-import { getAuth,signInWithEmailAndPassword } from 'firebase/auth';
+import { Alert } from 'react-native'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { app } from '../../../firebase'
 
-
-export default function Login({navigation}) {
-  const [data, setData] = useState([]);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { loginUser,loggedInUser } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false); // State for loading status
-
-
+export default function Login({ navigation }) {
+  const [data, setData] = useState([])
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { loginUser, loggedInUser } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false) // State for loading status
 
   const handleLogin = () => {
-    const auth = getAuth(app);
-    setLoading(true); // Start loading indicator
-  
+    const auth = getAuth(app)
+    setLoading(true) // Start loading indicator
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log('Login user', user.uid);
-  
+        const user = userCredential.user
+        console.log('Login user', user.uid)
+
         // Send a request to the server to fetch the user data from Firestore
         axios
           .post(
@@ -42,14 +39,14 @@ export default function Login({navigation}) {
               headers: {
                 'Content-Type': 'application/json',
               },
-            }
+            },
           )
           .then((response) => {
-            const userData = response.data.userData;
-            console.log('User data from Firestore:', userData);
-  
-            loginUser(userData); // Log in the user using the context or appropriate method
-  
+            const userData = response.data.userData
+            console.log('User data from Firestore:', userData)
+
+            loginUser(userData) // Log in the user using the context or appropriate method
+
             Alert.alert(
               'Login Successful',
               'You have successfully logged in!',
@@ -58,18 +55,18 @@ export default function Login({navigation}) {
                   text: 'OK',
                   onPress: () => {
                     // Navigate to the desired screen
-                    navigation.navigate('myTabs', { screen: 'Home' });
+                    navigation.navigate('myTabs', { screen: 'Home' })
                   },
                 },
-              ]
-            );
+              ],
+            )
             setEmail('')
             setPassword('')
-            setLoading(false); // End loading on success
+            setLoading(false) // End loading on success
           })
           .catch((error) => {
-            console.error('Error fetching user data:', error);
-  
+            console.error('Error fetching user data:', error)
+
             Alert.alert(
               'Login Error',
               error.response?.data?.error || error.message,
@@ -77,38 +74,32 @@ export default function Login({navigation}) {
                 {
                   text: 'OK',
                   onPress: () => {
-                    console.log('Error acknowledged');
+                    console.log('Error acknowledged')
                   },
                 },
-              ]
-            );
-  
-            setLoading(false); // End loading on error
-          });
+              ],
+            )
+
+            setLoading(false) // End loading on error
+          })
       })
       .catch((error) => {
-        const errorMessage = error.message;
+        const errorMessage = error.message
         // console.error('Firebase Auth Error:', errorMessage);
-  
-        Alert.alert(
-          'Authentication Error',
-          'User not exists',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                console.log('Auth error acknowledged');
-              },
+
+        Alert.alert('Authentication Error', 'User not exists', [
+          {
+            text: 'OK',
+            onPress: () => {
+              console.log('Auth error acknowledged')
             },
-          ]
-        );
-  
-        setLoading(false); // End loading on Firebase Auth error
-      });
-  };
+          },
+        ])
 
+        setLoading(false) // End loading on Firebase Auth error
+      })
+  }
 
-  
   // const handleLogin = async () => {
   //   try {
   //     const lowercaseEmail = email.toLowerCase(); // Convert email to lowercase
@@ -133,7 +124,7 @@ export default function Login({navigation}) {
   //         [{ text: 'OK' }],
   //         { cancelable: false }
   //       );
-    
+
   //     }
   //   }
   //   finally{
@@ -142,79 +133,81 @@ export default function Login({navigation}) {
   //   }
   // };
 
-
   return (
-    <View style={[Theme.screen,styles.screen]}>
-      <BackArrow/>
-      <Text style={[Theme.primaryTitle,styles.title]}>התחברות</Text>
-      <Text  style={[Theme.primaryText,styles.text]}>אנא הרשם לאפליקציה על מנת להתחיל להכיר מטיילים</Text>
+    <View style={[Theme.screen, styles.screen]}>
+      <BackArrow />
+      <Text style={[Theme.primaryTitle, styles.title]}>התחברות</Text>
+      <Text style={[Theme.primaryText, styles.text]}>
+        אנא הרשם לאפליקציה על מנת להתחיל להכיר מטיילים
+      </Text>
       <View style={styles.inputsContainer}>
-      <TextInput
-        label= {"אימייל"}
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        mode="outlined"
-        activeOutlineColor='#E6824A'
-        selectionColor='gray'
-        textAlign='right'
-      />  
-       <TextInput
-        label= {"סיסמה"}
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        mode="outlined"
-        secureTextEntry
-        activeOutlineColor='#E6824A'
-        selectionColor='gray'
-        textAlign='right'
-
-      />
+        <TextInput
+          label={'אימייל'}
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          mode='outlined'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+          textAlign='right'
+        />
+        <TextInput
+          label={'סיסמה'}
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          mode='outlined'
+          secureTextEntry
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+          textAlign='right'
+        />
       </View>
-      <Text style={Theme.primaryText}> עדיין אין לך חשבון? <Text style={Theme.primaryColor} onPress={()=>navigation.navigate('Register')}>להרשמה</Text></Text>
+      <Text style={Theme.primaryText}>
+        {' '}
+        עדיין אין לך חשבון?{' '}
+        <Text
+          style={Theme.primaryColor}
+          onPress={() => navigation.navigate('Register')}
+        >
+          להרשמה
+        </Text>
+      </Text>
       {loading && (
-            <ActivityIndicator
-              size="small"
-              color="#0000ff"
-              style={styles.loader}
-            />
-          )}
-    <ButtonLower textContent={"התחבר"} handlePress={handleLogin}/>
+        <ActivityIndicator size='small' color='#0000ff' style={styles.loader} />
+      )}
+      <ButtonLower textContent={'התחבר'} handlePress={handleLogin} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-screen:{
-alignItems:'center',
-},
-title:{
-marginTop:windowHeight*0.175,
-marginBottom:windowHeight*0.0174
-
-},
-inputsContainer:{
-marginTop:VerticalScale(44),
-width:'90%',
-
-},
-text:{
-color:'gray',
-marginHorizontal:0,
-},
-input: {
-  marginBottom: VerticalScale(24),
-  paddingHorizontal: 10,
-  textAlign: 'left', 
-  direction: 'rtl',
-},
-button: {
-  marginTop: 10,
-},
-loader: {
-  alignItems: 'center',
-  textAlign: 'center',
-
-},
+  screen: {
+    alignItems: 'center',
+  },
+  title: {
+    marginTop: windowHeight * 0.175,
+    marginBottom: windowHeight * 0.0174,
+  },
+  inputsContainer: {
+    marginTop: VerticalScale(44),
+    width: '90%',
+  },
+  text: {
+    color: 'gray',
+    marginHorizontal: 0,
+  },
+  input: {
+    marginBottom: VerticalScale(24),
+    paddingHorizontal: 10,
+    textAlign: 'left',
+    direction: 'rtl',
+  },
+  button: {
+    marginTop: 10,
+  },
+  loader: {
+    alignItems: 'center',
+    textAlign: 'center',
+  },
 })

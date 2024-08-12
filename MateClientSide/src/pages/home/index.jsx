@@ -5,9 +5,8 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Platform, 
-  StatusBar
-
+  Platform,
+  StatusBar,
 } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import Theme from '../../../assets/styles/theme'
@@ -108,13 +107,14 @@ export default function Home({ navigation }) {
     }
   }
 
-
-useEffect(() => {
-  if (isFocused) {
-    getAllTrips()
-    getUserByUid()
-  }
-}, [isFocused])
+  useEffect(() => {
+    if (isFocused) {
+      getAllTrips()
+      getUserByUid()
+      setuserPostsCurretPage(1)
+      setTripsCurrentPage(1)
+    }
+  }, [isFocused])
 
   const logOut = () => {
     logoutUser()
@@ -149,12 +149,12 @@ useEffect(() => {
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getAllTrips`,
       )
 
-      const currentDate = new Date();
+      const currentDate = new Date()
 
-    const futureTrips = response.data.filter(
-    (trip) => new Date(trip.startDate) >= currentDate)
+      const futureTrips = response.data.filter(
+        (trip) => new Date(trip.startDate) >= currentDate,
+      )
       const updatedTrips = futureTrips.map((trip) => {
-        
         const matchingScore = calculateTripMatchingScore(loggedInUser, trip)
         return { ...trip, matchingScore }
       })
@@ -168,7 +168,7 @@ useEffect(() => {
   useEffect(() => {
     getAllUsers()
     getAllTrips()
-    // setTripsCurrentPage(1);
+    setTripsCurrentPage(1)
     setuserPostsCurretPage(1)
   }, [loggedInUser])
 
@@ -186,12 +186,18 @@ useEffect(() => {
     setIsLoadingTrips(false)
   }, [tripData])
 
-  const handleHeaderPress = () => {    
-    navigation.navigate('ViewProfile');
-  };
+  const handleHeaderPress = () => {
+    navigation.navigate('ViewProfile')
+  }
 
   return (
-    <SafeAreaView style={[Theme.screen, styles.screen,{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}]}>
+    <SafeAreaView
+      style={[
+        Theme.screen,
+        styles.screen,
+        { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+      ]}
+    >
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
@@ -220,24 +226,23 @@ useEffect(() => {
           data={tripsRenderData}
           renderItem={({ item }) => (
             <SingleTrip
-            handlePress={() => {
-              navigation.navigate('ViewTrip', { trip: item })
-            }}
-            key={item.id.toString()}
-            picUrl={{
-              uri:
-                item.tripPictureUrl || 'https://example.com/default-trip.png',
-            }}
-            title={item.tripName || 'Unnamed Trip'}
-            destination={item.destinations || []}
-            max={'/' + item.limitUsers || ''}
-            numOfPeople={item.joinedUsers.length || 0}
-          />
-
+              handlePress={() => {
+                navigation.navigate('ViewTrip', { trip: item })
+              }}
+              key={item.id.toString()}
+              picUrl={{
+                uri:
+                  item.tripPictureUrl || 'https://example.com/default-trip.png',
+              }}
+              title={item.tripName || 'Unnamed Trip'}
+              destination={item.destinations || []}
+              max={'/' + item.limitUsers || ''}
+              numOfPeople={item.joinedUsers.length || 0}
+            />
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            console.log('fetch page number' + tripsCurrentPage )
+            console.log('fetch page number' + tripsCurrentPage)
             console.log(tripsRenderData.length)
             if (isLoadingTrips) {
               return
@@ -266,19 +271,19 @@ useEffect(() => {
           data={userPostsRenderData}
           renderItem={({ item }) => (
             <SingleProfile
-            key={item.uid.toString()}
-            handlePress={() => {
-              navigation.navigate('ViewProfile', { profile: item })
-            }}
-            name={item.fullname || 'Anonymous'}
-            details={item.introduction || 'No introduction'}
-            profileImg={{
-              uri:
-                item.profileImage || 'https://example.com/default-avatar.png',
-            }}
-            age={item.age || 'N/A'}
-            city={item.city || 'Unknown'}
-            ig={item.instagram || 'N/A'}
+              key={item.uid.toString()}
+              handlePress={() => {
+                navigation.navigate('ViewProfile', { profile: item })
+              }}
+              name={item.fullname || 'Anonymous'}
+              details={item.introduction || 'No introduction'}
+              profileImg={{
+                uri:
+                  item.profileImage || 'https://example.com/default-avatar.png',
+              }}
+              age={item.age || 'N/A'}
+              city={item.city || 'Unknown'}
+              ig={item.instagram || 'N/A'}
             />
           )}
           onEndReachedThreshold={0.5}
@@ -309,7 +314,7 @@ useEffect(() => {
 const styles = StyleSheet.create({
   screen: { alignItems: 'center' },
   topBar: {
-    flexDirection: 'row-reverse',
+    flexDirection: Platform.OS === 'ios' ? 'row-reverse' : 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '90%',
@@ -323,7 +328,10 @@ const styles = StyleSheet.create({
     width: '90%',
     // flexDirection: 'row-reverse',
   },
-  title: { textAlign: 'right' },
+  title: {
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
+  },
+
   bell: {
     backgroundColor: '#E3E3E3',
     borderRadius: 50,
@@ -333,12 +341,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    position: 'absolute',
-    left: '0%',
+    // position: 'absolute',
     paddingHorizontal: HorizontalScale(5),
     // top: VerticalScale(10),
     borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
+    ...(Platform.OS === 'ios' && {
+      right: '0%',
+    }),
+    ...(Platform.OS === 'android' && {
+      left: '0%',
+    }),
   },
 })

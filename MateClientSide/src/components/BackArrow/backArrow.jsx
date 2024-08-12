@@ -1,4 +1,11 @@
-import { StyleSheet, Image, Text, View, Pressable } from 'react-native'
+import {
+  StyleSheet,
+  Image,
+  Text,
+  View,
+  Pressable,
+  Platform,
+} from 'react-native'
 import React from 'react'
 import { IconButton } from 'react-native-paper'
 import Theme from '../../../assets/styles/theme'
@@ -26,9 +33,14 @@ const styles = StyleSheet.create({
   container: {
     zIndex: 999,
     position: 'absolute',
-    left: '5%',
     top: VerticalScale(56),
     backgroundColor: '#F7F7F9',
     borderRadius: 50,
+    ...(Platform.OS === 'ios' && {
+      left: '5%',
+    }),
+    ...(Platform.OS === 'android' && {
+      right: '5%',
+    }),
   },
 })

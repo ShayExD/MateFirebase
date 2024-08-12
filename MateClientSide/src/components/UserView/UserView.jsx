@@ -1,9 +1,15 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native'
 import Theme from '../../../assets/styles/theme'
 import { Avatar } from 'react-native-paper'
 
-const UserView = ({ title, content, avatar ,onPress}) => {
+const UserView = ({ title, content, avatar, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.labelContainer}>
@@ -27,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
     marginBottom: 10,
-    alignItems: 'flex-end', // Align items to the right
+    alignItems: Platform.OS === 'ios' ? 'flex-end' : 'flex-start', // Align items to the right
   },
   smallTitle: {
     color: Theme.primaryColor.color,
@@ -37,12 +43,17 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   contentContainer: {
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
     alignItems: 'center',
     justifyContent: 'flex-start', // Align content to the right
   },
   avatar: {
-    marginLeft: 20, // Add space between avatar and text
+    ...(Platform.OS === 'ios' && {
+      marginLeft: 20,
+    }),
+    ...(Platform.OS === 'android' && {
+      marginRight: 20,
+    }),
   },
   textAttributes: {
     color: 'black',

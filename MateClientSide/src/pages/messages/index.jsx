@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, FlatList, StyleSheet, Pressable,Alert } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Pressable,
+  Alert,
+  Platform,
+} from 'react-native'
 import {
   collection,
   query,
@@ -7,8 +15,7 @@ import {
   onSnapshot,
   orderBy,
   doc,
-  deleteDoc
-
+  deleteDoc,
 } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import { AuthContext } from '../../../AuthContext'
@@ -17,8 +24,6 @@ import { Avatar } from 'react-native-paper'
 import Theme from '../../../assets/styles/theme'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Swipeable } from 'react-native-gesture-handler'
-
-
 
 const DEFAULT_PROFILE_IMAGE = 'https://example.com/default-profile-image.png'
 
@@ -51,7 +56,7 @@ const MessagesPage = ({ navigation }) => {
             unreadCount: data.unreadCount?.[loggedInUser.uid] || 0, // Add this line
           }
         })
-        console.log("השיחות",conversationsData);
+        console.log('השיחות', conversationsData)
         setConversations(conversationsData)
       },
       (error) => {
@@ -64,54 +69,52 @@ const MessagesPage = ({ navigation }) => {
 
   const renderConversation = ({ item }) => {
     return (
-      <Swipeable
-        renderLeftActions={() => renderRightActions(item.id)}
-      >
-      <Pressable
-        onPress={() =>
-          navigation.navigate('Chat', {
-            conversationId: item.id,
-            otherUserId: item.otherUser.id,
-            otherUser: item.otherUser,
-          })
-        }
-      >
-        <View style={styles.conversationItem}>
-          <Avatar.Image
-            size={50}
-            source={{
-              uri: item.otherUser?.profileImage || DEFAULT_PROFILE_IMAGE,
-            }}
-          />
-          <View style={styles.conversationInfo}>
-            <Text style={styles.conversationName}>
-              {item.otherUser?.fullname || 'Unknown User'}
-            </Text>
-            <Text
-              style={[
-                styles.lastMessage,
-                item.unreadCount > 0 && styles.unreadMessage,
-              ]}
-              numberOfLines={1}
-              ellipsizeMode='tail'
-            >
-              {item.lastMessage || 'No messages yet'}
-            </Text>
-          </View>
-          <View style={styles.rightContainer}>
-            {item.lastMessageTimestamp && (
-              <Text style={styles.timestamp}>
-                {formatTimestamp(item.lastMessageTimestamp)}
+      <Swipeable renderLeftActions={() => renderRightActions(item.id)}>
+        <Pressable
+          onPress={() =>
+            navigation.navigate('Chat', {
+              conversationId: item.id,
+              otherUserId: item.otherUser.id,
+              otherUser: item.otherUser,
+            })
+          }
+        >
+          <View style={styles.conversationItem}>
+            <Avatar.Image
+              size={50}
+              source={{
+                uri: item.otherUser?.profileImage || DEFAULT_PROFILE_IMAGE,
+              }}
+            />
+            <View style={styles.conversationInfo}>
+              <Text style={styles.conversationName}>
+                {item.otherUser?.fullname || 'Unknown User'}
               </Text>
-            )}
-            {item.unreadCount > 0 && (
-              <View style={styles.unreadBadge}>
-                <Text style={styles.unreadCount}>{item.unreadCount}</Text>
-              </View>
-            )}
+              <Text
+                style={[
+                  styles.lastMessage,
+                  item.unreadCount > 0 && styles.unreadMessage,
+                ]}
+                numberOfLines={1}
+                ellipsizeMode='tail'
+              >
+                {item.lastMessage || 'No messages yet'}
+              </Text>
+            </View>
+            <View style={styles.rightContainer}>
+              {item.lastMessageTimestamp && (
+                <Text style={styles.timestamp}>
+                  {formatTimestamp(item.lastMessageTimestamp)}
+                </Text>
+              )}
+              {item.unreadCount > 0 && (
+                <View style={styles.unreadBadge}>
+                  <Text style={styles.unreadCount}>{item.unreadCount}</Text>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </Pressable>
+        </Pressable>
       </Swipeable>
     )
   }
@@ -145,11 +148,10 @@ const MessagesPage = ({ navigation }) => {
         onPress={() => deleteConversation(conversationId)}
         style={styles.deleteButton}
       >
-        <Ionicons name="trash" size={24} color="#fff" />
+        <Ionicons name='trash' size={24} color='#fff' />
       </Pressable>
     )
   }
-
 
   return (
     <View style={styles.container}>
@@ -174,13 +176,13 @@ const styles = StyleSheet.create({
     marginTop: 90,
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'right',
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
     marginBottom: 20,
     color: Theme.primaryColor.color,
   },
-  
+
   conversationItem: {
-    flexDirection: 'row-reverse',
+    flexDirection: Platform.OS === 'ios' ? 'row-reverse' : 'row',
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
@@ -194,14 +196,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginRight: 10,
-    textAlign: 'right',
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
   },
   lastMessage: {
     fontSize: 14,
     marginRight: 10,
     color: '#888',
     marginTop: 4,
-    textAlign: 'right',
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
   },
   unreadMessage: {
     fontWeight: 'bold',

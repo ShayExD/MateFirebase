@@ -1,25 +1,38 @@
 import React from 'react'
-import { View, Text, StyleSheet, Pressable, Image,Platform } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  Platform,
+} from 'react-native'
 import { HorizontalScale, VerticalScale } from '../../utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Theme from '../../../assets/styles/theme'
 
-const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress,max ,endDate}) => {
+const SingleTrip = ({
+  picUrl,
+  title,
+  destination,
+  numOfPeople,
+  handlePress,
+  max,
+  endDate,
+}) => {
   const isOver = new Date(endDate) < new Date()
 
   return (
     <Pressable onPress={handlePress}>
       <View style={styles.shadowContainer}>
         <View style={[styles.container, isOver && styles.containerOver]}>
-          <Image
-            resizeMode={'cover'}
-            source={picUrl}
-            style={styles.image}
-          />
+          <Image resizeMode={'cover'} source={picUrl} style={styles.image} />
           {isOver && <View style={styles.overlay} />}
           <View style={styles.information}>
-            <Text style={[styles.text, isOver && styles.textOver]}>{title}</Text>
+            <Text style={[styles.text, isOver && styles.textOver]}>
+              {title}
+            </Text>
             <View style={styles.bottom}>
               <View style={styles.iconContainer}>
                 <Ionicons
@@ -28,7 +41,10 @@ const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress,max ,
                   color={isOver ? '#888' : '#e6824a'}
                   style={styles.icon}
                 />
-                <Text style={[styles.iconText, isOver && styles.textOver]}>{numOfPeople}{max}</Text>
+                <Text style={[styles.iconText, isOver && styles.textOver]}>
+                  {numOfPeople}
+                  {max}
+                </Text>
               </View>
               <View style={styles.iconContainer}>
                 <EvilIcons
@@ -37,7 +53,9 @@ const SingleTrip = ({ picUrl, title, destination, numOfPeople, handlePress,max ,
                   color={isOver ? '#888' : '#e6824a'}
                   style={styles.icon}
                 />
-                <Text style={[styles.iconText, isOver && styles.textOver]}>{destination[0]}</Text>
+                <Text style={[styles.iconText, isOver && styles.textOver]}>
+                  {destination[0]}
+                </Text>
               </View>
             </View>
           </View>
@@ -64,11 +82,11 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.5,
       shadowRadius: 3.84,
-      elevation: 5
+      elevation: 5,
     }),
     ...(Platform.OS === 'android' && {
       elevation: 0, // Ensure no elevation on Android
-    })    
+    }),
     // shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,
@@ -109,7 +127,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: HorizontalScale(20),
   },
   text: {
-    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
     color: 'black',
     fontFamily: 'OpenSans-Bold',
     fontSize: 14,
@@ -118,7 +136,7 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   bottom: {
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
     justifyContent: 'space-between',
     marginTop: VerticalScale(20),
   },

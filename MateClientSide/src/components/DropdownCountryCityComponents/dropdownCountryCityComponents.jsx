@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, ScrollView } from 'react-native'
+import { StyleSheet, View, ScrollView, Platform } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import axios from 'axios'
 import Theme from '../../../assets/styles/theme'
 
-
-const DropdownCountryCityComponents = ({setCityLabel,setCountryLabel,cityValue,countryValue,setCityValue,setCountryValue}) => {
+const DropdownCountryCityComponents = ({
+  setCityLabel,
+  setCountryLabel,
+  cityValue,
+  countryValue,
+  setCityValue,
+  setCountryValue,
+}) => {
   const [countryData, setCountryData] = useState([])
   const [cityData, setCityData] = useState([])
   const [value, setValue] = useState(null)
   const [isFocus, setIsFocus] = useState(false)
   const [isFocusCity, setIsFocusCity] = useState(false)
-
 
   useEffect(() => {
     var config = {
@@ -40,7 +45,6 @@ const DropdownCountryCityComponents = ({setCityLabel,setCountryLabel,cityValue,c
         console.log(error)
       })
   }, [])
-
 
   const handleCity = (countyCode) => {
     var config = {
@@ -72,7 +76,10 @@ const DropdownCountryCityComponents = ({setCityLabel,setCountryLabel,cityValue,c
   return (
     <View style={styles.container}>
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: Theme.primaryColor.color }]}
+        style={[
+          styles.dropdown,
+          isFocus && { borderColor: Theme.primaryColor.color },
+        ]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
@@ -96,7 +103,10 @@ const DropdownCountryCityComponents = ({setCityLabel,setCountryLabel,cityValue,c
         }}
       />
       <Dropdown
-        style={[styles.dropdown, isFocusCity && { borderColor: Theme.primaryColor.color }]}
+        style={[
+          styles.dropdown,
+          isFocusCity && { borderColor: Theme.primaryColor.color },
+        ]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
@@ -117,7 +127,6 @@ const DropdownCountryCityComponents = ({setCityLabel,setCountryLabel,cityValue,c
           setIsFocusCity(false)
         }}
       />
-     
     </View>
   )
 }
@@ -135,7 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 8,
     marginBottom: 10,
-    minWidth:'90%'
+    minWidth: '90%',
   },
   icon: {
     marginRight: 0,
@@ -151,8 +160,8 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: Theme.primaryText.fontSize,
-    textAlign:'right',
-alignItems:'flex-end'
+    textAlign: Platform.OS === 'ios' ? 'right' : 'left',
+    alignItems: 'flex-end',
   },
   selectedTextStyle: {
     fontSize: Theme.primaryText.fontSize,
@@ -171,7 +180,6 @@ alignItems:'flex-end'
     width: 340,
     marginBottom: 15,
     textAlign: 'right',
-    
   },
 
   textStyle: {

@@ -1,15 +1,21 @@
-import React from 'react';
-import { useContext } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, Keyboard,KeyboardAvoidingView, Platform } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { AuthProvider,AuthContext } from './AuthContext';
-import { Provider as PaperProvider } from 'react-native-paper';
-import MainNavigation from './src/navigation/Navigation';
-import Tabs from './src/navigation/tabs';
-import Theme from './assets/styles/theme';
+import React from 'react'
+import { useContext } from 'react'
+import {
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { AuthProvider, AuthContext } from './AuthContext'
+import { Provider as PaperProvider } from 'react-native-paper'
+import MainNavigation from './src/navigation/Navigation'
+import Tabs from './src/navigation/tabs'
+import Theme from './assets/styles/theme'
 
 const AppContent = () => {
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext)
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -20,20 +26,20 @@ const AppContent = () => {
 > */}
       <NavigationContainer style={styles.container}>
         <PaperProvider>
-        <MainNavigation />
+          <MainNavigation />
         </PaperProvider>
       </NavigationContainer>
       {/* </KeyboardAvoidingView> */}
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
 export default function App() {
   return (
     <AuthProvider>
       <AppContent />
     </AuthProvider>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -45,4 +51,4 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-});
+})

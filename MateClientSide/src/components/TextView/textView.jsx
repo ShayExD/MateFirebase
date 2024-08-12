@@ -1,16 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert,Platform } from 'react-native';
-import Theme from '../../../assets/styles/theme';
-import Icon from 'react-native-vector-icons/Ionicons';
-import * as Clipboard from 'expo-clipboard';
+import React from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from 'react-native'
+import Theme from '../../../assets/styles/theme'
+import Icon from 'react-native-vector-icons/Ionicons'
+import * as Clipboard from 'expo-clipboard'
 
 const TextView = ({ title, content, iconName, allowCopy }) => {
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(content);
+    await Clipboard.setStringAsync(content)
     Alert.alert('Text Copied', 'The text has been copied to the clipboard.', [
       { text: 'OK' },
-    ]);
-  };
+    ])
+  }
 
   return (
     <View style={styles.labelContainer}>
@@ -20,17 +27,17 @@ const TextView = ({ title, content, iconName, allowCopy }) => {
         <Text style={styles.textAttributes}>{content}</Text>
         {allowCopy && (
           <TouchableOpacity onPress={copyToClipboard}>
-            <Icon name="copy-outline" size={20} style={styles.copyIcon} />
+            <Icon name='copy-outline' size={20} style={styles.copyIcon} />
           </TouchableOpacity>
         )}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   smallTitle: {
-    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
+    // textAlign: Platform.OS === 'ios' ? 'left' : 'right',
     color: Theme.primaryColor.color,
     fontSize: 16,
     fontWeight: 'bold',
@@ -46,9 +53,8 @@ const styles = StyleSheet.create({
     // borderColor: 'gray',
     marginBottom: 10,
     // direction: 'rtl',
-    direction: Platform.OS === 'ios' ? 'rtl' : 'ltr',
-    alignItems: Platform.OS === 'ios' ? 'flex-start' : 'flex-end',
-
+    direction: 'rtl',
+    alignItems: 'flex-start',
   },
   titleContainer: {
     flexDirection: 'row',
@@ -56,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   textAttributes: {
-    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
+    textAlign: 'left',
     color: 'black',
     fontSize: 18,
     flex: 1,
@@ -68,6 +74,6 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginLeft: 5,
   },
-});
+})
 
-export default TextView;
+export default TextView

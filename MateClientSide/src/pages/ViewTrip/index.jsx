@@ -1,4 +1,11 @@
-import { StyleSheet, Image, Text, View, ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  Image,
+  Text,
+  View,
+  ScrollView,
+  Platform,
+} from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import {
   HorizontalScale,
@@ -106,7 +113,6 @@ export default function ViewTrip({ navigation }) {
   useEffect(() => {
     if (isFocused) {
       getTrip()
-
     }
   }, [isFocused])
 
@@ -185,11 +191,15 @@ export default function ViewTrip({ navigation }) {
           header={'מנוהל ע"י'}
           content={
             <UserView
-            key={tripData.joinedUsers[0].uid}
-            content={tripData.joinedUsers[0].fullname}
-            avatar={tripData.joinedUsers[0].profileImage}
-            onPress={() => navigation.navigate('ViewProfile', { profile: tripData.joinedUsers[0] })}
-          />
+              key={tripData.joinedUsers[0].uid}
+              content={tripData.joinedUsers[0].fullname}
+              avatar={tripData.joinedUsers[0].profileImage}
+              onPress={() =>
+                navigation.navigate('ViewProfile', {
+                  profile: tripData.joinedUsers[0],
+                })
+              }
+            />
           }
         />
         <Button
@@ -220,22 +230,23 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
   },
   icon: {
     marginLeft: HorizontalScale(8),
   },
   place: {
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
     alignItems: 'center',
   },
   iconText: {
     marginTop: VerticalScale(10),
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
     alignItems: 'center',
   },
   screen: {
-    justifyContent: 'flex-start',
+    justifyContent: Platform.OS === 'ios' ? 'flex-start' : 'flex-end',
+
     alignItems: 'center',
   },
   image: {
@@ -244,8 +255,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginBottom: windowHeight * 0.0234,
   },
-  content: {
-    alignItems: 'flex-end',
+  content: {    alignItems: Platform.OS === 'ios' ? 'flex-end' : 'flex-start',
+
   },
   text: {
     textAlign: 'right',
