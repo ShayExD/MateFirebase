@@ -154,7 +154,7 @@ const MapPage = () => {
           ))}
         </MapView>
       ) : (
-        <Text style={{ justifyContent: 'center' }}>Loading location...</Text>
+        <Text style={{ justifyContent: 'center' }}></Text>
       )}
 
       {visible && selectedHotel && (

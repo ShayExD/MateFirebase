@@ -1,13 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Pressable,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
-} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable,KeyboardAvoidingView,Keyboard,Platform  } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight } from '../../utils'
@@ -34,7 +25,7 @@ export default function EditProfile({ navigation }) {
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
     useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
-  const [isImageUpload, setIsImageUpload] = useState(false)
+  const [isImageUpload, setIsImageUpload ]= useState(false)
   const [profilePicture, setProfilePicture] = useState(
     loggedInUser.profileImage,
   )
@@ -92,6 +83,7 @@ export default function EditProfile({ navigation }) {
 
   const uploadImage = async (uri) => {
     try {
+      setIsLoading(true)
       const formData = new FormData()
       const randomKey = Math.random().toString(36).substring(7)
       formData.append('files', {
@@ -114,23 +106,31 @@ export default function EditProfile({ navigation }) {
         const uploadedFileName = response.data[0]
         const uploadedImageURI = `https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/${uploadedFileName}`
         setProfilePicture(uploadedImageURI)
+        console.log(uploadedImageURI)
         // setLoggedInUser((prevUser) => ({
         //   ...prevUser,
         //   profileImage: uploadedImageURI,
         // }))
-        setIsImageUpload(true)
+        setIsImageUpload(true);
+        setIsLoading(false)
+
+        
       }
     } catch (error) {
       console.error('Upload error:', error)
+      setIsLoading(false)
+
     } finally {
       // setIsLoading(false)
-      console.log('check')
     }
   }
 
+  
+
+
   const updateUser = async () => {
     setIsLoading(true)
-    console.log('check')
+    console.log("check")
     // await uploadImage(profilePicture)
     try {
       if (!phoneNumberPattern.test(phoneNumber)) {
@@ -143,22 +143,23 @@ export default function EditProfile({ navigation }) {
       }
       // uploadImage(profilePicture)
       const updatedUserData = {
-        uid: loggedInUser.uid,
-
-        attributes: {
-          fullname: fullName,
-          password: loggedInUser.password,
-          introduction: description,
-          gender: mapToSingleChar(gender),
-          age: age,
-          instagram: instagram,
-          email: loggedInUser.email,
-          phoneNumber: phoneNumber,
-          profileImage: profilePicture,
-          city: city,
-          travelPlan: destination,
-          tripInterests: selectedInterests,
-        },
+        uid:loggedInUser.uid,
+        
+        attributes:{
+        fullname: fullName,
+        password: loggedInUser.password,
+        introduction: description,
+        gender: mapToSingleChar(gender),
+        age: age,
+        instagram: instagram,
+        email: loggedInUser.email,
+        phoneNumber: phoneNumber,
+        profileImage: profilePicture,
+        city: city,
+        travelPlan: destination,
+        tripInterests: selectedInterests,
+        }
+        
       }
 
       if (
@@ -221,117 +222,115 @@ export default function EditProfile({ navigation }) {
       console.error('Error updating user:', error)
 
       // Handle the error if needed
-    } finally {
+    }
+    finally{
       setIsLoading(false)
+
     }
   }
+  
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={10} // Adjust this offset if needed
-    >
-      <ScrollView
-        contentContainerStyle={[styles.screen]}
-        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={10} // Adjust this offset if needed
       >
-        <BackArrow />
+    <ScrollView
+      contentContainerStyle={[styles.screen]}
+      showsVerticalScrollIndicator={false}
+    >
+      <BackArrow />
 
-        <Text style={[Theme.primaryTitle, styles.title]}>
-          בניית הפרופיל שלך
-        </Text>
-        <View style={styles.avatarContainer}>
-          <AvatarComponent
-            uploadImage={uploadImage}
-            setProfilePicture={setProfilePicture}
-          />
-        </View>
-        <View style={styles.inputsContainer}>
-          <Spinner
-            visible={isLoading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerText}
-            overlayColor='rgba(0, 0, 0, 0.6)'
-          />
-          <TextInput
-            label={'שם מלא'}
-            value={fullName}
-            onChangeText={setFullName}
-            style={styles.input}
-            mode='outlined'
-            activeOutlineColor='#E6824A'
-            selectionColor='gray'
-          />
-          <TextInput
-            label={'קצת עלי'}
-            value={description}
-            onChangeText={setDescription}
-            style={styles.input}
-            mode='outlined'
-            activeOutlineColor='#E6824A'
-            selectionColor='gray'
-          />
-          <TextInput
-            label={'אינסטגרם'}
-            value={instagram}
-            onChangeText={setInstagram}
-            style={[styles.input, { textAlign: 'left' }]}
-            mode='outlined'
-            activeOutlineColor='#E6824A'
-            selectionColor='gray'
-          />
-          <TextInput
-            label='מספר פלאפון'
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-            style={[styles.input, { textAlign: 'left' }]}
-            mode='outlined'
-            keyboardType='phone-pad'
-            activeOutlineColor='#E6824A'
-            selectionColor='gray'
-          />
+      <Text style={[Theme.primaryTitle, styles.title]}>בניית הפרופיל שלך</Text>
+      <View style={styles.avatarContainer}>
+        <AvatarComponent
+          uploadImage={uploadImage}
+          setProfilePicture={setProfilePicture}
+        />
+      </View>
+      <View style={styles.inputsContainer}>
+        <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerText}
+          overlayColor='rgba(0, 0, 0, 0.6)'
+        />
+        <TextInput
+          label={'שם מלא'}
+          value={fullName}
+          onChangeText={setFullName}
+          style={styles.input}
+          mode='outlined'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+        />
+        <TextInput
+          label={'קצת עלי'}
+          value={description}
+          onChangeText={setDescription}
+          style={styles.input}
+          mode='outlined'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+        />
+        <TextInput
+          label={'אינסטגרם'}
+          value={instagram}
+          onChangeText={setInstagram}
+          style={[styles.input, { textAlign: 'left' }]}
+          mode='outlined'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+        />
+        <TextInput
+          label='מספר פלאפון'
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          style={[styles.input, { textAlign: 'left' }]}
+          mode='outlined'
+          keyboardType='phone-pad'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+        />
 
-          {phoneNumberError !== '' && (
-            <Text style={styles.errorText}>{phoneNumberError}</Text>
-          )}
+        {phoneNumberError !== '' && (
+          <Text style={styles.errorText}>{phoneNumberError}</Text>
+        )}
 
-          {/* <DatePickerComponent
-					selectedDate={selectedDate}
-					onDateChange={setSelectedDate}
-				/> */}
-          <AgePicker selectedAge={age} onAgeChange={setAge} />
 
-          <GenderPicker
-            onGenderChange={setGender}
-            selectedGender={gender}
-          ></GenderPicker>
-          <MultiSelectDropdown
-            data={interests}
-            title={'בחירת תחומי עניין בטיול'}
-            onSelectionsChange={handleSelectedInterests}
-          ></MultiSelectDropdown>
-          <MultiSelectDropdown
-            data={countryData}
-            title={'בחירת יעדים'}
-            onSelectionsChange={handleSelectedDestinations}
-            selectedItems={loggedInUser.travelPlan}
-          ></MultiSelectDropdown>
-          <CitiesComponent
-            onSelectCity={handleSelectedCity}
-            defualtOptionCheck={loggedInUser.city}
-          />
-        </View>
+        <AgePicker selectedAge={age} onAgeChange={setAge} />
 
-        <ButtonLower textContent={'עדכון פרטים'} handlePress={updateUser} />
-      </ScrollView>
+        <GenderPicker
+          onGenderChange={setGender}
+          selectedGender={gender}
+        ></GenderPicker>
+        <MultiSelectDropdown
+          data={interests}
+          title={'בחירת תחומי עניין בטיול'}
+          onSelectionsChange={handleSelectedInterests}
+        ></MultiSelectDropdown>
+        <MultiSelectDropdown
+          data={countryData}
+          title={'בחירת יעדים'}
+          onSelectionsChange={handleSelectedDestinations}
+          selectedItems={loggedInUser.travelPlan}
+        ></MultiSelectDropdown>
+        <CitiesComponent
+          onSelectCity={handleSelectedCity}
+          defualtOptionCheck={loggedInUser.city}
+        />
+      </View>
+
+      <ButtonLower textContent={'עדכון פרטים'} handlePress={updateUser} />
+    </ScrollView>
     </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flexGrow: '1',
+    flexGrow: Platform.OS === 'ios' ? '1' :1,
     width: '100%',
     paddingVertical: 20,
     alignItems: 'center',
@@ -361,7 +360,7 @@ const styles = StyleSheet.create({
     left: '8%',
     top: VerticalScale(70),
     // backgroundColor: 'red',
-    borderRadius: '50%',
+    borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
   },

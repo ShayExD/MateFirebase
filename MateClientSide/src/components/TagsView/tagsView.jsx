@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,Platform } from 'react-native';
 import Theme from '../../../assets/styles/theme';
 
 const TagsView = ({ title, list }) => {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   smallTitle: {
     color: Theme.primaryColor.color,
     marginBottom: 10,
-    textAlign: 'right',
+    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
     color: Theme.primaryColor.color,
     fontSize: 16,
     fontWeight: 'bold',
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: Platform.OS === 'ios' ? 'flex-start' : 'flex-end',
     marginBottom: 10,
   },
   tagsContainer: {

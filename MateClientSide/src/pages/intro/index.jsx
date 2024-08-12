@@ -9,7 +9,7 @@ export default function Intro({navigation}) {
     <View style={[Theme.screen,styles.screen]}>
     <View>
       <Image
-       source={require("../../../assets/images/IntroImage.png")}
+       source={{uri:"https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/IntroImage.png"}}
        resizeMode="contain"
        style = {styles.image}/>
        </View>

@@ -18,6 +18,7 @@ import UserView from '../../components/UserView/UserView'
 import axios from 'axios'
 import { AuthContext } from '../../../AuthContext'
 import BackArrow from '../../components/BackArrow/backArrow'
+import { useIsFocused } from '@react-navigation/native'
 
 export default function ViewTrip({ navigation }) {
   const route = useRoute()
@@ -27,6 +28,7 @@ export default function ViewTrip({ navigation }) {
   const [isUserJoined, setIsJoined] = useState(false)
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
     useContext(AuthContext)
+  const isFocused = useIsFocused()
 
   const getTrip = async () => {
     try {
@@ -100,6 +102,13 @@ export default function ViewTrip({ navigation }) {
     } finally {
     }
   }
+
+  useEffect(() => {
+    if (isFocused) {
+      getTrip()
+
+    }
+  }, [isFocused])
 
   useEffect(() => {
     getTrip()
@@ -186,10 +195,10 @@ export default function ViewTrip({ navigation }) {
         <Button
           textContent={
             isUserJoined && loggedInUser.uid === tripData.manageByUid
-              ? 'מחק את הקבוצה'
+              ? 'מחק את הטיול'
               : isUserJoined
-              ? 'עזוב את הקבוצה'
-              : 'הצטרף לקבוצה'
+              ? 'עזוב את הטיול'
+              : 'הצטרף לטיול'
           }
           handlePress={() => {
             if (isUserJoined) {

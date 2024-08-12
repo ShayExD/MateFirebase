@@ -5,6 +5,9 @@ import {
   View,
   SafeAreaView,
   FlatList,
+  Platform, 
+  StatusBar
+
 } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import Theme from '../../../assets/styles/theme'
@@ -188,7 +191,7 @@ useEffect(() => {
   };
 
   return (
-    <SafeAreaView style={[Theme.screen, styles.screen]}>
+    <SafeAreaView style={[Theme.screen, styles.screen,{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}]}>
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
@@ -323,7 +326,7 @@ const styles = StyleSheet.create({
   title: { textAlign: 'right' },
   bell: {
     backgroundColor: '#E3E3E3',
-    borderRadius: '50%',
+    borderRadius: 50,
     height: VerticalScale(50),
     width: HorizontalScale(50),
     justifyContent: 'center',
@@ -334,7 +337,7 @@ const styles = StyleSheet.create({
     left: '0%',
     paddingHorizontal: HorizontalScale(5),
     // top: VerticalScale(10),
-    borderRadius: '50%',
+    borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
   },

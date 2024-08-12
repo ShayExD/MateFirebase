@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList,I18nManager,Platform } from 'react-native'
 import axios from 'axios'
 import Theme from '../../../assets/styles/theme'
 import { VerticalScale, windowHeight } from '../../utils'
@@ -26,7 +26,9 @@ export default function ViewProfile({ navigation }) {
 
   useEffect(() => {
     // Call getAllUserTrips when the component mounts
-    getAllUserTrips()
+    getAllUserTrips();
+    // I18nManager.forceRTL(true);
+
   }, [])
 
   const getAllUserTrips = async () => {
@@ -34,7 +36,7 @@ export default function ViewProfile({ navigation }) {
       const response = await axios.post(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/getUserTrips`,
         {
-          uid: loggedInUser.uid,
+          uid: profile.uid,
         },
         {
           headers: {
@@ -49,7 +51,7 @@ export default function ViewProfile({ navigation }) {
   }
 
   const handleEditProfile = () => {
-    navigation.navigate('myTabs', { screen: 'EditProfile' })
+    navigation.navigate('myTabs', { screen: 'EditProfile' });
   }
 
   const handleMyTrips = () => {
@@ -58,16 +60,9 @@ export default function ViewProfile({ navigation }) {
 
   const handleStartChat = async () => {
     if (isOwnProfile) return // Don't start a chat with yourself
-    const conversationId = await startNewConversation(
-      loggedInUser.uid,
-      profile.uid,
-    )
+    const conversationId = await startNewConversation(loggedInUser.uid, profile.uid)
     if (conversationId) {
-      navigation.navigate('Chat', {
-        conversationId,
-        otherUserId: profile.uid,
-        otherUser: profile,
-      })
+      navigation.navigate('Chat', { conversationId, otherUserId: profile.uid, otherUser:profile })
     } else {
       console.error('Failed to start conversation')
       // You might want to show an error message to the user here
@@ -116,20 +111,20 @@ export default function ViewProfile({ navigation }) {
             <Button
               mode='contained'
               onPress={handleMyTrips}
-              style={[styles.button, { backgroundColor: 'orange' }]}
+              style={[styles.button,{backgroundColor:"orange"}]}
             >
               מעבר לטיולים שלי
             </Button>
-          </View>
-        ) : (
-          <Button
-            mode='contained'
-            onPress={handleStartChat}
-            style={styles.button}
-          >
-            התחל צ'אט
-          </Button>
-        )}
+            </View>
+          ) : (
+            <Button
+              mode='contained'
+              onPress={handleStartChat}
+              style={styles.button}
+            >
+              התחל צ'אט
+            </Button>
+          )}
       </View>
       <View style={styles.inputsContainer}>
         <TextView
@@ -142,6 +137,8 @@ export default function ViewProfile({ navigation }) {
               ? 'woman'
               : 'male-female-outline'
           }
+          style={{textAlign: Platform.OS === 'ios' ? 'left' : 'right',
+          }}
         />
         <TextView title={'קצת עלי'} content={profile.introduction} />
         <TagsView title={'תחומי עניין בטיול'} list={profile.tripInterests} />
@@ -219,7 +216,7 @@ const styles = StyleSheet.create({
     direction: 'rtl',
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     padding: 10,
   },
@@ -230,7 +227,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     borderWidth: 1,
     borderColor: 'gray',
     marginBottom: 10,
@@ -243,6 +240,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 10,
     marginHorizontal: 5,
+
   },
   editButton: {
     marginVertical: 10,
@@ -265,7 +263,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: Theme.primaryColor.color,
-    textAlign: 'left',
+    textAlign: Platform.OS === 'ios' ? 'left' : 'right',
   },
   flatListContent: {
     paddingRight: 10, // Add some padding to the right side of the FlatList
