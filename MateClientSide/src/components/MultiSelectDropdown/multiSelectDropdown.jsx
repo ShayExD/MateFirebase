@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,Platform } from 'react-native'
 import React, { useState,useCallback,useContext  } from 'react'
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 import Theme from '../../../assets/styles/theme'
@@ -56,7 +56,7 @@ const MultiSelectDropdown = (props) => {
           maxWidth: '100%',
           alignItems: 'flex-end',
         }}
-        dropdownItemStyles={{ width: '100%', justifyContent: 'space-between' }}
+        dropdownItemStyles={{ width: '100%', justifyContent: 'space-between',flexDirection: Platform.OS === 'ios'? 'row':'row-reverse' }}
         setSelected={(val) => handleSelectionChange(val)} // Pass the selected values to the handleSelectionChange function
         data={props.data}
         save='value'
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 
   },
   label: {
-    textAlign:'left',
+    textAlign: 'left',
     color: 'black',
     
     fontFamily: Theme.primaryText.fontFamily,

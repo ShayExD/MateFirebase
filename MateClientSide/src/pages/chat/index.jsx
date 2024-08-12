@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import {  HorizontalScale } from '../../utils'
 import {
   View,
   Text,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
     alignItems: 'center',
     padding: 10,
     marginTop: VerticalScale(50),
@@ -260,12 +261,24 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginLeft: 10,
+    ...(Platform.OS === 'ios' && {
+      marginLeft: HorizontalScale(10),
+    }),
+    ...(Platform.OS === 'android' && {
+      marginRight: HorizontalScale(10),
+    }),
+    // marginLeft: 10,
   },
   userName: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 10,
+    ...(Platform.OS === 'ios' && {
+      marginLeft: HorizontalScale(10),
+    }),
+    ...(Platform.OS === 'android' && {
+      marginRight: HorizontalScale(10),
+    }),
+    // marginLeft: 10,
   },
   loaderContainer: {
     flex: 1,
@@ -277,14 +290,14 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   messageContainer: {
-    marginVertical: 5,
+    marginVertical: VerticalScale(5),
     maxWidth: '80%',
   },
   ownMessageContainer: {
-    alignSelf: 'flex-end',
+    alignSelf: Platform.OS === 'ios' ?'flex-end' :'flex-start',
   },
   otherMessageContainer: {
-    alignSelf: 'flex-start',
+    alignSelf: Platform.OS === 'ios' ?'flex-start' :'flex-end',
   },
   messageBubble: {
     padding: 10,
@@ -306,15 +319,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 2,
+    marginTop: VerticalScale(2),
   },
   timestamp: {
     fontSize: 10,
     color: '#888',
-    marginRight: 5,
+    ...(Platform.OS === 'ios' && {
+      marginRight: HorizontalScale(5),
+    }),
+    ...(Platform.OS === 'android' && {
+      marginLeft: HorizontalScale(5),
+    }),
+    // marginRight: 5,
   },
   inputContainer: {
-    flexDirection: 'row',
+    flexDirection: Platform.OS === 'ios' ? 'row' : 'row-reverse',
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: '#eee',
@@ -324,13 +343,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginRight: 10,
+    paddingHorizontal: HorizontalScale(15),
+    paddingVertical: VerticalScale(10),
+    ...(Platform.OS === 'ios' && {
+      marginRight: HorizontalScale(10),
+    }),
+    ...(Platform.OS === 'android' && {
+      marginLeft: HorizontalScale(10),
+    }),
   },
   sendButton: {
     justifyContent: 'center',
     alignItems: 'center',
+    // marginRight:5,
   },
 })
 

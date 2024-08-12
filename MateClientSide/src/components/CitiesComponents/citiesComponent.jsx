@@ -29,7 +29,7 @@ const CitiesComponent = ({onSelectCity,defualtOptionCheck}) => {
             direction: 'rtl',
             textAlign: 'center',
             minWidth: '100%',
-            alignItems:'center'
+            // alignItems:'center'
           }}
           dropdownStyles={{
             textAlign: 'right',
@@ -37,7 +37,8 @@ const CitiesComponent = ({onSelectCity,defualtOptionCheck}) => {
           }}
           dropdownItemStyles={{
             textAlign:'right',
-            alignItems:'flex-end'
+            // alignItems:Platform.OS === 'ios'?'flex-end':'flex-start',
+            flexDirection:Platform.OS === 'ios'? 'row-reverse':'row-reverse'
           }}
           defaultOption={defualtOptionCheck ? defualtOptionCheck: ""}
         save="value"

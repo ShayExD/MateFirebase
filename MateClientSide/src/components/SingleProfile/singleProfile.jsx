@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     // height: '%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: VerticalScale(-45),
+    paddingBottom:VerticalScale(5),
+     marginTop: VerticalScale(-47),
     backgroundColor: Theme.primaryColor.color,
     // opacity: 0.7,
     zIndex: 999,
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 12,
     maxWidth: '100%',
+    paddingBottom:VerticalScale(1)
     // maxHeight:'30%'
   },
   text: {
