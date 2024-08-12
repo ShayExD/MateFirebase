@@ -108,11 +108,14 @@ export default function Home({ navigation }) {
   }
 
   useEffect(() => {
+    setuserPostsCurretPage(1)
+    setTripsCurrentPage(1)
     if (isFocused) {
+      getAllUsers()
       getAllTrips()
       getUserByUid()
-      setuserPostsCurretPage(1)
-      setTripsCurrentPage(1)
+      // setuserPostsCurretPage(1)
+      // setTripsCurrentPage(1)
     }
   }, [isFocused])
 
@@ -134,10 +137,12 @@ export default function Home({ navigation }) {
 
       // console.log(updatedUserData)
       setData(updatedUserData)
+      setIsLoading(false)
 
       // console.log('Data fetched successfully:', response.data);
     } catch (error) {
       console.error('Error fetching data:', error)
+      setIsLoading(false)
     } finally {
       setIsLoading(false)
     }
@@ -165,12 +170,12 @@ export default function Home({ navigation }) {
     }
   }
 
-  useEffect(() => {
-    getAllUsers()
-    getAllTrips()
-    setTripsCurrentPage(1)
-    setuserPostsCurretPage(1)
-  }, [loggedInUser])
+  // useEffect(() => {
+  //   getAllUsers()
+  //   getAllTrips()
+  //   // setTripsCurrentPage(1)
+  //   // setuserPostsCurretPage(1)
+  // }, [loggedInUser])
 
   useEffect(() => {
     setisLoadinguserPosts(true)
@@ -242,8 +247,8 @@ export default function Home({ navigation }) {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            console.log('fetch page number' + tripsCurrentPage)
-            console.log(tripsRenderData.length)
+            console.log('fetch trip page number' + tripsCurrentPage)
+            console.log('trip.length' + tripsRenderData.length)
             if (isLoadingTrips) {
               return
             }
@@ -288,8 +293,8 @@ export default function Home({ navigation }) {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            // console.log('fetch page number' + userPostsCurretPage + 1)
-            // console.log(userPostsRenderData)
+            console.log('fetch user page number ' + userPostsCurretPage)
+            console.log('userlength ' + userPostsRenderData.length)
             if (isLoadinguserPosts) {
               return
             }
