@@ -21,6 +21,7 @@ import DropDown from '../../components/DropDown/DropDown'
 import { AuthContext } from '../../../AuthContext'
 import { startNewConversation } from '../../utils/chatUtils.jsx' // Assuming you have this utility function
 import SingleTrip from '../../components/SingleTrip/singleTrip' // Assuming SingleTrip is another component
+import Spinner from 'react-native-loading-spinner-overlay'
 
 export default function ViewProfile({ navigation }) {
   const route = useRoute()
@@ -31,6 +32,7 @@ export default function ViewProfile({ navigation }) {
   const [tripsCurrentPage, setTripsCurrentPage] = useState(1)
   const [tripsPageSize] = useState(10)
   const [isLoadingTrips, setIsLoadingTrips] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     // Call getAllUserTrips when the component mounts
@@ -66,6 +68,7 @@ export default function ViewProfile({ navigation }) {
   }
 
   const handleStartChat = async () => {
+    setIsLoading(true)
     if (isOwnProfile) return // Don't start a chat with yourself
     const conversationId = await startNewConversation(
       loggedInUser.uid,
@@ -84,6 +87,8 @@ export default function ViewProfile({ navigation }) {
       console.error('Failed to start conversation')
       // You might want to show an error message to the user here
     }
+    setIsLoading(false)
+
   }
 
   const profile = route.params?.profile || loggedInUser
@@ -111,6 +116,12 @@ export default function ViewProfile({ navigation }) {
       showsVerticalScrollIndicator={false}
     >
       <BackArrow />
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading Chat...'}
+        textStyle={styles.spinnerText}
+        overlayColor='rgba(0, 0, 0, 0.6)'
+      />
       <View style={styles.avatarContainer}>
         <Avatar.Image size={150} source={{ uri: profile.profileImage }} />
         <Text style={[Theme.primaryTitle, styles.text]}>
@@ -282,5 +293,8 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingRight: 10, // Add some padding to the right side of the FlatList
+  },
+  spinnerText: {
+    color: '#FFF',
   },
 })
