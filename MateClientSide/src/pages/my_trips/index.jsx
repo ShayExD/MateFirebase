@@ -21,14 +21,18 @@ import { useIsFocused } from '@react-navigation/native';
 
 
 export default function MyTrips({ navigation }) {
-  const { loggedInUser, logoutAndNavigate } = useContext(AuthContext)
+  const { loggedInUser, logoutUser } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(true)
   const [futureTrips, setFutureTrips] = useState([])
   const [pastTrips, setPastTrips] = useState([])
   const [error, setError] = useState(null)
   const isFocused = useIsFocused();
 
-
+  const logOut = () => {
+    logoutUser()
+    navigation.navigate('Login')
+    // console.log('logOut')
+  }
 
   useEffect(() => {
     if (isFocused) {
@@ -117,7 +121,7 @@ export default function MyTrips({ navigation }) {
           nickName={loggedInUser.fullname || 'Guest'}
           picUri={loggedInUser.profileImage || 'https://example.com/default-avatar.png'}
         />
-        <Pressable style={styles.icon} onPress={() => logoutAndNavigate(navigation)}>
+        <Pressable style={styles.icon} onPress={logOut}>
           <AntDesign name='logout' size={30} color='#e6824a' />
           <Text>התנתק</Text>
         </Pressable>

@@ -77,6 +77,8 @@ const MultiSelectDropdownReset = (props) => {
         badgeStyles={styles.badges}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+      
+
       />
     </View>
   )
