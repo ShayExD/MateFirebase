@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-        console.log('Login user', user.uid)
+        // console.log('Login user', user.uid)
 
         // Send a request to the server to fetch the user data from Firestore
         axios
@@ -43,7 +43,7 @@ export default function Login({ navigation }) {
           )
           .then((response) => {
             const userData = response.data.userData
-            console.log('User data from Firestore:', userData)
+            // console.log('User data from Firestore:', userData)
 
             loginUser(userData) // Log in the user using the context or appropriate method
 
@@ -74,7 +74,7 @@ export default function Login({ navigation }) {
                 {
                   text: 'OK',
                   onPress: () => {
-                    console.log('Error acknowledged')
+                    // console.log('Error acknowledged')
                   },
                 },
               ],
@@ -91,7 +91,7 @@ export default function Login({ navigation }) {
           {
             text: 'OK',
             onPress: () => {
-              console.log('Auth error acknowledged')
+              // console.log('Auth error acknowledged')
             },
           },
         ])

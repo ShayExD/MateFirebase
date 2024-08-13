@@ -106,7 +106,7 @@ export default function EditProfile({ navigation }) {
         const uploadedFileName = response.data[0]
         const uploadedImageURI = `https://proj.ruppin.ac.il/cgroup72/test2/tar1/images/${uploadedFileName}`
         setProfilePicture(uploadedImageURI)
-        console.log(uploadedImageURI)
+        // console.log(uploadedImageURI)
         // setLoggedInUser((prevUser) => ({
         //   ...prevUser,
         //   profileImage: uploadedImageURI,
@@ -130,7 +130,7 @@ export default function EditProfile({ navigation }) {
 
   const updateUser = async () => {
     setIsLoading(true)
-    console.log("check")
+    // console.log("check")
     // await uploadImage(profilePicture)
     try {
       if (!phoneNumberPattern.test(phoneNumber)) {
@@ -188,7 +188,7 @@ export default function EditProfile({ navigation }) {
       }
       // await uploadImage(profilePicture)
 
-      console.log(updatedUserData)
+      // console.log(updatedUserData)
 
       const response = await axios({
         method: 'POST', // or 'PATCH' if the server expects a PATCH request
@@ -203,7 +203,7 @@ export default function EditProfile({ navigation }) {
       // You can perform additional actions after successful update, such as updating the loggedInUser state
       if (response.data) {
         loginUser(response.data.userData)
-        console.log(response.data.userData)
+        // console.log(response.data.userData)
         Alert.alert(
           'Updated Successful',
           'You have successfully updated your details!',

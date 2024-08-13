@@ -53,7 +53,7 @@ export default function Splash({navigation}) {
           await AsyncStorage.setItem('countryData', JSON.stringify(countryArray));
           setLoadCountries(true)
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       };
   

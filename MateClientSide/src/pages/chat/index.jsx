@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import {  HorizontalScale } from '../../utils'
+import { HorizontalScale } from '../../utils'
 import {
   View,
   Text,
@@ -294,10 +294,10 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   ownMessageContainer: {
-    alignSelf: Platform.OS === 'ios' ?'flex-end' :'flex-start',
+    alignSelf: Platform.OS === 'ios' ? 'flex-end' : 'flex-start',
   },
   otherMessageContainer: {
-    alignSelf: Platform.OS === 'ios' ?'flex-start' :'flex-end',
+    alignSelf: Platform.OS === 'ios' ? 'flex-start' : 'flex-end',
   },
   messageBubble: {
     padding: 10,

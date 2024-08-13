@@ -108,7 +108,7 @@ export default function Register({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log('signUp user', user);
+        // console.log('signUp user', user);
         setErrorFirebase('');
   
         // Send a request to the server to add the user to the Firestore users collection
@@ -129,7 +129,7 @@ export default function Register({ navigation }) {
             }
           )
           .then((response) => {
-            console.log(response.data.userData)
+            // console.log(response.data.userData)
             loginUser(response.data.userData)
             setErrorFirebase(false)
             setEmail('')
@@ -142,14 +142,14 @@ export default function Register({ navigation }) {
                   text: 'OK',
                   onPress: () => {
                     // Navigate only if necessary; otherwise, just close the alert
-                    console.log('User creation acknowledged');
+                    // console.log('User creation acknowledged');
                     navigation.navigate('myTabs', { screen: 'EditProfile' }); // Uncomment if you actually want to navigate
 
                   },
                 },
               ]
             );
-            console.log('Success:', response.data.message); // Log success message
+            // console.log('Success:', response.data.message); // Log success message
           })
           .catch((error) => {
             Alert.alert(
@@ -160,7 +160,7 @@ export default function Register({ navigation }) {
                   text: 'OK',
                   onPress: () => {
                     // Handle the alert dismissal
-                    console.log('Error acknowledged');
+                    // console.log('Error acknowledged');
                   },
                 },
               ]
@@ -183,12 +183,12 @@ export default function Register({ navigation }) {
               text: 'OK',
               onPress: () => {
                 // Handle the alert dismissal
-                console.log('Error acknowledged');
+                // console.log('Error acknowledged');
               },
             },
           ]
         );
-        console.log('Firebase Auth Error:', error); 
+        // console.log('Firebase Auth Error:', error); 
         setLoading(false); // Log Firebase Auth error
       })
       .finally(()=>{
