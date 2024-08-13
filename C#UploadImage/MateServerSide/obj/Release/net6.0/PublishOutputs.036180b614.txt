@@ -1,0 +1,17 @@
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\MateServerSide.exe
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\MateServerSide.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\MateServerSide.deps.json
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\MateServerSide.runtimeconfig.json
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\MateServerSide.pdb
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\runtimes\win-arm64\native\sni.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\sni.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\sni.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\shaye\Documents\GitHub\Mate\MateServerSide\MateServerSide\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

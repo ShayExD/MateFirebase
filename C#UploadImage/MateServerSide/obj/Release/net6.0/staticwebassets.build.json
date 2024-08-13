@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "gV3RfFLgOJDPvsAumjcF0gG1fXWHFjJskMWfU65UQAM=",
+  "Source": "MateServerSide",
+  "BasePath": "_content/MateServerSide",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
