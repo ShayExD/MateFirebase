@@ -8,7 +8,8 @@ import {
   Alert,
   KeyboardAvoidingView,
   keyboardVerticalOffset,
-  Platform,Keyboard
+  Platform,
+  Keyboard,
 } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import DatePicker from '../../components/DatePicker/datePicker'
@@ -75,7 +76,7 @@ export default function CreateTrip({ navigation }) {
     setSelectedInterests([])
     setDestination([])
     setResetDropdowns((prev) => !prev) // Trigger a re-render for dropdowns
-    console.log('Reset fields called')
+    // console.log('Reset fields called')
   }
 
   const logAllFields = () => {
@@ -90,7 +91,7 @@ export default function CreateTrip({ navigation }) {
       destination,
     }
 
-    console.log('Field Values:', fields)
+    // console.log('Field Values:', fields)
   }
 
   const validateFields = () => {
@@ -154,7 +155,7 @@ export default function CreateTrip({ navigation }) {
           {
             text: 'OK',
             onPress: () => {
-              console.log('Validation error acknowledged')
+              // console.log('Validation error acknowledged')
             },
           },
         ],
@@ -189,20 +190,20 @@ export default function CreateTrip({ navigation }) {
         {
           text: 'OK',
           onPress: () => {
-            console.log('Trip creation acknowledged')
+            // console.log('Trip creation acknowledged')
             navigation.navigate('myTabs', { screen: 'Home' })
           },
         },
       ])
       await resetFields()
-      console.log('Success:', response.data.message)
+      // console.log('Success:', response.data.message)
     } catch (error) {
       setLoading(false)
       Alert.alert('Error', error.response?.data?.error || error.message, [
         {
           text: 'OK',
           onPress: () => {
-            console.log('Error acknowledged')
+            // console.log('Error acknowledged')
           },
         },
       ])
@@ -211,87 +212,91 @@ export default function CreateTrip({ navigation }) {
   }
   return (
     <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={10} // Adjust this offset if needed
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={10} // Adjust this offset if needed
     >
-    <ScrollView
-      contentContainerStyle={[styles.screen]}
-      showsVerticalScrollIndicator={false}
-    >
-      <UploadImage setuUploadImage={setTripPhoto} uploadImage={uploadImage} />
-      {/* <Image
+      <ScrollView
+        contentContainerStyle={[styles.screen]}
+        showsVerticalScrollIndicator={false}
+      >
+        <UploadImage setuUploadImage={setTripPhoto} uploadImage={uploadImage} />
+        {/* <Image
         source={require('../../../assets/images/IntroImage.png')}
         resizeMode='cover'
         style={styles.image}
       /> */}
-      <TextInput
-        label={'שם הטיול'}
-        value={tripName}
-        onChangeText={setTripName}
-        style={[styles.input, { textAlign: 'right' }]}
-        mode='outlined'
-        activeOutlineColor='#E6824A'
-        selectionColor='gray'
-        maxLength={100} // הגבלת מספר האותיות
-      />
-      <TextInput
-        label={'תאור הטיול'}
-        value={aboutTrip}
-        onChangeText={setAboutTrip}
-        maxLength={1500} // הגבלת מספר האותיות
-        style={[
-          styles.input,
-          { textAlign: 'right', height: VerticalScale(100) },
-        ]}
-        mode='outlined'
-        activeOutlineColor='#E6824A'
-        selectionColor='gray'
-        multiline // תכונה זו מאפשרת לטקסט לרדת שורה אוטומטית
-        numberOfLines={4}
-      />
-      <TextInput
-        label='מספר אנשים (מוגבל עד 30)'
-        value={numOfPeople}
-        onChangeText={setNumOfPeople}
-        style={[styles.input, { textAlign: 'right' }]}
-        mode='outlined'
-        keyboardType='phone-pad'
-        activeOutlineColor={numOfPeople > 30 ? 'red' : '#E6824A'}
-        selectionColor='gray'
-      />
-      <DateRangePicker
-        startDate={startDate}
-        endDate={endDate}
-        onStartDateChange={setStartDate}
-        onEndDateChange={setEndDate}
-      />
-      <MultiSelectDropdownReset
-        data={interests}
-        title={'בחירת תחומי עניין בטיול'}
-        onSelectionsChange={handleSelectedInterests}
-        selectedItems={selectedInterests}
-        reset={resetDropdowns}
-      ></MultiSelectDropdownReset>
-      <MultiSelectDropdownReset
-        data={countryData}
-        title={'בחירת יעדים'}
-        onSelectionsChange={handleSelectedDestinations}
-        selectedItems={destination}
-        reset={resetDropdowns}
-      ></MultiSelectDropdownReset>
-      {loading && (
-        <ActivityIndicator size='small' color='#0000ff' style={styles.loader} />
-      )}
-      <ButtonLower textContent={'יצירת הטיול'} handlePress={createTrip} />
-    </ScrollView>
+        <TextInput
+          label={'שם הטיול'}
+          value={tripName}
+          onChangeText={setTripName}
+          style={[styles.input, { textAlign: 'right' }]}
+          mode='outlined'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+          maxLength={100} // הגבלת מספר האותיות
+        />
+        <TextInput
+          label={'תאור הטיול'}
+          value={aboutTrip}
+          onChangeText={setAboutTrip}
+          maxLength={1500} // הגבלת מספר האותיות
+          style={[
+            styles.input,
+            { textAlign: 'right', height: VerticalScale(100) },
+          ]}
+          mode='outlined'
+          activeOutlineColor='#E6824A'
+          selectionColor='gray'
+          multiline // תכונה זו מאפשרת לטקסט לרדת שורה אוטומטית
+          numberOfLines={4}
+        />
+        <TextInput
+          label='מספר אנשים (מוגבל עד 30)'
+          value={numOfPeople}
+          onChangeText={setNumOfPeople}
+          style={[styles.input, { textAlign: 'right' }]}
+          mode='outlined'
+          keyboardType='phone-pad'
+          activeOutlineColor={numOfPeople > 30 ? 'red' : '#E6824A'}
+          selectionColor='gray'
+        />
+        <DateRangePicker
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={setStartDate}
+          onEndDateChange={setEndDate}
+        />
+        <MultiSelectDropdownReset
+          data={interests}
+          title={'בחירת תחומי עניין בטיול'}
+          onSelectionsChange={handleSelectedInterests}
+          selectedItems={selectedInterests}
+          reset={resetDropdowns}
+        ></MultiSelectDropdownReset>
+        <MultiSelectDropdownReset
+          data={countryData}
+          title={'בחירת יעדים'}
+          onSelectionsChange={handleSelectedDestinations}
+          selectedItems={destination}
+          reset={resetDropdowns}
+        ></MultiSelectDropdownReset>
+        {loading && (
+          <ActivityIndicator
+            size='small'
+            color='#0000ff'
+            style={styles.loader}
+          />
+        )}
+        <ButtonLower textContent={'יצירת הטיול'} handlePress={createTrip} />
+      </ScrollView>
     </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flexGrow: Platform.OS === 'ios' ? '1' :1,
+    flexGrow: Platform.OS === 'ios' ? '1' : 1,
     width: '100%',
     marginVertical: 30,
     alignItems: 'center',

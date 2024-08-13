@@ -42,7 +42,7 @@ export default function MyTrips({ navigation }) {
 
   const fetchAllTrips = async () => {
     if (!loggedInUser || !loggedInUser.uid) {
-      console.log("No logged-in user")
+      // console.log("No logged-in user")
       setIsLoading(false)
       return
     }
@@ -62,7 +62,7 @@ export default function MyTrips({ navigation }) {
         (trip.joinedUsers && trip.joinedUsers.some(user => user.uid === loggedInUser.uid))
       )
 
-      console.log('Filtered User Trips:', userTrips)
+      // console.log('Filtered User Trips:', userTrips)
 
       const currentDate = new Date()
 
@@ -73,7 +73,7 @@ export default function MyTrips({ navigation }) {
       setPastTrips(past)
     } catch (error) {
       console.error('Error fetching trips:', error)
-      console.log('Error details:', error.response?.data)
+      // console.log('Error details:', error.response?.data)
       setError('Failed to load trips. Please try again.')
       Alert.alert('Error', 'Failed to load trips. Please try again.')
     } finally {

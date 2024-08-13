@@ -50,7 +50,7 @@ export default function ViewTrip({ navigation }) {
   }
 
   const joinTrip = async () => {
-    console.log(isUserJoined)
+    // console.log(isUserJoined)
     try {
       const response = await axios.post(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/joinTrip`,
@@ -64,7 +64,7 @@ export default function ViewTrip({ navigation }) {
           },
         },
       )
-      console.log(response)
+      // console.log(response)
       setTripData((prevTripData) => ({
         ...prevTripData,
         joinedUsers: [...prevTripData.joinedUsers, loggedInUser],
@@ -79,8 +79,8 @@ export default function ViewTrip({ navigation }) {
   }
 
   const leaveTrip = async () => {
-    console.log(tripData.id)
-    console.log(loggedInUser.uid)
+    // console.log(tripData.id)
+    // console.log(loggedInUser.uid)
     try {
       const response = await axios.post(
         `https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/leaveTrip`,
@@ -176,15 +176,15 @@ export default function ViewTrip({ navigation }) {
               </Text>
             </View>
             <StackedAvatars members={tripData.joinedUsers} maxDisplay={4} />
-           
+
             {/* <Text style={[styles.text, styles.details]}>
               {tripData.aboutTrip}
             </Text> */}
           </View>
         </View>
         <DropDown
-             header={'תיאור הטיול '}
-         content={tripData.aboutTrip}
+          header={'תיאור הטיול '}
+          content={tripData.aboutTrip}
         ></DropDown>
         <DropDown header={'יעדים'} content={tripData.destinations}></DropDown>
         <DropDown
@@ -259,9 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginBottom: windowHeight * 0.0234,
   },
-  content: {    alignItems: Platform.OS === 'ios' ? 'flex-end' : 'flex-start',
-
-  },
+  content: { alignItems: Platform.OS === 'ios' ? 'flex-end' : 'flex-start' },
   text: {
     textAlign: 'right',
     writingDirection: 'rtl',

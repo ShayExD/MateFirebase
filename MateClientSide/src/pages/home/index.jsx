@@ -137,7 +137,7 @@ export default function Home({ navigation }) {
 
       // console.log(updatedUserData)
       setData(updatedUserData)
-      console.log(updatedUserData)
+      // console.log(updatedUserData)
       setIsLoading(false)
 
       // console.log('Data fetched successfully:', response.data);
@@ -248,8 +248,8 @@ export default function Home({ navigation }) {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            console.log('fetch trip page number' + tripsCurrentPage)
-            console.log('trip.length' + tripsRenderData.length)
+            // console.log('fetch trip page number' + tripsCurrentPage)
+            // console.log('trip.length' + tripsRenderData.length)
             if (isLoadingTrips) {
               return
             }
@@ -294,8 +294,8 @@ export default function Home({ navigation }) {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            console.log('fetch user page number ' + userPostsCurretPage)
-            console.log('userlength ' + userPostsRenderData.length)
+            // console.log('fetch user page number ' + userPostsCurretPage)
+            // console.log('userlength ' + userPostsRenderData.length)
             if (isLoadinguserPosts) {
               return
             }

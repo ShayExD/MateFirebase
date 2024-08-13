@@ -22,8 +22,8 @@ const MultiSelectDropdownReset = (props) => {
     if (props.reset) {
       setSelected([])
       setKey(Math.random().toString()) // Change the key to force re-render
-      console.log('אחרי איפוס')
-      console.log(selected)
+      // console.log('אחרי איפוס')
+      // console.log(selected)
     }
   }, [props.reset])
 

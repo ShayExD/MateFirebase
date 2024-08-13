@@ -56,7 +56,7 @@ const MessagesPage = ({ navigation }) => {
             unreadCount: data.unreadCount?.[loggedInUser.uid] || 0, // Add this line
           }
         })
-        console.log('השיחות', conversationsData)
+        // console.log('השיחות', conversationsData)
         setConversations(conversationsData)
       },
       (error) => {
