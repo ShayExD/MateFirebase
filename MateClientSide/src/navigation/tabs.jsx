@@ -69,6 +69,7 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        // gestureEnabled: false,
         tabBarStyle: {
           elevation: 0,
           backgroundColor: 'white',

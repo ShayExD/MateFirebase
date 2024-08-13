@@ -19,7 +19,9 @@ const MainNavigation = () => {
   return (
     <Stack.Navigator
       initialRouteName='Loading'
-      screenOptions={{ header: () => null, headerShown: false }}
+      screenOptions={{ header: () => null, headerShown: false,
+        gestureEnabled: false
+       }}
     >
       {/* <Stack.Screen name='CreateTrip' component={CreateTrip} /> */}
       <Stack.Screen name='Splash' component={Splash} />
