@@ -193,8 +193,10 @@ export default function Home({ navigation }) {
   }, [tripData])
 
   const handleHeaderPress = () => {
-    navigation.navigate('ViewProfile')
-  }
+    navigation.navigate('ViewProfile', {
+      profile: loggedInUser,
+    }) 
+   }
 
   return (
     <SafeAreaView

@@ -26,8 +26,9 @@ import Spinner from 'react-native-loading-spinner-overlay'
 export default function ViewProfile({ navigation }) {
   const route = useRoute()
   const { loggedInUser } = useContext(AuthContext)
-  const isOwnProfile = !route.params?.profile
+  // const isOwnProfile = !route.params?.profile
 
+  const [isOwnProfile, setIsOwnProfile] = useState(false)
   const [tripsRenderData, setTripsRenderData] = useState([])
   const [tripsCurrentPage, setTripsCurrentPage] = useState(1)
   const [tripsPageSize] = useState(10)
@@ -35,6 +36,12 @@ export default function ViewProfile({ navigation }) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    if(loggedInUser.uid===route.params.profile.uid){
+      setIsOwnProfile(true)
+    }
+    else{
+      setIsOwnProfile(false)
+    }
     // Call getAllUserTrips when the component mounts
     getAllUserTrips()
     // I18nManager.forceRTL(true);

@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   Platform,
+  FlatList
 } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import {
@@ -13,6 +14,7 @@ import {
   windowHeight,
   windowWidth,
 } from '../../utils'
+import UserViewJoined from '../../components/UserViewJoined/userViewJoined'
 import Theme from '../../../assets/styles/theme'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -191,6 +193,31 @@ export default function ViewTrip({ navigation }) {
           header={'תחומי עניין'}
           content={tripData.tripInterests}
         ></DropDown>
+         <DropDown
+          header={'רשימת משתתפים'}
+          content={
+            <FlatList
+          horizontal={true}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          inverted={true} 
+          data={tripData.joinedUsers}
+          renderItem={({ item }) => (
+            <UserViewJoined
+            key={item.uid}
+            content={item.fullname}
+            avatar={item.profileImage}
+            onPress={() =>
+              navigation.navigate('ViewProfile', {
+                profile: item,
+              })
+            }
+          />
+          )}
+          
+        />
+          }
+        />
         <DropDown
           header={'מנוהל ע"י'}
           content={
