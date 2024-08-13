@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect,useState} from 'react'
 import {
   View,
   Text,
@@ -21,7 +21,16 @@ const SingleTrip = ({
   max,
   endDate,
 }) => {
+
+  // const [isOver, setIsOver] = useState(false)
+
   const isOver = new Date(endDate) < new Date()
+
+  // useEffect(() => {
+  //   if ( new Date(endDate) < new Date()) {
+  //     setIsOver(true);
+  //   }
+  // }, [])
 
   return (
     <Pressable onPress={handlePress}>

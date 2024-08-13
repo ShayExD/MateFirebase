@@ -82,8 +82,9 @@ export default function MyTrips({ navigation }) {
   }
 
   const handleHeaderPress = () => {
-    navigation.navigate('ViewProfile')
-  }
+    navigation.navigate('ViewProfile', {
+      profile: loggedInUser,
+    })   }
 
   const renderTrip = ({ item }) => (
     <SingleTrip
@@ -93,6 +94,7 @@ export default function MyTrips({ navigation }) {
       destination={item.destinations || []}
       max={'/' + item.limitUsers || ''}
       numOfPeople={item.joinedUsers.length || 0}
+      endDate={item.endDate}
     />
   )
 
