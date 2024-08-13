@@ -62,7 +62,7 @@ export default function MyTrips({ navigation }) {
         (trip.joinedUsers && trip.joinedUsers.some(user => user.uid === loggedInUser.uid))
       )
 
-      // console.log('Filtered User Trips:', userTrips)
+      console.log('Filtered User Trips:', userTrips)
 
       const currentDate = new Date()
 

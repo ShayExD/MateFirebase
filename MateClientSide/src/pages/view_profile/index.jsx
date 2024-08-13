@@ -72,11 +72,14 @@ export default function ViewProfile({ navigation }) {
       profile.uid,
     )
     if (conversationId) {
-      navigation.navigate('Chat', {
-        conversationId,
-        otherUserId: profile.uid,
-        otherUser: profile,
-      })
+      navigation.navigate('myTabs', {
+        screen: 'Chat',
+        params: {
+          conversationId,
+          otherUserId: profile.uid,
+          otherUser: profile,
+        },
+      });
     } else {
       console.error('Failed to start conversation')
       // You might want to show an error message to the user here
