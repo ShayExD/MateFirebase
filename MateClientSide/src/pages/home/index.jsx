@@ -137,6 +137,7 @@ export default function Home({ navigation }) {
 
       // console.log(updatedUserData)
       setData(updatedUserData)
+      console.log(updatedUserData)
       setIsLoading(false)
 
       // console.log('Data fetched successfully:', response.data);

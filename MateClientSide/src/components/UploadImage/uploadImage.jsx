@@ -52,7 +52,7 @@ const UploadImage = ({ setuUploadImage, uploadImage }) => {
   }, [tripPhoto])
 
   useEffect(() => {
-    requestPermissions()
+    // requestPermissions()
   }, [])
 
   const requestPermissions = async () => {
@@ -125,7 +125,12 @@ const UploadImage = ({ setuUploadImage, uploadImage }) => {
           }}
         />
       )}
-      <Button title=' העלאת תמונה ' onPress={() => setModalVisible(true)} />
+      <Button title=' העלאת תמונה ' onPress={() => {
+        
+        requestPermissions()
+        setModalVisible(true)
+
+      }} />
       <Modal animationType='slide' transparent={true} visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>

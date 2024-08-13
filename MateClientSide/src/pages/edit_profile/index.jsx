@@ -240,7 +240,7 @@ export default function EditProfile({ navigation }) {
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
     >
-      <BackArrow />
+      {/* <BackArrow /> */}
 
       <Text style={[Theme.primaryTitle, styles.title]}>בניית הפרופיל שלך</Text>
       <View style={styles.avatarContainer}>

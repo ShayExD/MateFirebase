@@ -133,7 +133,7 @@ export default function MyTrips({ navigation }) {
               data={futureTrips}
               renderItem={renderTrip}
               keyExtractor={(item) => item.id.toString()}
-              ListEmptyComponent={<Text style={styles.emptyText}>No future trips found</Text>}
+              ListEmptyComponent={<Text style={styles.emptyText}>לא נמצאו טיולים עתידיים</Text>}
             />
           </View>
 
@@ -145,7 +145,7 @@ export default function MyTrips({ navigation }) {
               data={pastTrips}
               renderItem={renderTrip}
               keyExtractor={(item) => item.id.toString()}
-              ListEmptyComponent={<Text style={styles.emptyText}>No past trips found</Text>}
+              ListEmptyComponent={<Text >לא נמצאו טיולי עבר</Text>}
             />
           </View>
         </>
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   content: {
     marginTop: VerticalScale(30),
     width: '90%',
+
   },
   title: { textAlign: 'right' },
   icon: {
@@ -179,5 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     textAlign: 'center',
     alignItems: 'center',
+  },
+  emptyText:{
   },
 })

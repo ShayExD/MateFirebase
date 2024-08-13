@@ -12,9 +12,9 @@ import { app } from '../../../firebase'
 
 export default function Register({ navigation }) {
   // const [data, setData] = useState([])
-    // const [emailError, setEmailError] = useState('')
-  // const [passwordError, setPasswordError] = useState('')
-    // const [showError, setShowError] = useState(false)
+    const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+    const [showError, setShowError] = useState(false)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -23,32 +23,32 @@ export default function Register({ navigation }) {
 
   const [errorFirebase, setErrorFirebase] = useState('')
 
-  // const emailRegex = /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
-  // const passwordRegex =
-  //   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/
+  const emailRegex = /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+  const passwordRegex =
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/
 
- // useEffect(() => {
-  //   const validateEmail = () => {
-  //     if (!emailRegex.test(email)) {
-  //       setEmailError('Please enter a valid email address.')
-  //     } else {
-  //       setEmailError('')
-  //     }
-  //   }
+ useEffect(() => {
+    const validateEmail = () => {
+      if (!emailRegex.test(email)) {
+        setEmailError('Please enter a valid email address.')
+      } else {
+        setEmailError('')
+      }
+    }
 
-  //   const validatePassword = () => {
-  //     if (!passwordRegex.test(password)) {
-  //       setPasswordError(
-  //         'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
-  //       )
-  //     } else {
-  //       setPasswordError('')
-  //     }
-  //   }
+    const validatePassword = () => {
+      if (!passwordRegex.test(password)) {
+        setPasswordError(
+          'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+        )
+      } else {
+        setPasswordError('')
+      }
+    }
 
-  //   validateEmail()
-  //   validatePassword()
-  // }, [email, password])
+    validateEmail()
+    validatePassword()
+  }, [email, password])
 
   // const handleRegister = async () => {
   //   setShowError(true)
@@ -98,6 +98,11 @@ export default function Register({ navigation }) {
 
 
   const handleSignUp = () => {
+    setShowError(true)
+    if (emailError != '' || passwordError != '') {
+          return
+        }
+
     const auth = getAuth(app);
     setLoading(true); 
     createUserWithEmailAndPassword(auth, email, password)
@@ -170,9 +175,28 @@ export default function Register({ navigation }) {
       .catch((error) => {
         const errorMessage = error.message;
         setErrorFirebase(errorMessage); // Set Firebase error message
+        Alert.alert(
+          'Error', // Title of the alert
+          errorMessage , // Show detailed error if available
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Handle the alert dismissal
+                console.log('Error acknowledged');
+              },
+            },
+          ]
+        );
         console.log('Firebase Auth Error:', error); 
         setLoading(false); // Log Firebase Auth error
       })
+      .finally(()=>{
+      setShowError(false)
+      setEmail('')
+      setPassword('')
+      })
+      
       
       
   };
@@ -208,7 +232,12 @@ export default function Register({ navigation }) {
             selectionColor='gray'
             textAlign='right'
           />
-          <Text style={{ color: 'red' }}>{errorFirebase}</Text>
+          {showError ? (
+          <Text style={{ color: 'red' }}>{emailError} {passwordError}</Text> 
+          ):(<Text></Text>)}
+          {/* <Text style={{ color: 'red' }}>{emailError}</Text>
+          <Text style={{ color: 'red' }}>{passwordError}</Text> */}
+
           {loading && (
             <ActivityIndicator
               size="small"
