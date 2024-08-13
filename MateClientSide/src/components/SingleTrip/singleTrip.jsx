@@ -70,7 +70,7 @@ const SingleTrip = ({
           </View>
           {isOver && (
             <View style={styles.endedBadge}>
-              <Text style={styles.endedText}>Ended</Text>
+              <Text style={styles.endedText}>הסתיים</Text>
             </View>
           )}
         </View>
