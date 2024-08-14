@@ -87,7 +87,7 @@ export default function Login({ navigation }) {
         const errorMessage = error.message
         // console.error('Firebase Auth Error:', errorMessage);
 
-        Alert.alert('Authentication Error', 'User not exists', [
+        Alert.alert('Authentication Error', 'אנא וודא שפרטייך נכונים', [
           {
             text: 'OK',
             onPress: () => {
