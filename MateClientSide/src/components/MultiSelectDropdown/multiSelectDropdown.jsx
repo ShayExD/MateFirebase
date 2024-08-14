@@ -69,6 +69,7 @@ const MultiSelectDropdown = (props) => {
         badgeStyles={styles.badges}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+        // selectedItemIconColor={'red'}
       />
     </View>
   )
