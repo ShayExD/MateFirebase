@@ -191,7 +191,7 @@ export default function EditProfile({ navigation }) {
       // console.log(updatedUserData)
 
       const response = await axios({
-        method: 'POST', // or 'PATCH' if the server expects a PATCH request
+        method: 'PUT', // or 'PATCH' if the server expects a PATCH request
         url: 'https://us-central1-mateapiconnection.cloudfunctions.net/mateapi/updateUser',
         data: updatedUserData,
         headers: {

@@ -113,7 +113,7 @@ app.post('/createUser', async (req, res) => {
   }
 })
 
-app.post('/updateUser', async (req, res) => {
+app.put('/updateUser', async (req, res) => {
   const { uid, attributes } = req.body
 
   if (!uid || !attributes) {
