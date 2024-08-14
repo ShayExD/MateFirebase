@@ -65,7 +65,7 @@ const MultiSelectDropdownReset = (props) => {
           maxWidth: '100%',
           alignItems: 'flex-end',
         }}
-        dropdownItemStyles={{ width: '100%', justifyContent: 'space-between' }}
+        dropdownItemStyles={{ width: '100%', justifyContent: 'space-between',flexDirection: Platform.OS === 'ios'? 'row':'row-reverse' }}
         setSelected={(val) => handleSelectionChange(val)} // Pass the selected values to the handleSelectionChange function
         data={props.data}
         save='value'
