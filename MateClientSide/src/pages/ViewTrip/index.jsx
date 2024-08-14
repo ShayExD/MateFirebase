@@ -28,6 +28,8 @@ import axios from 'axios'
 import { AuthContext } from '../../../AuthContext'
 import BackArrow from '../../components/BackArrow/backArrow'
 import { useIsFocused } from '@react-navigation/native'
+import Spinner from 'react-native-loading-spinner-overlay'
+
 
 export default function ViewTrip({ navigation }) {
   const route = useRoute()
@@ -35,6 +37,8 @@ export default function ViewTrip({ navigation }) {
   const [tripData, setTripData] = useState(trip)
   const [isChange, setIsChange] = useState(false)
   const [isUserJoined, setIsJoined] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const { loginUser, loggedInUser, setLoggedInUser, logoutUser } =
     useContext(AuthContext)
   const isFocused = useIsFocused()
@@ -72,10 +76,12 @@ export default function ViewTrip({ navigation }) {
         joinedUsers: [...prevTripData.joinedUsers, loggedInUser],
       }))
       setIsChange(!isChange)
-
+      setIsLoading(false)
       setIsJoined(true)
     } catch (error) {
       console.error('Error', error.message)
+      setIsLoading(false)
+
     } finally {
     }
   }
@@ -102,11 +108,12 @@ export default function ViewTrip({ navigation }) {
       }
       // console.log(response);
       setIsChange(!isChange)
-
+      setIsLoading(false)
       setIsJoined(false)
 
       navigation.navigate('myTabs', { screen: 'Home' })
     } catch (error) {
+      setIsLoading(false)
       console.error('Error', error.message)
     } finally {
     }
@@ -130,6 +137,12 @@ export default function ViewTrip({ navigation }) {
       contentContainerStyle={[styles.screen]}
       showsVerticalScrollIndicator={false}
     >
+       <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerText}
+        overlayColor='rgba(0, 0, 0, 0.6)'
+      />
       <View style={[Theme.screen, styles.screen]}>
         <View>
           <Image
@@ -242,6 +255,7 @@ export default function ViewTrip({ navigation }) {
               : 'הצטרף לטיול'
           }
           handlePress={() => {
+            setIsLoading(true)
             if (isUserJoined) {
               leaveTrip()
             } else {
@@ -310,5 +324,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'right',
     fontWeight: 'bold',
+  },
+  spinnerText: {
+    color: '#FFF',
   },
 })
