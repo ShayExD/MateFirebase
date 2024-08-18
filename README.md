@@ -1,6 +1,5 @@
 C#UploadImage - Includes image upload functionality to the Ruppin server.
 
-App Description
 Mate is a travel app designed to connect travelers with each other and match them with trips based on shared interests, destinations, and other relevant criteria. The app enables users to connect, schedule meetings, and create shared experiences, all while receiving personalized recommendations from an AI-powered system. Additionally, the app features an integrated chat system that allows travelers to communicate and stay in touch before, during, and after their trips.
 
 Modules
