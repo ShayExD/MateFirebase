@@ -22,3 +22,4 @@ Description: This module allows users to find hotels near their current location
 
 ![Pages1-4](https://github.com/user-attachments/assets/290338c9-6095-4160-856d-223e06afd446)
 ![Pages 5-8](https://github.com/user-attachments/assets/e45cdb5d-ae7b-4f18-b882-fe35f5582b93)
+![Pages 8-11](https://github.com/user-attachments/assets/bb0916cb-ade7-4679-8702-1a7a37819d48)
