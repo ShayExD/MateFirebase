@@ -20,4 +20,4 @@ Description: This module manages communication between users within the app. It 
 Description: This module allows users to find hotels near their current location. It integrates with the Google Places API to provide a list of nearby accommodations based on distance. The module can only display surrounding accommodations and provide an option to navigate to them, ensuring users can quickly find suitable lodging.
 
 
-![Splash](https://github.com/user-attachments/assets/29312800-442e-4599-a037-8fc66c473605)
+![Pages1-4](https://github.com/user-attachments/assets/5d941e35-01ea-468b-91d6-3b8068baa922)
